@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">JARVIS</string>
+    <string name="app_title">F.R.I.D.A.Y</string>
+    <string name="button_1"> 键盘 </string>
+    <string name="button_2">语音</string>
+    <string name="button_3">发送</string>
+    <string name="voice_to_text">我正在听……</string>
+</resources>
