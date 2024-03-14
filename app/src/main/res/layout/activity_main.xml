@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -26,16 +27,55 @@
         android:scaleType="fitCenter"
         android:src="@drawable/cartoon_girl" /> <!-- 替换your_image为您的图片资源名 -->
 
-    <!-- 语音识别文本 -->
-    <TextView
-        android:id="@+id/voice_to_text"
+    <!-- 输入文本 -->
+    <FrameLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp">
+
+        <!-- 手动输入文本 -->
+        <FrameLayout
+            android:id="@+id/keyboard_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible">
+
+            <EditText
+                android:id="@+id/keyboard_input_edit"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:autofillHints="text"
+                android:background="@drawable/custom_edittext_background"
+                android:inputType="text"
+                android:textSize="23sp"
+                tools:ignore="LabelFor" />
+
+            <Button
+                android:id="@+id/keyboard_input_send"
+                android:layout_width="80dp"
+                android:layout_height="45dp"
+                android:layout_gravity="end"
+                android:text="@string/send" />
+
+        </FrameLayout>
+
+        <!-- 语音识别文本 -->
+        <TextView
+            android:id="@+id/voice_to_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:autofillHints="text"
+            android:gravity="center"
+            android:text="@string/voice_to_text_ASR"
+            android:textSize="23sp"
+            android:visibility="invisible" />
+
+    </FrameLayout>
+
+    <View
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="@string/voice_to_text"
-        android:textSize="23sp"
-        android:visibility="invisible" />
+        android:layout_weight="1" />
 
     <!-- 按钮栏 -->
     <LinearLayout
@@ -47,26 +87,42 @@
 
         <!-- 第一个按钮 -->
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/keyboard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="7dp"
-            android:text="@string/button_1" />
+            android:text="@string/keyboard" />
 
         <!-- 第二个按钮 -->
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/button_2" />
+        <FrameLayout
+            android:id="@+id/voice_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/voice_input_start"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/voice_start"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/voice_input_end"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/voice_end"
+                android:visibility="invisible" />
+
+        </FrameLayout>
 
         <!-- 第三个按钮 -->
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/sendVoiceText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="7dp"
-            android:text="@string/button_3" />
+            android:text="@string/send" />
     </LinearLayout>
 </LinearLayout>

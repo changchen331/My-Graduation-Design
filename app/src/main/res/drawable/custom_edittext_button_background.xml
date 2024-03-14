@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#616161" /> <!-- 背景颜色 -->
+    <stroke
+        android:width="0dp"
+        android:color="#000000" /> <!-- 边框 -->
+    <corners android:radius="250dp" /> <!-- 圆角 -->
+    <!--    <gradient android:angle="45" android:startColor="#FF0000" android:endColor="#00FF00" android:type="linear"/> &lt;!&ndash; 渐变 &ndash;&gt;-->
+    <!-- 其他属性 -->
+</shape>
