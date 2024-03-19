@@ -117,12 +117,10 @@ public class MainActivity extends AppCompatActivity {
             systemService.showSoftInput(keyboardInputEdit, InputMethodManager.SHOW_IMPLICIT); //自动弹出软键盘
         });
 
-        /**
-         * 软键盘的事件监听，通常软键盘的收起方式大致3种：
-         *           1.点击软键盘右下角的“发送”按钮（系统收起）
-         *           2.输入框焦点时按界面底部的“返回”按钮（系统收起）
-         *           3.点击软键盘和输入框的外部（自发收起）
-         */
+        /*软键盘的事件监听，通常软键盘的收起方式大致3种：
+        1.点击软键盘右下角的Return按钮（系统收起）
+        2.输入框焦点时按返回按钮（系统收起）
+        3.点击软键盘和输入框的外部（自发收起）*/
         keyboardInputEdit.setOnEditorActionListener((v, actionId, event) -> {
             //1. 捕捉软键盘自带的“发送”按钮，类似于键盘的enter键（系统收起）
             //退出手动输入模式
