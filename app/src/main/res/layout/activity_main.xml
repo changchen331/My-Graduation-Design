@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F8F8FA"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -22,10 +23,10 @@
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:layout_gravity="center"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="50dp"
         android:importantForAccessibility="no"
         android:scaleType="fitCenter"
-        android:src="@drawable/cartoon_girl" /> <!-- 替换your_image为您的图片资源名 -->
+        android:src="@drawable/cartoon_girl" />
 
     <!-- 输入文本 -->
     <FrameLayout
@@ -42,7 +43,7 @@
 
             <EditText
                 android:id="@+id/keyboard_input_edit"
-                android:layout_width="300dp"
+                android:layout_width="340dp"
                 android:layout_height="40dp"
                 android:autofillHints="text"
                 android:background="@drawable/custom_edittext_background"
@@ -50,16 +51,21 @@
                 android:textSize="23sp"
                 tools:ignore="LabelFor" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/keyboard_input_send"
-                android:layout_width="80dp"
-                android:layout_height="45dp"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
                 android:layout_gravity="end"
-                android:text="@string/send" />
+                android:layout_marginTop="5dp"
+                android:adjustViewBounds="true"
+                android:background="#F8F8FA"
+                android:importantForAccessibility="no"
+                android:scaleType="fitXY"
+                android:src="@drawable/send_button" />
 
         </FrameLayout>
 
-        <!-- 语音识别文本 -->
+        <!-- 语音输入文本 -->
         <TextView
             android:id="@+id/voice_to_text"
             android:layout_width="match_parent"
