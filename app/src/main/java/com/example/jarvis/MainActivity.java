@@ -1,11 +1,6 @@
 package com.example.jarvis;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -16,7 +11,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -96,12 +92,9 @@ public class MainActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("警告");
                 builder.setMessage("请先进行语音输入！");
-                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // 用户点击“确定”按钮后的操作
-                        /*code*/
-                    }
+                builder.setPositiveButton("确定", (dialog, which) -> {
+                    // 用户点击“确定”按钮后的操作
+                    /*code*/
                 });
                 builder.setNegativeButton("取消", null); // 第二个参数为null表示点击“取消”按钮后不执行任何操作
                 AlertDialog dialog = builder.create();
