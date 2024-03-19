@@ -9,10 +9,11 @@ import java.util.List;
 
 public class SoftKeyboardStateHelper implements ViewTreeObserver.OnGlobalLayoutListener {
 
-    private final List<SoftKeyboardStateListener> listeners = new LinkedList<SoftKeyboardStateListener>();
+    private final List<SoftKeyboardStateListener> listeners = new LinkedList<>();
     private final View activityRootView;
     private int lastSoftKeyboardHeightInPx;
     private boolean isSoftKeyboardOpened;
+
     public SoftKeyboardStateHelper(View activityRootView) {
         this(activityRootView, false);
     }
@@ -30,10 +31,12 @@ public class SoftKeyboardStateHelper implements ViewTreeObserver.OnGlobalLayoutL
         activityRootView.getWindowVisibleDisplayFrame(r);
 
         final int heightDiff = activityRootView.getRootView().getHeight() - (r.bottom - r.top);
-        if (!isSoftKeyboardOpened && heightDiff > 100) { // if more than 100 pixels, its probably a keyboard...
+//        System.out.println("高度变化：" + heightDiff);
+        //heightDiff = 189
+        if (!isSoftKeyboardOpened && heightDiff > 200) { // if more than 100 pixels, its probably a keyboard...
             isSoftKeyboardOpened = true;
             notifyOnSoftKeyboardOpened(heightDiff);
-        } else if (isSoftKeyboardOpened && heightDiff < 100) {
+        } else if (isSoftKeyboardOpened && heightDiff < 200) {
             isSoftKeyboardOpened = false;
             notifyOnSoftKeyboardClosed();
         }

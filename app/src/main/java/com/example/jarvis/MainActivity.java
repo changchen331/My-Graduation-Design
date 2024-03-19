@@ -14,6 +14,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.jarvis.Utils.SoftKeyboardStateHelper;
+
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,43 +110,47 @@ public class MainActivity extends AppCompatActivity {
             keyboardInputEdit.requestFocus(); //将焦点设置到该输入框上
             systemService.showSoftInput(keyboardInputEdit, InputMethodManager.SHOW_IMPLICIT); //自动弹出软键盘
         });
-        /*软键盘的事件监听，通常软键盘的收起方式大致3种：
-        1.点击软键盘右下角的Return按钮（系统收起）
-        2.输入框焦点时按返回按钮（系统收起）
-        3.点击软键盘和输入框的外部（自发收起）*/
         keyboardInputEdit.setOnEditorActionListener((v, actionId, event) -> {
-            //1. 捕捉软键盘自带的“发送”按钮，类似于键盘的enter键（系统收起）
+            //捕捉软键盘自带的“发送”按钮，类似于键盘的enter键（系统收起）
             //退出手动输入模式
             systemService.hideSoftInputFromWindow(keyboardInputEdit.getWindowToken(), 0); //收起软键盘
             keyboardInput.setVisibility(View.INVISIBLE); //隐藏手动输入框
 
             //发送手动输入文本
             //如果用户输入了文本
-            if ("".equalsIgnoreCase(keyboardInputEdit.getText().toString())) {
+            if (!"".equalsIgnoreCase(keyboardInputEdit.getText().toString())) {
                 //发送文本（至云服务器？）
                 Toast.makeText(MainActivity.this, keyboardInputEdit.getText().toString(), Toast.LENGTH_SHORT).show();
                 /*code*/
                 //清空输入框的内容
                 keyboardInputEdit.setText("");
             }
-
             return false;
         });
-        keyboardInputEdit.setOnKeyListener((v, keyCode, event) -> {
-            //2.捕捉系统底部的返回按钮（系统收起）
-            //退出手动输入模式
-            systemService.hideSoftInputFromWindow(keyboardInputEdit.getWindowToken(), 0); //收起软键盘
-            keyboardInput.setVisibility(View.INVISIBLE); //隐藏手动输入框
+        //点击软键盘自带的收起按钮（软键盘收起）
+        SoftKeyboardStateHelper softKeyboardStateHelper = new SoftKeyboardStateHelper(keyboardInput);
+        softKeyboardStateHelper.addSoftKeyboardStateListener(new SoftKeyboardStateHelper.SoftKeyboardStateListener() {
+            @Override
+            public void onSoftKeyboardOpened(int keyboardHeightInPx) {
+                //软键盘打开
+                /*code*/
+            }
 
-            return false;
+            @Override
+            public void onSoftKeyboardClosed() {
+                //软键盘关闭之后
+                //退出手动输入模式
+                keyboardInput.setVisibility(View.INVISIBLE); //隐藏手动输入框
+            }
         });
+
         keyboardInputSend.setOnClickListener(v -> {
             //当按下文本输入的发送按钮之后，清空文本输入框的文本内容，隐藏文本输入框
-            //隐藏文本输入框
-            keyboardInput.setVisibility(View.INVISIBLE);
+            systemService.hideSoftInputFromWindow(keyboardInputEdit.getWindowToken(), 0); //收起软键盘
+            keyboardInput.setVisibility(View.INVISIBLE);//隐藏文本输入框
 
             //如果用户输入了文本
-            if ("".equalsIgnoreCase(keyboardInputEdit.getText().toString())) {
+            if (!"".equalsIgnoreCase(keyboardInputEdit.getText().toString())) {
                 //发送文本（至云服务器？）
                 Toast.makeText(MainActivity.this, keyboardInputEdit.getText().toString(), Toast.LENGTH_SHORT).show();
                 /*code*/
@@ -156,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        //点击软键盘和输入框的外部（自发收起）
         //手动输入文本输入（输入框+按钮）
         FrameLayout keyboardInput = findViewById(R.id.keyboard_input);
         //手动输入文本输入框
@@ -163,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
         //系统服务，用于控制软键盘
         InputMethodManager systemService = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 
-        //3.点击软键盘和输入框的外部（自发收起）
         //退出手动输入模式
         systemService.hideSoftInputFromWindow(keyboardInputEdit.getWindowToken(), 0); //收起软键盘
         keyboardInput.setVisibility(View.INVISIBLE); //隐藏手动输入框
