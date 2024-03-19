@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         //手动输入按钮
         Button keyboard = findViewById(R.id.keyboard);
         //手动输入文本输入（输入框+按钮）
-        FrameLayout keyboardInput = findViewById(R.id.keyboard_input);
+        LinearLayout keyboardInput = findViewById(R.id.keyboard_input);
         //手动输入文本输入框
         EditText keyboardInputEdit = findViewById(R.id.keyboard_input_edit);
         //系统服务，用于控制软键盘
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onTouchEvent(MotionEvent event) {
         //点击软键盘和输入框的外部（自发收起）
         //手动输入文本输入（输入框+按钮）
-        FrameLayout keyboardInput = findViewById(R.id.keyboard_input);
+        LinearLayout keyboardInput = findViewById(R.id.keyboard_input);
         //手动输入文本输入框
         EditText keyboardInputEdit = findViewById(R.id.keyboard_input_edit);
         //系统服务，用于控制软键盘
