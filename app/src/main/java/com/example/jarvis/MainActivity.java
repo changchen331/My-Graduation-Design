@@ -82,13 +82,6 @@ public class MainActivity extends AppCompatActivity {
                 voiceToText.setText(R.string.voice_to_text_ASR);
             } else {
                 //没有输入语音（弹出提示“请先输入语音”）
-//                    Snackbar.make(findViewById(R.id.voice_to_text), "请先进行语音输入！", Snackbar.LENGTH_LONG)
-//                            .setAction("好的", new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View view) {
-//                                    // 用户点击“好的”按钮后的操作
-//                                }
-//                            }).show();
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("警告");
                 builder.setMessage("请先进行语音输入！");
