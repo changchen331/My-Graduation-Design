@@ -15,31 +15,19 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
-
-    //语音输入文本展示框（建议使用实时语音识别）
-    TextView voiceToText = findViewById(R.id.voice_to_text);
-    //语音输入开始按钮
-    Button voiceInputStart = findViewById(R.id.voice_input_start);
-    //语音输入结束按钮
-    Button voiceInputEnd = findViewById(R.id.voice_input_end);
-    //发送语音文本按钮
-    Button sendVoiceText = findViewById(R.id.sendVoiceText);
-
-    //手动输入按钮
-    Button keyboard = findViewById(R.id.keyboard);
-    //手动输入文本输入（输入框+按钮）
-    FrameLayout keyboardInput = findViewById(R.id.keyboard_input);
-    //手动输入文本输入框
-    EditText keyboardInputEdit = findViewById(R.id.keyboard_input_edit);
-    //系统服务，用于控制软键盘
-    InputMethodManager systemService = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-    //手动输入文本发送按钮
-    ImageButton keyboardInputSend = findViewById(R.id.keyboard_input_send);
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //语音输入文本展示框（建议使用实时语音识别）
+        TextView voiceToText = findViewById(R.id.voice_to_text);
+        //语音输入开始按钮
+        Button voiceInputStart = findViewById(R.id.voice_input_start);
+        //语音输入结束按钮
+        Button voiceInputEnd = findViewById(R.id.voice_input_end);
+        //发送语音文本按钮
+        Button sendVoiceText = findViewById(R.id.sendVoiceText);
 
         voiceInputStart.setOnClickListener(v -> {
             //点击语音输入开始按钮
@@ -95,6 +83,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //手动输入按钮
+        Button keyboard = findViewById(R.id.keyboard);
+        //手动输入文本输入（输入框+按钮）
+        FrameLayout keyboardInput = findViewById(R.id.keyboard_input);
+        //手动输入文本输入框
+        EditText keyboardInputEdit = findViewById(R.id.keyboard_input_edit);
+        //系统服务，用于控制软键盘
+        InputMethodManager systemService = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        //手动输入文本发送按钮
+        ImageButton keyboardInputSend = findViewById(R.id.keyboard_input_send);
+
         keyboard.setOnClickListener(v -> {
             //按下文本输入按钮
             //关闭语音识别模式
@@ -109,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
             keyboardInputEdit.requestFocus(); //将焦点设置到该输入框上
             systemService.showSoftInput(keyboardInputEdit, InputMethodManager.SHOW_IMPLICIT); //自动弹出软键盘
         });
-
         /*软键盘的事件监听，通常软键盘的收起方式大致3种：
         1.点击软键盘右下角的Return按钮（系统收起）
         2.输入框焦点时按返回按钮（系统收起）
@@ -140,10 +138,6 @@ public class MainActivity extends AppCompatActivity {
 
             return false;
         });
-        //3.点击软键盘和输入框的外部（自发收起）
-        //详情见函数：public boolean onTouchEvent(MotionEvent event)
-
-
         keyboardInputSend.setOnClickListener(v -> {
             //当按下文本输入的发送按钮之后，清空文本输入框的文本内容，隐藏文本输入框
             //隐藏文本输入框
@@ -162,6 +156,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        //手动输入文本输入（输入框+按钮）
+        FrameLayout keyboardInput = findViewById(R.id.keyboard_input);
+        //手动输入文本输入框
+        EditText keyboardInputEdit = findViewById(R.id.keyboard_input_edit);
+        //系统服务，用于控制软键盘
+        InputMethodManager systemService = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+
         //3.点击软键盘和输入框的外部（自发收起）
         //退出手动输入模式
         systemService.hideSoftInputFromWindow(keyboardInputEdit.getWindowToken(), 0); //收起软键盘
