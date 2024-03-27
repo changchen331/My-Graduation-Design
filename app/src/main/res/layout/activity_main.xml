@@ -1,92 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F8FA"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:paddingStart="28dp"
+    android:paddingTop="40dp"
+    android:paddingEnd="28dp"
+    android:paddingBottom="20dp">
 
-    <!-- 标题栏 -->
+    <!-- 应用名称 -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
         android:gravity="center"
-        android:text="@string/app_title"
-        android:textSize="40sp"
+        android:text="@string/main_app_name"
+        android:textSize="45sp"
         android:textStyle="bold" />
 
-    <!-- 图片视图 -->
+    <!-- 卡通女生头像 -->
     <ImageView
-        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="30dp"
         android:importantForAccessibility="no"
         android:scaleType="fitCenter"
-        android:src="@drawable/cartoon_girl" />
+        android:src="@drawable/main_cartoon_girl" />
 
-    <!-- 输入文本 -->
-    <LinearLayout
+    <!-- 语音输入文本框 -->
+    <TextView
+        android:id="@+id/main_asr_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:orientation="vertical">
-
-        <!-- 手动输入文本 -->
-        <LinearLayout
-            android:id="@+id/keyboard_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:weightSum="10">
-
-            <EditText
-                android:id="@+id/keyboard_input_edit"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="top"
-                android:layout_weight="8.5"
-                android:autofillHints="text"
-                android:background="@drawable/custom_edittext_background"
-                android:inputType="text"
-                android:textSize="23sp"
-                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="0.2" />
-
-            <ImageButton
-                android:id="@+id/keyboard_input_send"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="end"
-                android:layout_weight="1.3"
-                android:adjustViewBounds="true"
-                android:background="#F8F8FA"
-                android:importantForAccessibility="no"
-                android:scaleType="fitEnd"
-                android:src="@drawable/send_button" />
-
-        </LinearLayout>
-
-        <!-- 语音输入文本 -->
-        <TextView
-            android:id="@+id/voice_to_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="text"
-            android:gravity="center"
-            android:text="@string/voice_to_text_ASR"
-            android:textSize="23sp"
-            android:visibility="invisible" />
-
-    </LinearLayout>
+        android:layout_marginTop="40dp"
+        android:autofillHints="text"
+        android:gravity="center"
+        android:text="@string/main_asr_text"
+        android:textSize="31sp"
+        android:visibility="invisible" />
 
     <View
         android:layout_width="match_parent"
@@ -97,50 +48,76 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:weightSum="4">
 
-        <!-- 第一个按钮 -->
-        <Button
-            android:id="@+id/keyboard"
+        <!-- 键盘 -->
+        <ImageButton
+            android:id="@+id/main_keyboard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="top"
             android:layout_weight="1"
-            android:text="@string/keyboard" />
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:importantForAccessibility="no"
+            android:scaleType="fitCenter"
+            android:src="@drawable/main_keyboard" />
 
-        <!-- 第二个按钮 -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2" />
+
+        <!-- 语音输入 -->
         <FrameLayout
-            android:id="@+id/voice_input"
+            android:id="@+id/main_asr"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2">
+            android:layout_weight="1.6">
 
-            <Button
-                android:id="@+id/voice_input_start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/voice_start"
+            <!-- 语音输入开始按钮 -->
+            <ImageButton
+                android:id="@+id/main_asr_start"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:background="@android:color/transparent"
+                android:importantForAccessibility="no"
+                android:scaleType="fitCenter"
+                android:src="@drawable/main_asr_start"
                 android:visibility="visible" />
 
-            <Button
-                android:id="@+id/voice_input_end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/voice_end"
+            <!-- 语音输入结束按钮 -->
+            <ImageButton
+                android:id="@+id/main_asr_end"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:background="@android:color/transparent"
+                android:importantForAccessibility="no"
+                android:scaleType="fitCenter"
+                android:src="@drawable/main_asr_end"
                 android:visibility="invisible" />
 
         </FrameLayout>
 
-        <!-- 第三个按钮 -->
-        <Button
-            android:id="@+id/sendVoiceText"
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2" />
+
+        <!-- 发送按钮 -->
+        <ImageButton
+            android:id="@+id/main_send"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
             android:layout_weight="1"
-            android:text="@string/send" />
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:importantForAccessibility="no"
+            android:scaleType="fitCenter"
+            android:src="@drawable/main_send" />
+
 
     </LinearLayout>
 </LinearLayout>

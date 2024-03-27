@@ -1,11 +1,5 @@
 <resources>
     <string name="app_name">JARVIS</string>
-    <string name="app_title">F.R.I.D.A.Y</string>
-    <string name="keyboard"> 键盘 </string>
-    <string name="voice_start">语音输入</string>
-    <string name="voice_end">结束输入</string>
-    <string name="send">发送</string>
-    <string name="voice_to_text_ASR">我正在听……</string>
-    <string name="voice_to_text_input">请输入……</string>
-    <string name="keyboard_input_edit">请输入文字</string>
+    <string name="main_app_name">F.R.I.D.A.Y</string>
+    <string name="main_asr_text">我正在听……</string>
 </resources>

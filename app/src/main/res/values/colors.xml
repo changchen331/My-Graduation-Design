@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
+    <color name="main_background_color">#ebebeb</color>
+    <color name="main_keyboard_edit">#696969</color>
+    <color name="main_keyboard_edit_hint">#D3D3D3</color>
+    <color name="main_keyboard_edit_text">#FFFFFF</color>
+    <color name="main_keyboard_edit_cursor">#0078d7</color>
+    <color name="main_keyboard_edit_highlight">#0078d7</color>
+    <color name="main_keyboard_background">#191919</color>
+
     <color name="white">#FFFFFF</color><!--白色 -->
     <color name="ivory">#FFFFF0</color><!--象牙色 -->
     <color name="lightyellow">#FFFFE0</color><!--亮黄色-->

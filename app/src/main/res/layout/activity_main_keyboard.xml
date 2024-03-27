@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:weightSum="3">
+
+    <!-- 手动输入文本 -->
+    <EditText
+        android:id="@+id/main_keyboard_edit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2.5"
+        android:autofillHints="text"
+        android:background="@drawable/main_keyboard_edit"
+        android:importantForAccessibility="no"
+        android:inputType="text"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textColor="@color/main_keyboard_edit_text"
+        android:textColorHighlight="@color/main_keyboard_edit_highlight"
+        android:textCursorDrawable="@drawable/main_cursor"
+        android:textIsSelectable="true"
+        android:textSize="23sp"
+        tools:ignore="LabelFor" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.1" />
+
+    <ImageButton
+        android:id="@+id/main_keyboard_send"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.4"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
+        android:src="@drawable/main_keyboard_send" />
+
+</LinearLayout>

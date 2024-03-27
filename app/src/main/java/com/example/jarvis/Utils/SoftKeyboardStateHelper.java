@@ -14,6 +14,8 @@ public class SoftKeyboardStateHelper implements ViewTreeObserver.OnGlobalLayoutL
     private int lastSoftKeyboardHeightInPx;
     private boolean isSoftKeyboardOpened;
 
+    private final int[] temp = new int[2];
+
     public SoftKeyboardStateHelper(View activityRootView) {
         this(activityRootView, false);
     }
@@ -30,13 +32,26 @@ public class SoftKeyboardStateHelper implements ViewTreeObserver.OnGlobalLayoutL
         //r will be populated with the coordinates of your view that area still visible.
         activityRootView.getWindowVisibleDisplayFrame(r);
 
-        final int heightDiff = activityRootView.getRootView().getHeight() - (r.bottom - r.top);
-//        System.out.println("高度变化：" + heightDiff);
-        //heightDiff = 189
-        if (!isSoftKeyboardOpened && heightDiff > 200) { // if more than 100 pixels, its probably a keyboard...
+//        final int heightDiff = activityRootView.getRootView().getHeight() - (r.bottom - r.top);
+//        if (!isSoftKeyboardOpened && heightDiff > 100) { // if more than 100 pixels, its probably a keyboard...
+//            isSoftKeyboardOpened = true;
+//            notifyOnSoftKeyboardOpened(heightDiff);
+//        } else if (isSoftKeyboardOpened && heightDiff < 100) {
+//            isSoftKeyboardOpened = false;
+//            notifyOnSoftKeyboardClosed();
+//        }
+
+        final int heightDiff = (r.height());
+
+        if (temp[1] == 0) temp[1] = heightDiff;
+        else if (heightDiff != temp[0] && heightDiff != temp[1]) temp[0] = heightDiff;
+        int openHeightDiff = Math.min(temp[0], temp[1]); //软键盘开启时的高度
+        int closeHeightDiff = Math.max(temp[0], temp[1]); //软键盘关闭时的高度
+
+        if (!isSoftKeyboardOpened && heightDiff == openHeightDiff) {
             isSoftKeyboardOpened = true;
             notifyOnSoftKeyboardOpened(heightDiff);
-        } else if (isSoftKeyboardOpened && heightDiff < 200) {
+        } else if (isSoftKeyboardOpened && heightDiff == closeHeightDiff) {
             isSoftKeyboardOpened = false;
             notifyOnSoftKeyboardClosed();
         }
@@ -69,7 +84,6 @@ public class SoftKeyboardStateHelper implements ViewTreeObserver.OnGlobalLayoutL
 
     private void notifyOnSoftKeyboardOpened(int keyboardHeightInPx) {
         this.lastSoftKeyboardHeightInPx = keyboardHeightInPx;
-
         for (SoftKeyboardStateListener listener : listeners) {
             if (listener != null) {
                 listener.onSoftKeyboardOpened(keyboardHeightInPx);
