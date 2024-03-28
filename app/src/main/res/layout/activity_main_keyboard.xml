@@ -6,6 +6,7 @@
     android:orientation="horizontal"
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
+    android:paddingBottom="20dp"
     android:weightSum="3">
 
     <!-- 手动输入文本 -->

@@ -1,6 +1,7 @@
 package com.example.jarvis;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -14,7 +15,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.jarvis.Utils.SoftKeyboardStateHelper;
+import com.example.jarvis.model.AppInfo;
+import com.example.jarvis.utils.AppInfoFetcher;
+import com.example.jarvis.utils.SoftKeyboardStateHelper;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -77,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
                 //发送语音识别文本
                 /*code*/
                 Toast.makeText(MainActivity.this, main_asr_text.getText().toString(), Toast.LENGTH_LONG).show();
+
+                //获取所有应用信息
+                getApplicationInformation(MainActivity.this);
             }
         });
 
@@ -84,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
         @SuppressLint("InflateParams") View activity_main_keyboard = getLayoutInflater().inflate(R.layout.activity_main_keyboard, null);
         //手动输入按钮
         ImageButton main_keyboard = findViewById(R.id.main_keyboard);
+        //设置手动输入按钮是否可见（解开注释不可见，否则默认可见）
+//        main_keyboard.setVisibility(Integer.parseInt(getResources().getString(R.string.invisible))); //不可见
         //按下 手动输入按钮
         main_keyboard.setOnClickListener(v -> {
             //关闭语音识别
@@ -233,5 +243,26 @@ public class MainActivity extends AppCompatActivity {
         lp.alpha = alpha;
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         getWindow().setAttributes(lp);
+    }
+
+    /**
+     * 获取所有应用信息
+     *
+     * @param context 指定环境
+     */
+    private void getApplicationInformation(Context context) {
+        // 创建 AppInfoFetcher 实例
+        AppInfoFetcher appInfoFetcher = new AppInfoFetcher(context);
+
+        // 获取所有已安装应用的信息
+        ArrayList<AppInfo> apps = appInfoFetcher.getAllInstalledApps();
+
+        for (AppInfo app : apps) {
+            if (!app.isSystemApp()) {
+                //仅输出第三方应用信息
+                System.out.println(app);
+                System.out.println("==================================");
+            }
+        }
     }
 }

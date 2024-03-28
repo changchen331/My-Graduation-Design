@@ -1,4 +1,4 @@
-package com.example.jarvis.Utils;
+package com.example.jarvis.utils;
 
 import android.graphics.Rect;
 import android.view.View;
