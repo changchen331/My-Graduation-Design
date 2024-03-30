@@ -9,12 +9,12 @@ import androidx.annotation.NonNull;
  * 应用信息
  */
 public class AppInfo {
-    public String appName = ""; //应用名称
-    public String packageName = ""; //应用包名（用于启动应用）
-    public String versionName = ""; //版本名称
-    public Drawable appIcon = null; //应用图标
-    // 注意：Drawable不能直接转换为String来表示图标，需要将其转换为Bitmap然后保存为文件
-    public boolean isSystemApp = true; //是否为系统应用
+    private String appName = ""; //应用名称
+    private String packageName = ""; //应用包名（用于启动应用）
+    private String className = ""; //应用类名（用于启动应用）
+    private String versionName = ""; //版本名称
+    private Drawable appIcon = null; //应用图标
+    private boolean isSystemApp = true; //是否为系统应用
 
     public String getAppName() {
         return appName;
@@ -30,6 +30,14 @@ public class AppInfo {
 
     public void setPackageName(String packageName) {
         this.packageName = packageName;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 
     public String getVersionName() {
@@ -62,6 +70,7 @@ public class AppInfo {
         return "AppInfo{" +
                 "appName='" + appName + '\'' +
                 ", packageName='" + packageName + '\'' +
+                ", className='" + className + '\'' +
                 ", versionName='" + versionName + '\'' +
                 ", appIcon=" + appIcon.toString() + '\'' +
                 ", isSystemApp=" + isSystemApp +
@@ -69,8 +78,9 @@ public class AppInfo {
     }
 
     public void print() {
-        Log.v("appInfo", "Name:" + appName + " Package:" + packageName);
-        Log.v("appInfo", "Name:" + appName + " versionName:" + versionName);
-        Log.v("appInfo", "Name:" + appName + " isSystemApp:" + isSystemApp);
+        Log.v("appInfo", "应用名称: " + appName + " -> 应用包名: " + packageName);
+        Log.v("appInfo", "应用名称: " + appName + " -> 应用包名: " + className);
+        Log.v("appInfo", "应用名称: " + appName + " -> 版本号: " + versionName);
+        Log.v("appInfo", "应用名称: " + appName + " -> 是否为系统应用: " + isSystemApp);
     }
 }

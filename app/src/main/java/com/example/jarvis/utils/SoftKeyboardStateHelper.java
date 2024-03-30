@@ -46,7 +46,7 @@ public class SoftKeyboardStateHelper implements ViewTreeObserver.OnGlobalLayoutL
          * 而这个代码是我从网上找到的。
          * 它利用当前 activity 的根视图（activityRootView）在屏幕上的可见部分（即未被系统栏如状态栏或导航栏遮挡的部分）的尺寸变化来判断界面状态。
          * 当然，软键盘也是会遮挡根视图的可见部分的。
-         * 所以在发现 r.height()（r 就是可见部分，r.height() 就是可见部分的高度）变小的时候，我们有理由怀疑是软键盘弹出了。
+         * 所以在发现 r.height()（r 是可见部分，r.height() 就是可见部分的高度）变小的时候，我们有理由怀疑是软键盘弹出了。
          * 同理可证，当 r.height()变大的时候，就是软键盘收起了。
          * 而上面注释掉的代码就是网上原本写好的判断 r.height()变化的代码，但是在我的系统中并不适用，所以我就重写了这部分的内容。
          * 在通过不断的测试 r.height()的值之后，我发现，不管是在虚拟机还是我的手机中，r.height()的值不管怎么输出，都只会在两个数之间反复横跳。

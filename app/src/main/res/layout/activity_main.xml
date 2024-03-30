@@ -117,7 +117,5 @@
             android:importantForAccessibility="no"
             android:scaleType="fitCenter"
             android:src="@drawable/main_send" />
-
-
     </LinearLayout>
 </LinearLayout>

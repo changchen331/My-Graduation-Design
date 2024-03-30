@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/application_selection_background" /> <!-- 背景颜色 -->
+    <corners
+        android:topLeftRadius="40dp"
+        android:topRightRadius="40dp" /> <!-- 圆角半径 -->
+</shape>
