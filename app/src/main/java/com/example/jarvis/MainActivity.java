@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
@@ -30,19 +31,19 @@ import com.example.jarvis.utils.AppInfoFetcher;
 import com.example.jarvis.utils.RecyclerViewAdapter;
 import com.example.jarvis.utils.SoftKeyboardStateHelper;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 /**
- * TODO: 系统横屏的时候，页面可以滑动显示
- * TODO: 手动输入弹出窗口的发送逻辑
- * TODO: send() 方法逻辑
+ * TODO 应用选择弹窗显示格式有误
+ * TODO 筛选应用数据
+ * TODO 系统横屏的时候，页面可以滑动显示
  */
 public class MainActivity extends AppCompatActivity {
-    private List<AppInfo> apps = null; // 应用信息列表
-    private Integer position = 0; // 应用选择下标
+    private List<AppInfo> apps; // 应用信息列表
+    private Integer position; // 应用选择下标
+    private String keyboardText = ""; //手动输入框内容
     private Boolean isKeyboardSend = Boolean.FALSE; // 是否发送手动输入的文本
 
     @Override
@@ -67,28 +68,21 @@ public class MainActivity extends AppCompatActivity {
             main_asr_start.setVisibility(View.INVISIBLE);
             // 显示语音输入结束按钮
             main_asr_end.setVisibility(View.VISIBLE);
-
-            //开始录音
+            //开始录音（应该有一个开始录音的方法）
             /*code*/
-            // 模拟开始录音（震动）
-            vibrate(200);
+            vibrate(200); // 模拟开始录音（震动）
         });
 
         // 点击语音输入结束按钮
         main_asr_end.setOnClickListener(v -> {
-            //结束录音
+            //结束录音（应该有一个结束录音的方法）
             /*code*/
-            // 模拟结束录音（震动）
-            vibrate(300);
-
+            vibrate(300); // 模拟结束录音（震动）
             // 隐藏结束语音输入按钮
             main_asr_end.setVisibility(View.INVISIBLE);
-
             //语音识别
             /*code*/
-            // 模拟语音识别结果
-            String text = "你好先生，我是Jarvis。";
-
+            String text = "你好先生，我是Jarvis。"; // 模拟语音识别结果
             // 显示语音识别结果
             main_asr_text.setText(text);
             // 显示开始语音输入按钮
@@ -103,29 +97,15 @@ public class MainActivity extends AppCompatActivity {
             if (!getResources().getString(R.string.main_asr_text).equalsIgnoreCase(main_asr_text.getText().toString())) {
                 // 隐藏语音识别框
                 main_asr_text.setVisibility(View.INVISIBLE);
-
-                // 发送语音识别文本
-                send(main_asr_text.getText().toString());
-
+                // 发送语音识别文本 + 接收返回数据
+                sendAndGet(main_asr_text.getText().toString());
                 // 还原语音识别文本
                 main_asr_text.setText(R.string.main_asr_text);
-
-//                // 接收后端返回的应用列表
-//                /*code*/
-//                // 模拟接收后端返回的应用列表（筛选出第三方应用）
-//                List<AppInfo> list = new ArrayList<>();
-//                for (int i = 0; i < (Math.min(1, apps.size())); i++) {
-//                    list.add(apps.get(i));
-//                }
-//                this.apps = list;
-
                 // 显示应用选择弹窗
                 showApplicationSelectionPopWindow(main_asr_text);
             }
         });
 
-        // 手动输入文本弹窗（没有把它写在 showKeyboardPopWindow 里面是为了要保留其中 textView 的内容）
-        @SuppressLint("InflateParams") View activity_main_keyboard = getLayoutInflater().inflate(R.layout.activity_main_keyboard, null);
         // 手动输入按钮
         ImageButton main_keyboard = findViewById(R.id.main_keyboard);
         // 设置手动输入按钮是否可见（解开注释则不可见，否则默认可见）
@@ -140,16 +120,8 @@ public class MainActivity extends AppCompatActivity {
             main_asr_end.setVisibility(View.INVISIBLE);
             // 显示语音输入开始按钮
             main_asr_start.setVisibility(View.VISIBLE);
-
             // 显示文本输入弹窗
-            showKeyboardPopWindow(main_asr_text, activity_main_keyboard);
-
-            // 如果发送了手动输入文本
-//            if (isKeyboardSend) {
-//                // 显示应用选择弹窗
-//                new Handler().postDelayed(() -> showApplicationSelectionPopWindow(main_asr_start), 100);
-//            }
-            Log.v("isKeyboardSend", String.valueOf(isKeyboardSend));
+            showKeyboardPopWindow(main_asr_text);
         });
     }
 
@@ -197,14 +169,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // 创建 PopupWindow 实例
-        PopupWindow main_application_selection = new PopupWindow(activity_application_selection, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        PopupWindow main_application_selection = new PopupWindow(activity_application_selection, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, true);
+        // 点击外部区域不能取消弹窗
+        main_application_selection.setOutsideTouchable(false);
         // 软键盘不会遮挡弹窗
         main_application_selection.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
-        // 背景变暗
-        darkenBackground(0.3f);
-        // 显示应用选择弹窗
-        main_application_selection.showAtLocation(parentView, Gravity.BOTTOM, 0, 0);
 
         // 应用选择弹窗取消按钮
         ImageButton application_selection_cancel = activity_application_selection.findViewById(R.id.application_selection_cancel);
@@ -212,29 +181,35 @@ public class MainActivity extends AppCompatActivity {
             // 处理找不到取消按钮的情况
             return;
         }
-        application_selection_cancel.setOnClickListener(v -> {
-            // 退出应用选择弹窗
-            main_application_selection.dismiss();
-        });
-
         // 应用选择弹窗确认按钮
         ImageButton application_selection_confirm = activity_application_selection.findViewById(R.id.application_selection_confirm);
         if (application_selection_confirm == null) {
             // 处理找不到确认按钮的情况
             return;
         }
+
+        // 背景变暗
+        darkenBackground(0.3f);
+        // 显示应用选择弹窗
+        main_application_selection.showAtLocation(parentView, Gravity.BOTTOM, 0, 0);
+
+        // 点击应用选择弹窗确认按钮
+        application_selection_cancel.setOnClickListener(v -> {
+            // 退出应用选择弹窗
+            main_application_selection.dismiss();
+        });
+
+        // 点击应用选择弹窗确认按钮
         application_selection_confirm.setOnClickListener(v -> {
             if (position >= 0 && position < apps.size()) {
+                // 获取选择的应用信息
                 AppInfo selectedApp = apps.get(position);
                 // 发送选择的应用信息
                 /*code*/
-                // 模拟发送选择的应用信息
-                Toast.makeText(MainActivity.this, selectedApp.getAppName(), Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(MainActivity.this, selectedApp.getAppName(), Toast.LENGTH_SHORT).show(); // 模拟发送选择的应用信息
                 // 打开应用
                 openApplication(MainActivity.this, selectedApp);
             }
-
             // 退出应用选择弹窗
             main_application_selection.dismiss();
         });
@@ -286,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
             return appInfoFetcher.getAllInstalledApps();
         } catch (Exception e) {
             // 处理获取应用信息时可能发生的异常
-            Log.e("getApplicationInformation", "Failed to get installed apps", e);
+            Log.e("GetApplicationInformation", "Failed to get installed apps", e);
             return Collections.emptyList(); // 返回空列表
         }
     }
@@ -296,34 +271,43 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param parentView 指定显示窗口
      */
-    private void showKeyboardPopWindow(View parentView, View currentView) {
-        if (parentView == null || currentView == null) {
+    private void showKeyboardPopWindow(View parentView) {
+        if (parentView == null) {
             // 处理无效的视图参数
             return;
         }
 
-        //手动输入文本输入框
-        EditText main_window_keyboard_edit = currentView.findViewById(R.id.main_keyboard_edit);
-        //手动输入文本发送按钮
-        ImageButton main_window_keyboard_send = currentView.findViewById(R.id.main_keyboard_send);
+        // 手动输入文本弹窗
+        @SuppressLint("InflateParams") View activity_main_keyboard = getLayoutInflater().inflate(R.layout.activity_main_keyboard, null);
+        if (activity_main_keyboard == null) {
+            // 处理布局 inflate 失败的情况
+            return;
+        }
+
+        // 创建 PopupWindow 实例
+        PopupWindow main_window_keyboard = new PopupWindow(activity_main_keyboard, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, true);
+        // 软键盘不会遮挡输入框
+        main_window_keyboard.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+        // 手动输入文本输入框
+        EditText main_window_keyboard_edit = activity_main_keyboard.findViewById(R.id.main_keyboard_edit);
+        // 手动输入文本发送按钮
+        ImageButton main_window_keyboard_send = activity_main_keyboard.findViewById(R.id.main_keyboard_send);
         if (main_window_keyboard_edit == null || main_window_keyboard_send == null) {
             // 处理找不到控件的情况
             return;
         }
 
-        // 创建 PopupWindow 实例
-        PopupWindow main_window_keyboard = new PopupWindow(currentView, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, true);
-        // 软键盘不会遮挡输入框
-        main_window_keyboard.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
         // 开启手动输入
-        //背景变暗
+        // 背景变暗
         darkenBackground(0.3f);
-        //显示手动输入弹窗
+        // 设置文本输入框的内容
+        main_window_keyboard_edit.setText(keyboardText);
+        // 显示手动输入弹窗
         main_window_keyboard.showAtLocation(parentView, Gravity.BOTTOM, 0, 0);
-        //请求文本输入框的焦点 + 弹出软键盘（异步）
+        // 请求文本输入框的焦点 + 弹出软键盘（异步）
         popUpSoftKeyboard(main_window_keyboard_edit);
-        //选中之前输入的文本
+        // 选中之前输入的文本
         if (main_window_keyboard_edit.getText().length() > 0) {
             main_window_keyboard_edit.setSelection(0, main_window_keyboard_edit.getText().length());
         }
@@ -331,25 +315,16 @@ public class MainActivity extends AppCompatActivity {
         // 监听编辑文本时的动作
         main_window_keyboard_edit.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                // 发送手动输入文本
-                this.isKeyboardSend = send(main_window_keyboard_edit.getText().toString());
-                // 清空输入框的内容
-                main_window_keyboard_edit.setText("");
-                // 退出手动输入
-                exitManualInput(main_window_keyboard_edit, main_window_keyboard);
+                // 关闭键盘弹窗
+                dismissKeyboard(Boolean.TRUE, main_window_keyboard_edit, main_window_keyboard);
             }
-
             return false;
         });
 
         // 点击发送按钮
         main_window_keyboard_send.setOnClickListener(v -> {
-            // 发送手动输入文本
-            this.isKeyboardSend = send(main_window_keyboard_edit.getText().toString());
-            // 清空输入框的内容
-            main_window_keyboard_edit.setText("");
-            // 退出手动输入
-            exitManualInput(main_window_keyboard_edit, main_window_keyboard);
+            // 关闭键盘弹窗
+            dismissKeyboard(Boolean.TRUE, main_window_keyboard_edit, main_window_keyboard);
         });
 
         // 监听软键盘状态变化
@@ -362,24 +337,43 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSoftKeyboardClosed() {
                 // 软键盘关闭
-                // 退出手动输入
-                exitManualInput(main_window_keyboard_edit, main_window_keyboard);
+                // 关闭键盘弹窗
+                dismissKeyboard(Boolean.FALSE, main_window_keyboard_edit, main_window_keyboard);
             }
         });
 
-        // 设置退出弹窗时的监听器（恢复背景）
-        main_window_keyboard.setOnDismissListener(() -> darkenBackground(1f));
+        // 设置退出弹窗时的监听器
+        main_window_keyboard.setOnDismissListener(() -> {
+            // 是否要发送输入文本
+            if (isKeyboardSend) {
+                // 发送文本
+                isKeyboardSend = sendAndGet(main_window_keyboard_edit.getText().toString());
+                // 还原输入框的内容
+                keyboardText = "";
+                // 显示应用选择弹窗（异步）
+                new Handler().postDelayed(() -> showApplicationSelectionPopWindow(parentView), 100);
+                // 还原标记
+                isKeyboardSend = Boolean.FALSE;
+            } else {
+                // 恢复背景
+                darkenBackground(1f);
+                // 记录已输入但没有发送的文本
+                keyboardText = main_window_keyboard_edit.getText().toString();
+            }
+        });
     }
 
     /**
-     * 发送输入文本
+     * 发送输入文本 + 接收返回数据
      *
-     * @param requirement 需求
+     * @param text 输入文本
      */
-    private Boolean send(String requirement) {
-        String text = requirement.trim();
-        // 用户输入了文本
-        if (!text.isEmpty()) {
+    private Boolean sendAndGet(String text) {
+        // 对输入的文本进行处理
+        String textTrimmed = text.trim();
+
+        if (!textTrimmed.isEmpty()) {
+            // 用户输入了文本
             // 获取所有应用信息
             apps = getApplicationInformation(MainActivity.this);
             // 重置选择应用的下标（默认为第一个应用）
@@ -387,17 +381,13 @@ public class MainActivity extends AppCompatActivity {
 
             // 发送需求 + 所有应用信息
             /*code*/
-            // 模拟发送语需求 + 所有应用信息
-            Toast.makeText(MainActivity.this, text + "\n" + apps.size(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, textTrimmed + "\n" + apps.size(), Toast.LENGTH_SHORT).show(); // 模拟发送语需求 + 所有应用信息
 
             // 接收后端返回的应用列表
             /*code*/
             // 模拟接收后端返回的应用列表
-            List<AppInfo> list = new ArrayList<>();
-            for (int i = 0; i < (Math.min(2, apps.size())); i++) {
-                list.add(apps.get(i));
-            }
-            this.apps = list;
+            apps = apps.stream().filter(app -> !app.isSystemApp()).collect(Collectors.toList()).subList(31, 33); // 从 31 到 33（不包含 33）
+
             return Boolean.TRUE;
         }
         return Boolean.FALSE;
@@ -427,22 +417,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * 退出手动输入（清除焦点 + 收起软键盘 -> 收起文本框）
+     * 关闭键盘弹窗
      *
-     * @param view        键盘输入框
-     * @param popupWindow 键盘输入弹窗
+     * @param isKeyboardSend 标记是否需要发送手动输入文本
+     * @param editText       文本框
+     * @param popupWindow    弹出窗口
      */
-    private void exitManualInput(View view, PopupWindow popupWindow) {
-        // 检查 view 是否为 null
-        if (view != null) {
-            // 使手动输入文本输入框失去焦点
-            view.clearFocus();
+    private void dismissKeyboard(Boolean isKeyboardSend, EditText editText, PopupWindow popupWindow) {
+        // 检查 EditText 和 PopupWindow 是否为 null
+        if (editText == null || popupWindow == null) {
+            // 如果 EditText 或 PopupWindow为null，记录错误并返回
+            Log.e("DismissKeyboard", "EditText或PopupWindow为null，无法关闭键盘弹窗");
+            return;
         }
 
-        // 检查 popupWindow 是否为 null
-        if (popupWindow != null && popupWindow.isShowing()) {
-            // 收起文本框
-            popupWindow.dismiss();
+        // 标记是否需要发送手动输入文本
+        this.isKeyboardSend = isKeyboardSend;
+
+        // 尝试清除EditText的焦点
+        try {
+            editText.clearFocus();
+        } catch (Exception e) {
+            Log.w("DismissKeyboard", "清除EditText焦点时发生异常", e);
+        }
+
+        // 检查PopupWindow是否正在显示
+        if (popupWindow.isShowing()) {
+            // 隐藏弹出窗口
+            try {
+                popupWindow.dismiss();
+            } catch (Exception e) {
+                Log.w("DismissKeyboard", "关闭PopupWindow时发生异常", e);
+            }
         }
     }
 

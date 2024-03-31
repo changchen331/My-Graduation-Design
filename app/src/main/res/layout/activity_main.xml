@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
         android:importantForAccessibility="no"
         android:scaleType="fitCenter"
         android:src="@drawable/main_cartoon_girl" />
@@ -32,7 +32,7 @@
         android:id="@+id/main_asr_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="50dp"
         android:autofillHints="text"
         android:gravity="center"
         android:text="@string/main_asr_text"

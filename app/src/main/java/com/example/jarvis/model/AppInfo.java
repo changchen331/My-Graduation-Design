@@ -9,12 +9,12 @@ import androidx.annotation.NonNull;
  * 应用信息
  */
 public class AppInfo {
-    private String appName = ""; //应用名称
-    private String packageName = ""; //应用包名（用于启动应用）
-    private String className = ""; //应用类名（用于启动应用）
-    private String versionName = ""; //版本名称
-    private Drawable appIcon = null; //应用图标
-    private boolean isSystemApp = true; //是否为系统应用
+    private String appName; //应用名称
+    private String packageName; //应用包名（用于启动应用）
+    private String className; //应用类名（用于启动应用）
+    private String versionName; //版本名称
+    private Drawable appIcon; //应用图标
+    private boolean isSystemApp; //是否为系统应用
 
     public String getAppName() {
         return appName;
@@ -64,6 +64,7 @@ public class AppInfo {
         isSystemApp = systemApp;
     }
 
+
     @NonNull
     @Override
     public String toString() {
@@ -79,7 +80,7 @@ public class AppInfo {
 
     public void print() {
         Log.v("appInfo", "应用名称: " + appName + " -> 应用包名: " + packageName);
-        Log.v("appInfo", "应用名称: " + appName + " -> 应用包名: " + className);
+        Log.v("appInfo", "应用名称: " + appName + " -> 应用类名: " + className);
         Log.v("appInfo", "应用名称: " + appName + " -> 版本号: " + versionName);
         Log.v("appInfo", "应用名称: " + appName + " -> 是否为系统应用: " + isSystemApp);
     }
