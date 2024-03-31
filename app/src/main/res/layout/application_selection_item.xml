@@ -32,6 +32,7 @@
         android:autoSizeTextType="uniform"
         android:autofillHints="text"
         android:gravity="center"
-        android:text="@string/application_selection_item_name" />
+        android:text="@string/application_selection_item_name"
+        android:textColor="@color/application_selection_item_text" />
 
 </LinearLayout>

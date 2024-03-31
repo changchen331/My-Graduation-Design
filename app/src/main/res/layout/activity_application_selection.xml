@@ -12,6 +12,7 @@
         android:layout_marginBottom="30dp"
         android:gravity="center"
         android:text="@string/application_selection_title"
+        android:textColor="@color/application_selection_title"
         android:textSize="28sp"
         android:textStyle="bold" />
 
@@ -30,16 +31,17 @@
         android:weightSum="3">
 
         <!-- 取消按钮 -->
-        <ImageButton
+        <Button
             android:id="@+id/application_selection_cancel"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.45"
-            android:adjustViewBounds="true"
-            android:background="@android:color/transparent"
+            android:background="@drawable/application_selection_cancel"
             android:importantForAccessibility="no"
-            android:scaleType="fitCenter"
-            android:src="@drawable/application_selection_cancel" />
+            android:text="@string/application_selection_cancel"
+            android:textColor="@color/application_selection_cancel_text"
+            android:textSize="23sp" />
 
         <View
             android:layout_width="0dp"
@@ -47,16 +49,17 @@
             android:layout_weight="0.1" />
 
         <!-- 确认按钮 -->
-        <ImageButton
+        <Button
             android:id="@+id/application_selection_confirm"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.45"
-            android:adjustViewBounds="true"
-            android:background="@android:color/transparent"
+            android:background="@drawable/application_selection_confirm"
             android:importantForAccessibility="no"
-            android:scaleType="fitCenter"
-            android:src="@drawable/application_selection_confirm" />
+            android:text="@string/application_selection_confirm"
+            android:textColor="@color/application_selection_confirm_text"
+            android:textSize="23sp" />
     </LinearLayout>
 
 </LinearLayout>

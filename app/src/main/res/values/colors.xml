@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
+    <color name="main_title">#000000</color>
+
+    <color name="main_asr_text">#000000</color>
+
     <color name="main_keyboard_edit">#696969</color>
     <color name="main_keyboard_edit_hint">#D3D3D3</color>
     <color name="main_keyboard_edit_text">#FFFFFF</color>
     <color name="main_keyboard_edit_cursor">#0078d7</color>
     <color name="main_keyboard_edit_highlight">#0078d7</color>
+
+    <color name="application_selection_title">#000000</color>
     <color name="application_selection_background">#FFFFFF</color>
-    <color name="application_selection_item_select_background">#d0f1f5</color>
+    <color name="application_selection_cancel">#C2C2C2</color>
+    <color name="application_selection_cancel_text">#454545</color>
+    <color name="application_selection_confirm">#0070C0</color>
+    <color name="application_selection_confirm_text">#FFFFFF</color>
+
+    <color name="application_selection_item_text">#000000</color>
+    <color name="application_selection_item_select_background">#D0F1F5</color>
     <color name="application_selection_item_unselect_background">#FFFFFF</color>
 
     <color name="white">#FFFFFF</color><!--白色 -->

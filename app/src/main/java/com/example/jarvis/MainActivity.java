@@ -16,6 +16,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
@@ -171,13 +172,13 @@ public class MainActivity extends AppCompatActivity {
         main_application_selection.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         // 应用选择弹窗取消按钮
-        ImageButton application_selection_cancel = activity_application_selection.findViewById(R.id.application_selection_cancel);
+        Button application_selection_cancel = activity_application_selection.findViewById(R.id.application_selection_cancel);
         if (application_selection_cancel == null) {
             // 处理找不到取消按钮的情况
             return;
         }
         // 应用选择弹窗确认按钮
-        ImageButton application_selection_confirm = activity_application_selection.findViewById(R.id.application_selection_confirm);
+        Button application_selection_confirm = activity_application_selection.findViewById(R.id.application_selection_confirm);
         if (application_selection_confirm == null) {
             // 处理找不到确认按钮的情况
             return;
