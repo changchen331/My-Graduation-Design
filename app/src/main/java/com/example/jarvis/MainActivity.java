@@ -23,7 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.jarvis.model.AppInfo;
@@ -36,9 +36,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * TODO 应用选择弹窗显示格式有误
  * TODO 筛选应用数据
- * TODO 系统横屏的时候，页面可以滑动显示
  */
 public class MainActivity extends AppCompatActivity {
     private List<AppInfo> apps; // 应用信息列表
@@ -142,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
             // 处理布局 inflate 失败的情况
             return;
         }
-
         // 应用选择视图
         RecyclerView recyclerView = activity_application_selection.findViewById(R.id.application_selection);
         if (recyclerView == null) {
@@ -150,12 +147,12 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        // 创建 LinearLayoutManager 实例
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        // 创建 GridLayoutManager 实例
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
         // 设置 recyclerView 为横向滚动
-        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        // 将 linearLayoutManager 设置为 recyclerView 的布局管理器
-        recyclerView.setLayoutManager(linearLayoutManager);
+        gridLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        // 将 gridLayoutManager 设置为 recyclerView 的布局管理器
+        recyclerView.setLayoutManager(gridLayoutManager);
 
         // 创建 RecyclerViewAdapter 实例
         RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(apps);
@@ -169,9 +166,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // 创建 PopupWindow 实例
-        PopupWindow main_application_selection = new PopupWindow(activity_application_selection, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, true);
-        // 点击外部区域不能取消弹窗
-        main_application_selection.setOutsideTouchable(false);
+        PopupWindow main_application_selection = new PopupWindow(activity_application_selection, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, false);
         // 软键盘不会遮挡弹窗
         main_application_selection.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
@@ -372,8 +367,8 @@ public class MainActivity extends AppCompatActivity {
         // 对输入的文本进行处理
         String textTrimmed = text.trim();
 
+        // 用户是否输入了文本
         if (!textTrimmed.isEmpty()) {
-            // 用户输入了文本
             // 获取所有应用信息
             apps = getApplicationInformation(MainActivity.this);
             // 重置选择应用的下标（默认为第一个应用）
@@ -386,7 +381,7 @@ public class MainActivity extends AppCompatActivity {
             // 接收后端返回的应用列表
             /*code*/
             // 模拟接收后端返回的应用列表
-            apps = apps.stream().filter(app -> !app.isSystemApp()).collect(Collectors.toList()).subList(31, 33); // 从 31 到 33（不包含 33）
+            apps = apps.stream().filter(app -> !app.isSystemApp()).collect(Collectors.toList());/*.subList(0, 3);*/
 
             return Boolean.TRUE;
         }
@@ -403,7 +398,6 @@ public class MainActivity extends AppCompatActivity {
         if (view != null) {
             // 将焦点设置到该输入框上
             view.requestFocus();
-
             // 弹出软键盘（异步）
             view.postDelayed(() -> {
                 // 获取输入方法管理器
@@ -440,7 +434,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.w("DismissKeyboard", "清除EditText焦点时发生异常", e);
         }
-
         // 检查PopupWindow是否正在显示
         if (popupWindow.isShowing()) {
             // 隐藏弹出窗口
@@ -466,9 +459,13 @@ public class MainActivity extends AppCompatActivity {
         Window window = MainActivity.this.getWindow();
         if (window != null) {
             try {
+                // 获取当前窗口的布局参数
                 WindowManager.LayoutParams lp = window.getAttributes();
+                // 设置窗口的透明度
                 lp.alpha = alpha;
+                // 为窗口添加背后模糊效果的标志
                 window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                // 应用更新后的布局参数到窗口
                 window.setAttributes(lp);
             } catch (Exception e) {
                 // 处理设置窗口属性时可能出现的异常
