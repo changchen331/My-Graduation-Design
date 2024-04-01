@@ -2,6 +2,7 @@
     <string name="app_name">appTalk</string>
 
     <string name="invisible">4</string>
+    <string name="target_directory">/storage/emulated/0/Download/</string>
 
     <string name="main_app_name">appTalk</string>
 

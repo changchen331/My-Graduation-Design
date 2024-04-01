@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
+import com.example.jarvis.R;
 import com.example.jarvis.model.AppInfo;
 
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ public class AppInfoFetcher {
                     Matcher matcher = pattern.matcher(aPackage.applicationInfo.loadLabel(packageManager).toString());
                     if (!matcher.find() && aPackage.applicationInfo.className != null && aPackage.applicationInfo.loadIcon(packageManager) != null) {
                         // 应用名称不包含‘.’ && 类名不为空 && 应用图标不为空
+                        // 获取信息
                         AppInfo appInfo = new AppInfo();
                         appInfo.setAppName(aPackage.applicationInfo.loadLabel(packageManager).toString());
                         appInfo.setPackageName(aPackage.packageName);
@@ -57,6 +59,14 @@ public class AppInfoFetcher {
                         appInfo.setAppIcon(aPackage.applicationInfo.loadIcon(packageManager));
                         appInfo.setSystemApp((aPackage.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
                         appList.add(appInfo);
+
+                        if (packages.indexOf(aPackage) == 0) {
+                            // 覆写
+                            FileUtils.writeTxtToFile(appInfo.toString(), context.getString(R.string.target_directory), "Apps.txt", Boolean.FALSE);
+                        } else {
+                            // 追加
+                            FileUtils.writeTxtToFile(appInfo.toString(), context.getString(R.string.target_directory), "Apps.txt", Boolean.TRUE);
+                        }
                     }
                 }
             }
