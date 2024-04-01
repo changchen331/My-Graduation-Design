@@ -3,6 +3,6 @@
     <!-- 当 item 被选中时 -->
     <item android:drawable="@drawable/application_selection_item_select_background" android:state_selected="true" />
 
-    <!-- 当 item 为被选中时 -->
+    <!-- 当 item 未被选中时 -->
     <item android:drawable="@drawable/application_selection_item_unselect_background" android:state_selected="false" />
 </selector>

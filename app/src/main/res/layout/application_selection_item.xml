@@ -13,7 +13,7 @@
 
     <ImageView
         android:id="@+id/application_selection_item_image"
-        android:layout_width="wrap_content"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:adjustViewBounds="true"
@@ -26,13 +26,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:autoSizeMaxTextSize="21sp"
-        android:autoSizeMinTextSize="15sp"
-        android:autoSizePresetSizes="2sp"
-        android:autoSizeTextType="uniform"
         android:autofillHints="text"
         android:gravity="center"
         android:text="@string/application_selection_item_name"
-        android:textColor="@color/application_selection_item_text" />
+        android:textColor="@color/application_selection_item_text"
+        android:textSize="16sp" />
 
 </LinearLayout>

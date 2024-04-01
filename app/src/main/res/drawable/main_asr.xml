@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 当语音识别按钮激活时 -->
+    <item android:drawable="@drawable/main_asr_end" android:state_activated="true" />
+
+    <!-- 当文本框获得焦点 -->
+    <item android:drawable="@drawable/main_asr_start" android:state_activated="false" />
+</selector>

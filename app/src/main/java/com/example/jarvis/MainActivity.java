@@ -42,7 +42,9 @@ import java.util.stream.Collectors;
 public class MainActivity extends AppCompatActivity {
     private List<AppInfo> apps; // 应用信息列表
     private Integer position; // 应用选择下标
-    private String keyboardText = ""; //手动输入框内容
+    private String keyboardText = ""; // 手动输入框内容
+    private Boolean isASRActivated = Boolean.FALSE; // 语音识别是否激活
+    private Boolean isASRTextActivated = Boolean.FALSE; // 语音识别文本是否激活
     private Boolean isKeyboardSend = Boolean.FALSE; // 是否发送手动输入的文本
 
     @Override
@@ -52,40 +54,53 @@ public class MainActivity extends AppCompatActivity {
 
         // 语音输入文本框
         TextView main_asr_text = findViewById(R.id.main_asr_text);
-        // 语音输入开始按钮
-        ImageButton main_asr_start = findViewById(R.id.main_asr_start);
-        // 语音输入结束按钮
-        ImageButton main_asr_end = findViewById(R.id.main_asr_end);
+        // 语音输入按钮
+        ImageButton main_asr = findViewById(R.id.main_asr);
 
-        // 点击语音输入开始按钮
-        main_asr_start.setOnClickListener(v -> {
-            // 还原语音识别文本
-            main_asr_text.setText(R.string.main_asr_text);
-            // 显示语音识别框
-            main_asr_text.setVisibility(View.VISIBLE);
-            // 隐藏语音输入开始按钮
-            main_asr_start.setVisibility(View.INVISIBLE);
-            // 显示语音输入结束按钮
-            main_asr_end.setVisibility(View.VISIBLE);
-            //开始录音（应该有一个开始录音的方法）
-            /*code*/
-            vibrate(200); // 模拟开始录音（震动）
-        });
+        // 点击语音输入按钮
+        main_asr.setOnClickListener(v -> {
+            if (!isASRActivated) {
+                // 语音识别文本休眠
+                isASRTextActivated = Boolean.FALSE;
+                main_asr_text.setTextColor(this.getColor(R.color.main_asr_text_empty));
+                // 重置语音识别文本
+                main_asr_text.setText(R.string.main_asr_text);
 
-        // 点击语音输入结束按钮
-        main_asr_end.setOnClickListener(v -> {
-            //结束录音（应该有一个结束录音的方法）
-            /*code*/
-            vibrate(300); // 模拟结束录音（震动）
-            // 隐藏结束语音输入按钮
-            main_asr_end.setVisibility(View.INVISIBLE);
-            //语音识别
-            /*code*/
-            String text = "你好先生，我是Jarvis。"; // 模拟语音识别结果
-            // 显示语音识别结果
-            main_asr_text.setText(text);
-            // 显示开始语音输入按钮
-            main_asr_start.setVisibility(View.VISIBLE);
+                // 显示语音识别框
+                main_asr_text.setVisibility(View.VISIBLE);
+
+                // 语音识别激活
+                isASRActivated = Boolean.TRUE;
+                main_asr.setActivated(true);
+
+                // 开始录音（应该有一个开始录音的方法）
+                /*code*/
+                vibrate(200); // 模拟开始录音（震动）
+            } else {
+                // 结束录音（应该有一个结束录音的方法）
+                /*code*/
+                vibrate(300); // 模拟结束录音（震动）
+
+                // 隐藏语音识别按钮（等待语音识别产生结果）
+                main_asr.setVisibility(View.INVISIBLE);
+
+                // 语音识别
+                /*code*/
+                String text = "你好先生，我是Jarvis。"; // 模拟语音识别结果
+
+                // 语音识别文本激活
+                isASRTextActivated = Boolean.TRUE;
+                main_asr_text.setTextColor(this.getColor(R.color.main_asr_text_filled));
+                // 显示语音识别文本
+                main_asr_text.setText(text);
+
+                // 语音识别休眠
+                isASRActivated = Boolean.FALSE;
+                main_asr.setActivated(false);
+
+                // 显示语音输入按钮
+                main_asr.setVisibility(View.VISIBLE);
+            }
         });
 
         // 发送语音文本按钮
@@ -93,13 +108,19 @@ public class MainActivity extends AppCompatActivity {
         // 点击发送语音文本按钮
         main_send.setOnClickListener(v -> {
             // 已经输入语音
-            if (!getResources().getString(R.string.main_asr_text).equalsIgnoreCase(main_asr_text.getText().toString())) {
+            if (isASRTextActivated) {
                 // 隐藏语音识别框
                 main_asr_text.setVisibility(View.INVISIBLE);
+
                 // 发送语音识别文本 + 接收返回数据
                 sendAndGet(main_asr_text.getText().toString());
-                // 还原语音识别文本
+
+                // 语音识别文本休眠
+                isASRTextActivated = Boolean.FALSE;
+                main_asr_text.setTextColor(this.getColor(R.color.main_asr_text_empty));
+                // 重置语音识别文本
                 main_asr_text.setText(R.string.main_asr_text);
+
                 // 显示应用选择弹窗
                 showApplicationSelectionPopWindow(main_asr_text);
             }
@@ -113,12 +134,17 @@ public class MainActivity extends AppCompatActivity {
         main_keyboard.setOnClickListener(v -> {
             // 隐藏语音输入文本展示框
             main_asr_text.setVisibility(View.INVISIBLE);
+
+            // 语音识别文本休眠
+            isASRTextActivated = Boolean.FALSE;
+            main_asr_text.setTextColor(this.getColor(R.color.main_asr_text_empty));
             // 重置语音识别文本
             main_asr_text.setText(R.string.main_asr_text);
-            // 隐藏语音输入结束按钮
-            main_asr_end.setVisibility(View.INVISIBLE);
-            // 显示语音输入开始按钮
-            main_asr_start.setVisibility(View.VISIBLE);
+
+            // 语音识别休眠
+            isASRActivated = Boolean.FALSE;
+            main_asr.setActivated(false);
+
             // 显示文本输入弹窗
             showKeyboardPopWindow(main_asr_text);
         });
@@ -377,13 +403,16 @@ public class MainActivity extends AppCompatActivity {
 
             // 发送需求 + 所有应用信息
             /*code*/
-            Toast.makeText(MainActivity.this, textTrimmed + "\n" + apps.size(), Toast.LENGTH_SHORT).show(); // 模拟发送语需求 + 所有应用信息
 
             // 接收后端返回的应用列表
             /*code*/
             // 模拟接收后端返回的应用列表
             apps = apps.stream().filter(app -> !app.isSystemApp()).collect(Collectors.toList());/*.subList(0, 3);*/
-
+            // 测试用
+//            for (AppInfo app : apps) {
+//                Log.v("apps", app.toString());
+//            }
+//            Log.v("apps", String.valueOf(apps.size()));
             return Boolean.TRUE;
         }
         return Boolean.FALSE;

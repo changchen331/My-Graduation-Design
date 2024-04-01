@@ -4,12 +4,16 @@
     <string name="invisible">4</string>
 
     <string name="main_app_name">appTalk</string>
-    <string name="main_asr_text">我正在听……</string>
 
+    <string name="main_asr_text">我正在听……</string>
     <string name="application_selection_title">选择应用</string>
     <string name="application_selection_cancel">取消</string>
     <string name="application_selection_confirm">确认</string>
 
-    <string name="application_selection_item_name">应用名称</string>
+    <!--    <string name="main_asr_text">I am listening……</string>-->
+    <!--    <string name="application_selection_title">Choose an application</string>-->
+    <!--    <string name="application_selection_cancel">@android:string/cancel</string>-->
+    <!--    <string name="application_selection_confirm">confirm</string>-->
 
+    <string name="application_selection_item_name">应用名称</string>
 </resources>

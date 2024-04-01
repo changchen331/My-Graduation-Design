@@ -2,7 +2,8 @@
 <resources>
     <color name="main_title">#000000</color>
 
-    <color name="main_asr_text">#000000</color>
+    <color name="main_asr_text_empty">#737373</color>
+    <color name="main_asr_text_filled">#000000</color>
 
     <color name="main_keyboard_edit">#696969</color>
     <color name="main_keyboard_edit_hint">#D3D3D3</color>
