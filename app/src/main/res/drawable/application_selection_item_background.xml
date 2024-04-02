@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- 当 item 被选中时 -->
-    <item android:drawable="@drawable/application_selection_item_select_background" android:state_selected="true" />
-
-    <!-- 当 item 未被选中时 -->
-    <item android:drawable="@drawable/application_selection_item_unselect_background" android:state_selected="false" />
-</selector>

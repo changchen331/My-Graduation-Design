@@ -37,7 +37,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * TODO 筛选应用数据
+ * TODO 完成 补充对话界面
+ * TODO 完善 获取应用数据类
+ * TODO 完善 文件工具类完善
  */
 public class MainActivity extends AppCompatActivity {
     private List<AppInfo> apps; // 应用信息列表
@@ -408,11 +410,7 @@ public class MainActivity extends AppCompatActivity {
             /*code*/
             // 模拟接收后端返回的应用列表
             apps = apps.stream().filter(app -> !app.isSystemApp()).collect(Collectors.toList());/*.subList(0, 3);*/
-            // 测试用
-//            for (AppInfo app : apps) {
-//                Log.v("apps", app.toString());
-//            }
-//            Log.v("apps", String.valueOf(apps.size()));
+
             return Boolean.TRUE;
         }
         return Boolean.FALSE;

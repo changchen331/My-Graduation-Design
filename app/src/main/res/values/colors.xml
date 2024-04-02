@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
-    <color name="main_title">#000000</color>
+    <color name="name">#000000</color>
 
     <color name="main_asr_text_empty">#737373</color>
     <color name="main_asr_text_filled">#000000</color>
@@ -11,16 +11,24 @@
     <color name="main_keyboard_edit_cursor">#0078d7</color>
     <color name="main_keyboard_edit_highlight">#0078d7</color>
 
+    <color name="application_selection">#FFFFFF</color>
     <color name="application_selection_title">#000000</color>
-    <color name="application_selection_background">#FFFFFF</color>
     <color name="application_selection_cancel">#C2C2C2</color>
     <color name="application_selection_cancel_text">#454545</color>
     <color name="application_selection_confirm">#0070C0</color>
     <color name="application_selection_confirm_text">#FFFFFF</color>
 
     <color name="application_selection_item_text">#000000</color>
-    <color name="application_selection_item_select_background">#D0F1F5</color>
-    <color name="application_selection_item_unselect_background">#FFFFFF</color>
+    <color name="application_selection_item_select">#D0F1F5</color>
+    <color name="application_selection_item_unselect">#FFFFFF</color>
+
+    <color name="extra">#F5F5F5</color>
+
+    <color name="extra_title">#D7D7D7</color>
+    <color name="extra_title_border">#EAEAEA</color>
+
+    <color name="extra_input">#F7F7F7</color>
+    <color name="extra_input_border">#E9E9E9</color>
 
     <color name="white">#FFFFFF</color><!--白色 -->
     <color name="ivory">#FFFFF0</color><!--象牙色 -->

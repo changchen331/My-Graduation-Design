@@ -2,10 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/application_selection_background"
+    android:background="@drawable/application_selection"
     android:orientation="vertical"
     android:padding="30dp">
 
+    <!-- 标题栏 -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,6 +21,7 @@
         android:textSize="30sp"
         android:textStyle="bold" />
 
+    <!-- 应用选择框 -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/application_selection"
         android:layout_width="match_parent"
