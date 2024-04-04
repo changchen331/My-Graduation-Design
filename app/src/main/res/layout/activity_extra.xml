@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:background="@color/extra"
     android:orientation="vertical">
 
     <!-- 标题栏 -->
@@ -23,7 +22,7 @@
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:importantForAccessibility="no"
-            android:padding="15dp"
+            android:padding="18dp"
             android:scaleType="fitCenter"
             android:src="@drawable/extra_return" />
 
@@ -37,8 +36,8 @@
             android:autoSizeStepGranularity="2sp"
             android:autoSizeTextType="uniform"
             android:gravity="center"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
+            android:paddingTop="13dp"
+            android:paddingBottom="13dp"
             android:text="@string/name"
             android:textColor="@color/name"
             android:textSize="20sp" />
@@ -55,6 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:background="@color/extra_dialog"
         android:paddingStart="20dp"
         android:paddingTop="15dp"
         android:paddingEnd="20dp"
@@ -64,7 +64,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/extra_input"
+        android:background="@color/extra_input"
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingStart="10dp"
@@ -73,38 +73,43 @@
         android:paddingBottom="15dp"
         android:weightSum="4">
 
+        <!-- 键盘输入按钮 -->
         <ImageButton
             android:id="@+id/extra_keyboard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.8"
+            android:layout_weight="0.7"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:importantForAccessibility="no"
             android:scaleType="fitCenter"
-            android:src="@drawable/extra_keyboard" />
+            android:src="@drawable/extra_keyboard"
+            android:visibility="visible" />
 
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.1" />
+            android:layout_weight="0.15" />
 
+        <!-- 语音输入按钮 -->
         <Button
+            android:id="@+id/extra_asr"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2.6"
+            android:layout_weight="2.4"
             android:background="@drawable/extra_asr"
             android:importantForAccessibility="no"
-            android:paddingTop="18dp"
-            android:paddingBottom="15dp"
+            android:paddingTop="13dp"
+            android:paddingBottom="13dp"
             android:text="@string/extra_asr"
             android:textColor="@color/extra_asr_text"
-            android:textSize="25sp" />
+            android:textSize="23sp" />
 
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.75" />
 
     </LinearLayout>
 </LinearLayout>

@@ -22,7 +22,7 @@ public class ExtraActivity extends AppCompatActivity {
         // 从 Intent 中获取用户选择的应用
         AppInfo selectedApp = (AppInfo) getIntent().getParcelableExtra("selected_applications");
         if (selectedApp != null) {
-            openApplication(ExtraActivity.this, selectedApp);
+//            openApplication(ExtraActivity.this, selectedApp);
         }
     }
 
