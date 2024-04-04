@@ -3,5 +3,6 @@
     <!-- 背景颜色 -->
     <solid android:color="@color/application_selection_item_unselect" />
 
-    <corners android:radius="20dp" /> <!-- 圆角半径 -->
+    <!-- 圆角半径 -->
+    <corners android:radius="20dp" />
 </shape>

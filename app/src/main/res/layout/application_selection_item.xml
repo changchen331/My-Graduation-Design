@@ -33,5 +33,4 @@
         android:text="@string/application_selection_item_name"
         android:textColor="@color/application_selection_item_text"
         android:textSize="16sp" />
-
 </LinearLayout>

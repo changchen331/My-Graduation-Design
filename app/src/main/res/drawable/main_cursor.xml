@@ -1,8 +1,12 @@
 <!-- res/drawable/blue_cursor.xml -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <solid android:color="@color/main_keyboard_edit_cursor" /> <!-- 蓝色 -->
+
+    <!-- 颜色 -->
+    <solid android:color="@color/main_keyboard_edit_cursor" />
+
+    <!-- 宽度和高度 -->
     <size
         android:width="4dp"
-        android:height="100dp" /> <!-- 宽度和高度可以根据需要调整 -->
+        android:height="100dp" />
 </shape>

@@ -1,20 +1,31 @@
 package com.example.jarvis.model;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
 /**
  * 应用信息
  */
-public class AppInfo {
-    private String appName; //应用名称
-    private String packageName; //应用包名（用于启动应用）
-    private String className; //应用类名（用于启动应用）
-    private String versionName; //版本名称
-    private Drawable appIcon; //应用图标
-    private boolean isSystemApp; //是否为系统应用
+public class AppInfo implements Parcelable {
+    public static final Creator<AppInfo> CREATOR = new Creator<AppInfo>() {
+        @Override
+        public AppInfo createFromParcel(Parcel in) {
+            return new AppInfo(in);
+        }
+
+        @Override
+        public AppInfo[] newArray(int size) {
+            return new AppInfo[size];
+        }
+    };
+    private String appName; // 应用名称
+    private Drawable appIcon; // 应用图标
+    private String packageName; // 应用包名
+    private ActivityInfo mainActivity; // 应用活动
 
     public String getAppName() {
         return appName;
@@ -22,30 +33,6 @@ public class AppInfo {
 
     public void setAppName(String appName) {
         this.appName = appName;
-    }
-
-    public String getPackageName() {
-        return packageName;
-    }
-
-    public void setPackageName(String packageName) {
-        this.packageName = packageName;
-    }
-
-    public String getClassName() {
-        return className;
-    }
-
-    public void setClassName(String className) {
-        this.className = className;
-    }
-
-    public String getVersionName() {
-        return versionName;
-    }
-
-    public void setVersionName(String versionName) {
-        this.versionName = versionName;
     }
 
     public Drawable getAppIcon() {
@@ -56,14 +43,31 @@ public class AppInfo {
         this.appIcon = appIcon;
     }
 
-    public boolean isSystemApp() {
-        return isSystemApp;
+    public AppInfo() {
     }
 
-    public void setSystemApp(boolean systemApp) {
-        isSystemApp = systemApp;
+    private AppInfo(Parcel in) {
+        // 从 Parcel 中读取信息
+        appName = in.readString();
+        packageName = in.readString();
+        mainActivity = in.readParcelable(ActivityInfo.class.getClassLoader());
     }
 
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
+    public ActivityInfo getMainActivity() {
+        return mainActivity;
+    }
+
+    public void setMainActivity(ActivityInfo mainActivity) {
+        this.mainActivity = mainActivity;
+    }
 
     @NonNull
     @Override
@@ -71,17 +75,25 @@ public class AppInfo {
         return "AppInfo{" +
                 "appName='" + appName + '\'' +
                 ", packageName='" + packageName + '\'' +
-                ", className='" + className + '\'' +
-                ", versionName='" + versionName + '\'' +
                 ", appIcon=" + appIcon.toString() + '\'' +
-                ", isSystemApp=" + isSystemApp +
+                ", mainActivity=" + mainActivity.name +
                 '}';
     }
 
-    public void print() {
-        Log.v("appInfo", "应用名称: " + appName + " -> 应用包名: " + packageName);
-        Log.v("appInfo", "应用名称: " + appName + " -> 应用类名: " + className);
-        Log.v("appInfo", "应用名称: " + appName + " -> 版本号: " + versionName);
-        Log.v("appInfo", "应用名称: " + appName + " -> 是否为系统应用: " + isSystemApp);
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        // 写入 appName 字符串
+        dest.writeString(appName);
+        // 写入 packageName 字符串
+        dest.writeString(packageName);
+        // 如果 mainActivity 不为空，则将其写入
+        if (mainActivity != null) {
+            dest.writeParcelable(mainActivity, flags);
+        }
     }
 }

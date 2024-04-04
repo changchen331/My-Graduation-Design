@@ -21,7 +21,6 @@ import java.util.List;
  * 负责将数据集合中的数据显示在 RecyclerView 上，并处理数据的操作，同时支持点击事件回调
  */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-
     private final List<AppInfo> apps; // 存储应用信息列表
     private int position = 0; // 记录当前选中 item 的位置
     private OnItemClickListener onItemClickListener; // 定义点击事件的回调接口
@@ -59,7 +58,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         // 转换 dp 为像素，并计算 item 的宽度和边距
         int itemWidth = recyclerWidth / 3;
-        int itemMargin = calculateItemMargin(recyclerWidth, itemWidth, apps.size()); // 根据屏幕宽度和 item 数量计算边距
+        // 根据屏幕宽度和 item 数量计算边距
+        int itemMargin = calculateItemMargin(recyclerWidth, itemWidth, apps.size());
 
         // 设置 item 的布局参数
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) itemView.getLayoutParams();
@@ -79,9 +79,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        AppInfo app = apps.get(position); // 获取当前位置的应用信息
-        viewHolder.appName.setText(app.getAppName()); // 设置应用名称
-        viewHolder.appIcon.setImageDrawable(app.getAppIcon()); // 设置应用图标
+        // 获取当前位置的应用信息
+        AppInfo app = apps.get(position);
+        // 设置应用名称
+        viewHolder.appName.setText(app.getAppName());
+        // 设置应用图标
+        viewHolder.appIcon.setImageDrawable(app.getAppIcon());
 
         // 设置 item 视图的选中状态
         viewHolder.itemView.setSelected(position == this.position);

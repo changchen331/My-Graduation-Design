@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <!-- 获取所有应用信息权限 -->
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
-        tools:ignore="QueryAllPackagesPermission" />
-
-    <!-- 震动权限 -->
+        tools:ignore="QueryAllPackagesPermission" /> <!-- 震动权限 -->
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
@@ -20,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JARVIS"
         tools:targetApi="31">
+        <activity
+            android:name=".ExtraActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

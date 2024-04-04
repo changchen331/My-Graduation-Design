@@ -23,12 +23,12 @@
     <color name="application_selection_item_unselect">#FFFFFF</color>
 
     <color name="extra">#F5F5F5</color>
-
     <color name="extra_title">#D7D7D7</color>
     <color name="extra_title_border">#EAEAEA</color>
-
     <color name="extra_input">#F7F7F7</color>
     <color name="extra_input_border">#E9E9E9</color>
+    <color name="extra_asr">#0F9B0F</color>
+    <color name="extra_asr_text">#FFFFFF</color>
 
     <color name="white">#FFFFFF</color><!--白色 -->
     <color name="ivory">#FFFFF0</color><!--象牙色 -->

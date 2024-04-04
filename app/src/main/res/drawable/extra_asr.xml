@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- 背景颜色 -->
-    <solid android:color="@color/application_selection_cancel" />
+    <!-- 填充颜色 -->
+    <solid android:color="@color/extra_asr" />
 
     <!-- 圆角半径 -->
-    <corners android:radius="30dp" />
+    <corners android:radius="10dp" />
 </shape>

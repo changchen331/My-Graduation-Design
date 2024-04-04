@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="60dp"
         android:importantForAccessibility="no"
         android:scaleType="fitCenter"
         android:src="@drawable/main_cartoon_girl" />
@@ -36,8 +36,7 @@
     <TextView
         android:id="@+id/main_asr_text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:autoSizeMaxTextSize="30sp"
         android:autofillHints="text"
@@ -48,11 +47,6 @@
         android:textColor="@color/main_asr_text_empty"
         android:textSize="28sp"
         android:visibility="invisible" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.1" />
 
     <!-- 按钮栏 -->
     <LinearLayout
