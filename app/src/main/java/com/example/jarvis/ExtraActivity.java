@@ -251,7 +251,9 @@ public class ExtraActivity extends AppCompatActivity {
                 // 编辑弹窗语音识别休眠
                 isEditASRActivated = false;
                 extra_edit_asr.setActivated(false);
-                extra_edit_answer.setText(revisedAnswers.get(position - 1));
+                extra_edit_answer.setText(revisedAnswers.get(position / 2));
+
+                Log.v(TAG, String.valueOf(position));
             }
         });
 
