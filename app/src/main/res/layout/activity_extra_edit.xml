@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:padding="30dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/extra_edit"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:weightSum="1">
+
+        <!-- 取消按钮 -->
+        <ImageButton
+            android:id="@+id/extra_edit_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="end"
+            android:layout_weight="0.13"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:importantForAccessibility="no"
+            android:scaleType="fitCenter"
+            android:src="@drawable/extra_edit_cancel" />
+
+        <!-- 问题 -->
+        <TextView
+            android:id="@+id/extra_edit_question"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.24"
+            android:autofillHints="text"
+            android:gravity="center"
+            android:maxLines="3"
+            android:text="@string/extra_edit_question"
+            android:textColor="@color/extra_edit_question"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <!-- 回答 -->
+        <TextView
+            android:id="@+id/extra_edit_answer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="0.5"
+            android:autofillHints="text"
+            android:background="@drawable/extra_edit_answer"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="@string/extra_edit_answer"
+            android:textColor="@color/asr_text_empty"
+            android:textSize="20sp" />
+
+        <!-- 语音识别按钮 -->
+        <ImageButton
+            android:id="@+id/extra_edit_asr"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="0.13"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:importantForAccessibility="no"
+            android:scaleType="fitCenter"
+            android:src="@drawable/extra_edit_asr" />
+    </LinearLayout>
+
+    <!-- 确认按钮 -->
+    <ImageButton
+        android:id="@+id/extra_edit_confirm"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
+        android:src="@drawable/extra_asr_confirm" />
+
+</LinearLayout>

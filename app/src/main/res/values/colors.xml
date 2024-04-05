@@ -4,8 +4,8 @@
 
     <color name="main">#FFFFFF</color>
 
-    <color name="main_asr_text_empty">#737373</color>
-    <color name="main_asr_text_filled">#000000</color>
+    <color name="asr_text_empty">#737373</color>
+    <color name="asr_text_filled">#000000</color>
 
     <color name="main_keyboard_edit">#696969</color>
     <color name="main_keyboard_edit_hint">#D3D3D3</color>
@@ -26,15 +26,26 @@
 
     <color name="extra_title">#EDEDED</color>
     <color name="extra_title_border">#E6E6E6</color>
-    <color name="extra_dialog">#EDEDED</color>
+
+    <color name="extra_asr_activated">#EFB300</color>
+    <color name="extra_asr_unactivated">#0F9B0F</color>
+
     <color name="extra_input">#FFFFFF</color>
     <color name="extra_input_border">#E2E2E2</color>
-    <color name="extra_asr">#0F9B0F</color>
+
     <color name="extra_asr_text">#FFFFFF</color>
 
+    <color name="extra_asr_end">#ED213A</color>
+    <color name="extra_asr_end_text">#FFFFFF</color>
+
+    <color name="extra_dialog">#EDEDED</color>
     <color name="extra_dialog_item_text">#000000</color>
     <color name="extra_dialog_item_text_left">#FFFFFF</color>
     <color name="extra_dialog_item_text_right">#95EC6A</color>
+
+    <color name="extra_edit">#FFFFFF</color>
+    <color name="extra_edit_question">#000000</color>
+    <color name="extra_edit_answer">#E0E0E0</color>
 
     <color name="white">#FFFFFF</color><!--白色 -->
     <color name="ivory">#FFFFF0</color><!--象牙色 -->

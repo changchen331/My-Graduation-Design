@@ -22,10 +22,21 @@ public class AppInfo implements Parcelable {
             return new AppInfo[size];
         }
     };
+
     private String appName; // 应用名称
     private Drawable appIcon; // 应用图标
     private String packageName; // 应用包名
     private ActivityInfo mainActivity; // 应用活动
+
+    public AppInfo() {
+    }
+
+    private AppInfo(Parcel in) {
+        // 从 Parcel 中读取信息
+        appName = in.readString();
+        packageName = in.readString();
+        mainActivity = in.readParcelable(ActivityInfo.class.getClassLoader());
+    }
 
     public String getAppName() {
         return appName;
@@ -41,16 +52,6 @@ public class AppInfo implements Parcelable {
 
     public void setAppIcon(Drawable appIcon) {
         this.appIcon = appIcon;
-    }
-
-    public AppInfo() {
-    }
-
-    private AppInfo(Parcel in) {
-        // 从 Parcel 中读取信息
-        appName = in.readString();
-        packageName = in.readString();
-        mainActivity = in.readParcelable(ActivityInfo.class.getClassLoader());
     }
 
     public String getPackageName() {

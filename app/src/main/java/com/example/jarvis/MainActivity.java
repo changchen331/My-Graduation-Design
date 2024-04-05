@@ -25,20 +25,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.jarvis.model.AppInfo;
 import com.example.jarvis.utils.AppInfoFetcher;
-import com.example.jarvis.utils.RecyclerViewAdapter;
+import com.example.jarvis.utils.AppSelectRecyclerViewAdapter;
 import com.example.jarvis.utils.SoftKeyboardStateHelper;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * TODO 完成 补充对话界面
- */
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private List<AppInfo> apps; // 应用信息列表
+    private final ArrayList<String> questions = new ArrayList<>(); // 补充问题列表
     private int position = 0; // 应用选择下标
     private String keyboardText = ""; // 手动输入框内容
     private boolean isASRActivated = false; // 语音识别是否激活
@@ -60,9 +59,9 @@ public class MainActivity extends AppCompatActivity {
             if (!isASRActivated) {
                 // 语音识别文本休眠
                 isASRTextActivated = false;
-                main_asr_text.setTextColor(MainActivity.this.getColor(R.color.main_asr_text_empty));
+                main_asr_text.setTextColor(MainActivity.this.getColor(R.color.asr_text_empty));
 
-                main_asr_text.setText(R.string.main_asr_text); // 重置语音识别文本
+                main_asr_text.setText(R.string.asr_text); // 重置语音识别文本
                 main_asr_text.setVisibility(View.VISIBLE); // 显示语音识别框
 
                 // 语音识别激活
@@ -81,11 +80,11 @@ public class MainActivity extends AppCompatActivity {
 
                 // 语音识别
                 /*code*/
-                String text = "我要去浦东机场"; // 模拟语音识别结果
+                String text = "I'm going to Pudong Airport"; // 模拟语音识别结果
 
                 // 语音识别文本激活
                 isASRTextActivated = true;
-                main_asr_text.setTextColor(MainActivity.this.getColor(R.color.main_asr_text_filled));
+                main_asr_text.setTextColor(MainActivity.this.getColor(R.color.asr_text_filled));
                 main_asr_text.setText(text); // 显示语音识别文本
 
                 // 语音识别休眠
@@ -106,25 +105,25 @@ public class MainActivity extends AppCompatActivity {
 
                 // 语音识别文本休眠
                 isASRTextActivated = false;
-                main_asr_text.setTextColor(MainActivity.this.getColor(R.color.main_asr_text_empty));
+                main_asr_text.setTextColor(MainActivity.this.getColor(R.color.asr_text_empty));
 
-                main_asr_text.setText(R.string.main_asr_text); // 重置语音识别文本
+                main_asr_text.setText(R.string.asr_text); // 重置语音识别文本
                 showApplicationSelectionPopWindow(main_asr_text); // 显示应用选择弹窗
             }
         });
 
-        // 手动输入按钮
+        // 键盘输入按钮
         ImageButton main_keyboard = findViewById(R.id.main_keyboard);
-        // 设置手动输入按钮是否可见（解开注释则不可见，否则默认可见）
-//        main_keyboard.setVisibility(Integer.parseInt(getResources().getString(R.string.invisible)));
-        // 点击手动输入按钮
+        // 设置键盘输入按钮是否可见（解开注释则不可见，否则默认可见）
+        main_keyboard.setVisibility(Integer.parseInt(getResources().getString(R.string.visibility)));
+        // 点击键盘输入按钮
         main_keyboard.setOnClickListener(v -> {
             main_asr_text.setVisibility(View.INVISIBLE); // 隐藏语音输入文本展示框
-            main_asr_text.setText(R.string.main_asr_text); // 重置语音识别文本
+            main_asr_text.setText(R.string.asr_text); // 重置语音识别文本
 
             // 语音识别文本休眠
             isASRTextActivated = false;
-            main_asr_text.setTextColor(MainActivity.this.getColor(R.color.main_asr_text_empty));
+            main_asr_text.setTextColor(MainActivity.this.getColor(R.color.asr_text_empty));
 
             // 语音识别休眠
             isASRActivated = false;
@@ -159,15 +158,15 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(gridLayoutManager);
 
         // 创建 RecyclerViewAdapter 实例
-        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(apps);
+        AppSelectRecyclerViewAdapter appSelectRecyclerViewAdapter = new AppSelectRecyclerViewAdapter(apps);
+        // 将 recyclerViewAdapter 设置为 recyclerView 的适配器
+        recyclerView.setAdapter(appSelectRecyclerViewAdapter);
         // 点击 项视图（itemView）获取所选应用的下标
-        recyclerViewAdapter.setOnItemClickListener((view, position) -> {
+        appSelectRecyclerViewAdapter.setOnItemClickListener((view, position) -> {
             if (position >= 0 && position < apps.size()) {
                 this.position = position;
             }
         });
-        // 将 recyclerViewAdapter 设置为 recyclerView 的适配器
-        recyclerView.setAdapter(recyclerViewAdapter);
 
         // 创建 PopupWindow 实例
         PopupWindow main_application_selection = new PopupWindow(activity_application_selection, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, false);
@@ -214,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ExtraActivity.class);
         // 将 AppInfo 对象添加到 Intent 额外数据中
         intent.putExtra("selected_applications", appInfo);
+        intent.putStringArrayListExtra("extra_questions", questions);
         // 启动 ExtraActivity
         startActivity(intent);
     }
@@ -258,9 +258,9 @@ public class MainActivity extends AppCompatActivity {
         @SuppressLint("InflateParams") View activity_main_keyboard = getLayoutInflater().inflate(R.layout.activity_main_keyboard, null);
 
         // 创建 PopupWindow 实例
-        PopupWindow main_window_keyboard = new PopupWindow(activity_main_keyboard, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, true);
+        PopupWindow main_keyboard_window = new PopupWindow(activity_main_keyboard, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, true);
         // 软键盘不会遮挡输入框
-        main_window_keyboard.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        main_keyboard_window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         // 手动输入文本输入框
         EditText main_window_keyboard_edit = activity_main_keyboard.findViewById(R.id.main_keyboard_edit);
@@ -268,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
         main_window_keyboard_edit.setText(keyboardText);
 
         // 显示手动输入弹窗
-        main_window_keyboard.showAtLocation(parentView, Gravity.BOTTOM, 0, 0);
+        main_keyboard_window.showAtLocation(parentView, Gravity.BOTTOM, 0, 0);
         // 请求文本输入框的焦点 + 弹出软键盘（异步）
         popUpSoftKeyboard(main_window_keyboard_edit);
         // 选中之前输入的文本
@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
         main_window_keyboard_edit.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 // 关闭键盘弹窗
-                dismissKeyboard(Boolean.TRUE, main_window_keyboard_edit, main_window_keyboard);
+                dismissKeyboard(Boolean.TRUE, main_window_keyboard_edit, main_keyboard_window);
             }
             return false;
         });
@@ -290,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
         // 点击发送按钮
         main_window_keyboard_send.setOnClickListener(v -> {
             // 关闭键盘弹窗
-            dismissKeyboard(Boolean.TRUE, main_window_keyboard_edit, main_window_keyboard);
+            dismissKeyboard(Boolean.TRUE, main_window_keyboard_edit, main_keyboard_window);
         });
 
         // 监听软键盘状态变化
@@ -304,12 +304,12 @@ public class MainActivity extends AppCompatActivity {
             public void onSoftKeyboardClosed() {
                 // 软键盘关闭
                 // 关闭键盘弹窗
-                dismissKeyboard(Boolean.FALSE, main_window_keyboard_edit, main_window_keyboard);
+                dismissKeyboard(Boolean.FALSE, main_window_keyboard_edit, main_keyboard_window);
             }
         });
 
         // 设置退出弹窗时的监听器
-        main_window_keyboard.setOnDismissListener(() -> {
+        main_keyboard_window.setOnDismissListener(() -> {
             // 是否要发送输入文本
             if (isKeyboardSend) {
                 // 发送文本
@@ -351,6 +351,8 @@ public class MainActivity extends AppCompatActivity {
             // 模拟接收后端返回的应用列表
             List<String> targetApplications = Arrays.asList("滴滴出行", "美团", "百度地图");
             apps = apps.stream().filter(app -> targetApplications.contains(app.getAppName())).collect(Collectors.toList());
+            // 模拟接收后端返回的补充问题
+            questions.addAll(Arrays.asList("Where are you currently?", "Which mode of transportation do you prefer?"));
         }
     }
 

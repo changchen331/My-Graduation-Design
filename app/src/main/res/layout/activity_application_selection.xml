@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="20dp"
         android:autoSizeMaxTextSize="40sp"
         android:autoSizeMinTextSize="20sp"
         android:autoSizeStepGranularity="2sp"
@@ -18,7 +18,7 @@
         android:gravity="center"
         android:text="@string/application_selection_title"
         android:textColor="@color/application_selection_title"
-        android:textSize="30sp"
+        android:textSize="28sp"
         android:textStyle="bold" />
 
     <!-- 应用选择框 -->
@@ -47,7 +47,7 @@
             android:importantForAccessibility="no"
             android:text="@string/application_selection_cancel"
             android:textColor="@color/application_selection_cancel_text"
-            android:textSize="23sp" />
+            android:textSize="20sp" />
 
         <View
             android:layout_width="0dp"
@@ -65,7 +65,7 @@
             android:importantForAccessibility="no"
             android:text="@string/application_selection_confirm"
             android:textColor="@color/application_selection_confirm_text"
-            android:textSize="23sp" />
+            android:textSize="20sp" />
     </LinearLayout>
 
 </LinearLayout>

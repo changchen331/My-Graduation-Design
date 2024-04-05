@@ -3,79 +3,110 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_marginTop="5dp"
-    android:layout_marginBottom="5dp"
-    android:background="@color/extra_dialog"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp">
 
+    <!-- 对话框 问题 -->
     <LinearLayout
         android:id="@+id/extra_dialog_left"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:orientation="horizontal">
+        android:gravity="start|center"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        android:weightSum="4">
 
+        <!-- 提问者头像 -->
         <ImageView
-            android:layout_width="70dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="0.7"
             android:adjustViewBounds="true"
             android:importantForAccessibility="no"
-            android:scaleType="fitStart"
+            android:scaleType="fitCenter"
             android:src="@drawable/cartoon_girl" />
 
+        <!-- 问题展示文本框 -->
         <TextView
             android:id="@+id/extra_dialog_left_text"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="5dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_weight="2.6"
             android:background="@drawable/extra_dialog_item_left"
-            android:gravity="center"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
+            android:gravity="start|center"
+            android:padding="15dp"
             android:text="@string/extra_dialog_item_text"
             android:textColor="@color/extra_dialog_item_text"
-            android:textSize="23sp" />
+            android:textSize="20sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7" />
     </LinearLayout>
 
+    <!-- 对话框 回答 -->
     <LinearLayout
         android:id="@+id/extra_dialog_right"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:layout_marginTop="5dp"
-        android:orientation="horizontal">
+        android:layout_marginBottom="5dp"
+        android:layoutDirection="rtl"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        android:weightSum="4">
 
-        <TextView
-            android:id="@+id/extra_dialog_right_text"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/extra_dialog_item_right"
-            android:gravity="center"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:text="@string/extra_dialog_item_text"
-            android:textColor="@color/extra_dialog_item_text"
-            android:textSize="23sp" />
-
+        <!-- 回答者头像 -->
         <ImageView
-            android:layout_width="70dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="start|center"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="0.6"
             android:adjustViewBounds="true"
             android:importantForAccessibility="no"
-            android:scaleType="fitStart"
+            android:scaleType="fitCenter"
             android:src="@drawable/extra_dialog_right_icon" />
+
+        <!-- 回答展示文本框 -->
+        <TextView
+            android:id="@+id/extra_dialog_right_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center"
+            android:layout_marginStart="5dp"
+            android:layout_weight="2.55"
+            android:background="@drawable/extra_dialog_item_right"
+            android:gravity="start|center"
+            android:padding="15dp"
+            android:text="@string/extra_dialog_item_text"
+            android:textColor="@color/extra_dialog_item_text"
+            android:textSize="20sp" />
+
+        <!-- 回答编辑按钮 -->
+        <ImageButton
+            android:id="@+id/extra_dialog_right_edit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="-13dp"
+            android:layout_weight="0.50"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:importantForAccessibility="no"
+            android:scaleType="fitCenter"
+            android:src="@drawable/extra_dialog_right_edit" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.35" />
     </LinearLayout>
 </LinearLayout>

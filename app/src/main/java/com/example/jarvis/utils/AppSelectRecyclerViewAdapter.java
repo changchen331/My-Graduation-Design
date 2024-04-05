@@ -20,12 +20,12 @@ import java.util.List;
  * 用于在 RecyclerView 中显示应用信息列表的适配器
  * 负责将数据集合中的数据显示在 RecyclerView 上，并处理数据的操作，同时支持点击事件回调
  */
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class AppSelectRecyclerViewAdapter extends RecyclerView.Adapter<AppSelectRecyclerViewAdapter.ViewHolder> {
     private final List<AppInfo> apps; // 存储应用信息列表
     private int position = 0; // 记录当前选中 item 的位置
     private OnItemClickListener onItemClickListener; // 定义点击事件的回调接口
 
-    public RecyclerViewAdapter(List<AppInfo> apps) {
+    public AppSelectRecyclerViewAdapter(List<AppInfo> apps) {
         this.apps = apps;
     }
 
@@ -85,7 +85,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         viewHolder.appName.setText(app.getAppName());
         // 设置应用图标
         viewHolder.appIcon.setImageDrawable(app.getAppIcon());
-
         // 设置 item 视图的选中状态
         viewHolder.itemView.setSelected(position == this.position);
     }

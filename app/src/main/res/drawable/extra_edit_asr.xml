@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 按钮被激活时 -->
+    <item android:drawable="@drawable/extra_edit_asr_activated" android:state_activated="true" />
+
+    <!-- 按钮未激活时 -->
+    <item android:drawable="@drawable/extra_edit_asr_unactivated" android:state_activated="false" />
+</selector>

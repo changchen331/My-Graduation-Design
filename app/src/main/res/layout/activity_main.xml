@@ -39,14 +39,13 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:autoSizeMaxTextSize="30sp"
         android:autofillHints="text"
         android:ellipsize="end"
         android:gravity="center"
         android:maxLines="3"
-        android:text="@string/main_asr_text"
-        android:textColor="@color/main_asr_text_empty"
-        android:textSize="28sp"
+        android:text="@string/asr_text"
+        android:textColor="@color/asr_text_empty"
+        android:textSize="30sp"
         android:visibility="invisible" />
 
     <!-- 按钮栏 -->

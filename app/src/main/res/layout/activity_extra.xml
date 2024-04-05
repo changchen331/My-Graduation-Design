@@ -55,10 +55,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@color/extra_dialog"
-        android:paddingStart="20dp"
-        android:paddingTop="15dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="15dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:scrollbars="vertical" />
 
     <LinearLayout
@@ -102,9 +100,9 @@
             android:importantForAccessibility="no"
             android:paddingTop="13dp"
             android:paddingBottom="13dp"
-            android:text="@string/extra_asr"
+            android:text="@string/extra_asr_unactivated"
             android:textColor="@color/extra_asr_text"
-            android:textSize="23sp" />
+            android:textSize="20sp" />
 
         <View
             android:layout_width="0dp"
