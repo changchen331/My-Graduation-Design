@@ -1,11 +1,13 @@
 <resources>
-    <string name="app_name">AppTalk</string>
-    <string name="name">AppTalk</string>
+    <string name="app_name">语悦</string>
+    <!--    <string name="app_name">AppTalk</string>-->
+    <string name="name">语悦</string>
+    <!--    <string name="name">AppTalk</string>-->
 
     <!-- 隐藏 -->
-    <!--    <string name="visibility">4</string>-->
+    <string name="visibility">4</string>
     <!-- 显示 -->
-    <string name="visibility">0</string>
+    <!--    <string name="visibility">0</string>-->
 
     <string name="asr_text">我正在听……</string>
     <!--    <string name="asr_text">I am listening……</string>-->

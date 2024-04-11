@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private List<AppInfo> apps; // 应用信息列表
-    private final ArrayList<String> questions = new ArrayList<>(); // 补充问题列表
+    private ArrayList<String> questions; // 补充问题列表
     private int position = 0; // 应用选择下标
     private String keyboardText = ""; // 手动输入框内容
     private boolean isASRActivated = false; // 语音识别是否激活
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // 语音识别
                 /*code*/
-                String text = "I'm going to Pudong Airport"; // 模拟语音识别结果
+                String text = "我要去医院"; // 模拟语音识别结果
 
                 // 语音识别文本激活
                 isASRTextActivated = true;
@@ -159,14 +159,14 @@ public class MainActivity extends AppCompatActivity {
 
         // 创建 RecyclerViewAdapter 实例
         AppSelectRecyclerViewAdapter appSelectRecyclerViewAdapter = new AppSelectRecyclerViewAdapter(apps);
-        // 将 recyclerViewAdapter 设置为 recyclerView 的适配器
-        recyclerView.setAdapter(appSelectRecyclerViewAdapter);
         // 点击 项视图（itemView）获取所选应用的下标
         appSelectRecyclerViewAdapter.setOnItemClickListener((view, position) -> {
             if (position >= 0 && position < apps.size()) {
                 this.position = position;
             }
         });
+        // 将 recyclerViewAdapter 设置为 recyclerView 的适配器
+        recyclerView.setAdapter(appSelectRecyclerViewAdapter);
 
         // 创建 PopupWindow 实例
         PopupWindow main_application_selection = new PopupWindow(activity_application_selection, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, false);
@@ -352,7 +352,11 @@ public class MainActivity extends AppCompatActivity {
             List<String> targetApplications = Arrays.asList("滴滴出行", "美团", "百度地图");
             apps = apps.stream().filter(app -> targetApplications.contains(app.getAppName())).collect(Collectors.toList());
             // 模拟接收后端返回的补充问题
-            questions.addAll(Arrays.asList("Where are you currently?", "Which mode of transportation do you prefer?"));
+            ArrayList<String> strings = new ArrayList<>();
+            strings.add("您的目的地：");
+            strings.add("您的出发地：");
+            strings.add("您的出发时间：");
+            questions = strings;
         }
     }
 

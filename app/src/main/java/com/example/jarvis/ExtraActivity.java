@@ -31,8 +31,6 @@ import java.util.List;
 public class ExtraActivity extends AppCompatActivity {
     private static final String TAG = "ExtraActivity";
     private final List<Message> messages = new ArrayList<>(); // 对话信息列表
-    private final List<String> answers = Arrays.asList("Dongyu Road", "Public transit"); // 用户的回答（模拟）
-    private final List<String> revisedAnswers = Arrays.asList("Old Humin Road", "Taxi"); // 更正后的答案（模拟）
     private AppInfo selectedApp; // 用户选择的应用信息
     private List<String> questions; // 补充问题
     private ExtraDialogRecyclerViewAdapter extraDialogRecyclerViewAdapter; // 对话框布局适配器
@@ -40,6 +38,10 @@ public class ExtraActivity extends AppCompatActivity {
     private boolean isVoiceInputConfirmed = false; // 语音输入是否确认
     private boolean isEditASRActivated = false; // 语音输入是否确认
     private boolean allQuestionsAnswered = false; // 问题是否全部回答完毕
+
+    private final List<String> answers = Arrays.asList("长海医院", "泰宝华庭", "周五下午两点"); // 用户的回答（模拟）
+    private final List<String> revisedAnswers = Arrays.asList("我的出发地不是泰宝华庭，是复旦二附小", "是的"); // 更正后的答案（模拟）
+    private final List<String> hint = Arrays.asList("根据您本周的行程和历史记录，我猜您要乘坐快车去长海医院。确认呼叫吗?", "已为您自动修正出发地，确认呼叫吗?"); // 系统提示（模拟）
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +69,6 @@ public class ExtraActivity extends AppCompatActivity {
         if (extraDialogRecyclerViewAdapter == null) {
             extraDialogRecyclerViewAdapter = initRecyclerView(recyclerView);
         }
-        // 点击 编辑按钮
-        extraDialogRecyclerViewAdapter.setButtonClickListener(position -> {
-            // 编辑文本
-            showEditPopWindow(recyclerView, position);
-        });
 
         // 语音输入按钮
         Button extra_asr = findViewById(R.id.extra_asr);
@@ -97,10 +94,21 @@ public class ExtraActivity extends AppCompatActivity {
         });
     }
 
-    // 初始化对话弹窗
+    /**
+     * 初始化对话弹窗
+     *
+     * @param recyclerView 滚动弹窗
+     * @return ExtraDialogRecyclerViewAdapter
+     */
     private ExtraDialogRecyclerViewAdapter initRecyclerView(RecyclerView recyclerView) {
-        // 添加第一个问题
-        messages.add(new Message(questions.get(position), Message.TYPE_RECEIVED));
+        // 添加信息
+//        messages.add(new Message(questions.get(position), Message.TYPE_RECEIVED));
+        // 模拟用添加数据
+        for (int i = 0; i < questions.size(); i++) {
+            messages.add(new Message(questions.get(i), Message.TYPE_RECEIVED));
+            messages.add(new Message(answers.get(i), Message.TYPE_SENT));
+        }
+        messages.add(new Message(hint.get(0), Message.TYPE_RECEIVED));
 
         // 创建 GridLayoutManager 实例
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
@@ -111,6 +119,20 @@ public class ExtraActivity extends AppCompatActivity {
 
         // 创建 RecyclerViewAdapter 实例
         ExtraDialogRecyclerViewAdapter extraDialogRecyclerViewAdapter = new ExtraDialogRecyclerViewAdapter(messages);
+        // 点击 编辑按钮
+        extraDialogRecyclerViewAdapter.setButtonClickListener(position -> {
+            // 弹出 编辑文本弹窗
+            showEditPopWindow(recyclerView, position);
+        });
+        // 点击 项视图
+        extraDialogRecyclerViewAdapter.setOnItemClickListener((view, position) -> {
+            // 读出项视图的内容（语音合成）
+            /*code*/
+            // 模拟语音合成
+            if (messages.get(position).getType() == Message.TYPE_RECEIVED) {
+                Toast.makeText(ExtraActivity.this, messages.get(position).getContent(), Toast.LENGTH_SHORT).show();
+            }
+        });
         // 将 recyclerViewAdapter 设置为 recyclerView 的适配器
         recyclerView.setAdapter(extraDialogRecyclerViewAdapter);
 
@@ -128,7 +150,8 @@ public class ExtraActivity extends AppCompatActivity {
         darkenBackground(0.3f);
 
         // 语音输入弹窗
-        @SuppressLint("InflateParams") View activity_extra_asr = getLayoutInflater().inflate(R.layout.activity_extra_asr, null);
+        @SuppressLint("InflateParams")
+        View activity_extra_asr = getLayoutInflater().inflate(R.layout.activity_extra_asr, null);
 
         // 创建 PopupWindow 实例
         PopupWindow extra_asr_window = new PopupWindow(activity_extra_asr, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, false);
@@ -153,7 +176,7 @@ public class ExtraActivity extends AppCompatActivity {
 
             // 语音识别文本激活
             extra_asr_text.setTextColor(ExtraActivity.this.getColor(R.color.asr_text_filled));
-            extra_asr_text.setText(answers.get(position)); // 显示语音识别文本
+            extra_asr_text.setText(revisedAnswers.get(position)); // 显示语音识别文本
 
             // 显示语音识别取消按钮
             extra_asr_cancel.setVisibility(View.VISIBLE);
@@ -171,12 +194,19 @@ public class ExtraActivity extends AppCompatActivity {
         extra_asr_confirm.setOnClickListener(v -> {
             // 语音输入确认
             isVoiceInputConfirmed = true;
-            // 录入语音识别结果
-            messages.add(new Message(answers.get(position), Message.TYPE_SENT));
-            // 更新对话弹窗
-            extraDialogRecyclerViewAdapter.notifyItemInserted(messages.size() - 1);
+            if (position == 0) {
+                // 录入语音识别结果
+//                messages.add(new Message(hint.get(position), Message.TYPE_RECEIVED));
+                messages.get(3).setContent("复旦二附小");
+                messages.get(messages.size() - 1).setContent(hint.get(1));
+                // 更新对话弹窗
+                extraDialogRecyclerViewAdapter.notifyItemChanged(3);
+                extraDialogRecyclerViewAdapter.notifyItemChanged(messages.size() - 1);
+            } else {
+                openApplication(ExtraActivity.this, selectedApp);
+            }
             // 问题进度 +1
-            position++;
+            if (position < 1) position++;
             // 退出语音识别弹窗
             extra_asr_window.dismiss();
         });
@@ -185,15 +215,15 @@ public class ExtraActivity extends AppCompatActivity {
             if (isVoiceInputConfirmed) {
                 if (position > answers.size() - 1) {
                     // 问题已经全部回答完毕
-                    allQuestionsAnswered = true;
+//                    allQuestionsAnswered = true;
                     // 激活语音识别按钮
-                    button.setText(R.string.extra_asr_activated);
-                    button.setActivated(true);
+//                    button.setText(R.string.extra_asr_activated);
+//                    button.setActivated(true);
                 } else {
                     // 更新问题
-                    messages.add(new Message(questions.get(position), Message.TYPE_RECEIVED));
-                    extraDialogRecyclerViewAdapter.notifyItemInserted(messages.size() - 1);
-                    recyclerView.scrollToPosition(messages.size() - 1);
+//                    messages.add(new Message(questions.get(position), Message.TYPE_RECEIVED));
+//                    extraDialogRecyclerViewAdapter.notifyItemInserted(messages.size() - 1);
+//                    recyclerView.scrollToPosition(messages.size() - 1);
                 }
                 isVoiceInputConfirmed = false;
             }

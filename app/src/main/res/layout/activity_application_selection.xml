@@ -25,7 +25,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/application_selection"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:scrollbars="horizontal" />
 
     <!-- 按钮栏 -->
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:orientation="horizontal"
-        android:weightSum="3">
+        android:weightSum="1">
 
         <!-- 取消按钮 -->
         <Button
@@ -42,7 +42,7 @@
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1.45"
+            android:layout_weight="0.48"
             android:background="@drawable/application_selection_cancel"
             android:importantForAccessibility="no"
             android:text="@string/application_selection_cancel"
@@ -52,7 +52,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.1" />
+            android:layout_weight="0.04" />
 
         <!-- 确认按钮 -->
         <Button
@@ -60,7 +60,7 @@
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1.45"
+            android:layout_weight="0.48"
             android:background="@drawable/application_selection_confirm"
             android:importantForAccessibility="no"
             android:text="@string/application_selection_confirm"

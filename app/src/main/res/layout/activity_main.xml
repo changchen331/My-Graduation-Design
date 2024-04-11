@@ -54,14 +54,14 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:weightSum="4">
+        android:weightSum="1">
 
         <!-- 键盘 -->
         <ImageButton
             android:id="@+id/main_keyboard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.25"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:importantForAccessibility="no"
@@ -71,13 +71,13 @@
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.2" />
+            android:layout_weight="0.05" />
 
         <!-- 语音输入 -->
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1.6">
+            android:layout_weight="0.4">
 
             <!-- 语音输入按钮 -->
             <ImageButton
@@ -95,14 +95,14 @@
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.2" />
+            android:layout_weight="0.05" />
 
         <!-- 发送按钮 -->
         <ImageButton
             android:id="@+id/main_send"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.25"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:importantForAccessibility="no"

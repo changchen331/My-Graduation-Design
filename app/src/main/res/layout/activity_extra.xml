@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
     android:orientation="vertical">
 
     <!-- 标题栏 -->
@@ -11,18 +10,18 @@
         android:layout_height="wrap_content"
         android:background="@drawable/extra_title"
         android:orientation="horizontal"
-        android:weightSum="3">
+        android:weightSum="1">
 
         <!-- 返回按钮 -->
         <ImageButton
             android:id="@+id/extra_return"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.38"
+            android:layout_weight="0.1"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:importantForAccessibility="no"
-            android:padding="18dp"
+            android:padding="13dp"
             android:scaleType="fitCenter"
             android:src="@drawable/extra_return" />
 
@@ -30,14 +29,14 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2.24"
+            android:layout_weight="0.75"
             android:autoSizeMaxTextSize="30sp"
             android:autoSizeMinTextSize="10sp"
             android:autoSizeStepGranularity="2sp"
             android:autoSizeTextType="uniform"
             android:gravity="center"
-            android:paddingTop="13dp"
-            android:paddingBottom="13dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:text="@string/name"
             android:textColor="@color/name"
             android:textSize="20sp" />
@@ -45,7 +44,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.38" />
+            android:layout_weight="0.15" />
     </LinearLayout>
 
     <!-- 聊天展示框 -->
@@ -69,14 +68,14 @@
         android:paddingTop="10dp"
         android:paddingEnd="10dp"
         android:paddingBottom="15dp"
-        android:weightSum="4">
+        android:weightSum="1">
 
         <!-- 键盘输入按钮 -->
         <ImageButton
             android:id="@+id/extra_keyboard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.7"
+            android:layout_weight="0.15"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:importantForAccessibility="no"
@@ -87,7 +86,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.15" />
+            android:layout_weight="0.07" />
 
         <!-- 语音输入按钮 -->
         <Button
@@ -95,7 +94,7 @@
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2.4"
+            android:layout_weight="0.6"
             android:background="@drawable/extra_asr"
             android:importantForAccessibility="no"
             android:paddingTop="13dp"
@@ -107,7 +106,6 @@
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.75" />
-
+            android:layout_weight="0.18" />
     </LinearLayout>
 </LinearLayout>

@@ -13,15 +13,16 @@
         android:id="@+id/extra_asr_text"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.4"
+        android:layout_weight="0.45"
         android:autofillHints="text"
         android:background="@drawable/extra_asr_text"
         android:ellipsize="end"
         android:gravity="center"
         android:maxLines="3"
+        android:padding="10dp"
         android:text="@string/asr_text"
         android:textColor="@color/asr_text_empty"
-        android:textSize="30sp" />
+        android:textSize="25sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,7 +32,6 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:weightSum="1">
-
 
         <!-- 取消按钮 -->
         <ImageButton
@@ -70,13 +70,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="15dp"
-        android:weightSum="3">
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.25" />
+        android:paddingBottom="13dp"
+        android:weightSum="1">
 
         <!-- 语音输入结束按钮 -->
         <Button
@@ -84,19 +79,14 @@
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2.5"
+            android:layout_weight="0.8"
             android:background="@drawable/extra_asr_end"
             android:importantForAccessibility="no"
-            android:paddingTop="17dp"
+            android:paddingTop="15dp"
             android:paddingBottom="15dp"
             android:text="@string/extra_asr_end"
             android:textColor="@color/extra_asr_end_text"
             android:textSize="20sp"
             android:visibility="visible" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.25" />
     </LinearLayout>
 </LinearLayout>

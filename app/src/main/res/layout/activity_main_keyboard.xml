@@ -9,14 +9,14 @@
     android:paddingTop="20dp"
     android:paddingEnd="16dp"
     android:paddingBottom="20dp"
-    android:weightSum="3">
+    android:weightSum="1">
 
     <!-- 手动输入文本 -->
     <EditText
         android:id="@+id/main_keyboard_edit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="2.5"
+        android:layout_weight="0.8"
         android:autofillHints="text"
         android:background="@drawable/main_keyboard_edit"
         android:importantForAccessibility="no"
@@ -33,14 +33,14 @@
     <View
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.1" />
+        android:layout_weight="0.05" />
 
     <!-- 发送按钮 -->
     <ImageButton
         android:id="@+id/main_keyboard_send"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.4"
+        android:layout_weight="0.15"
         android:adjustViewBounds="true"
         android:background="@android:color/transparent"
         android:importantForAccessibility="no"
