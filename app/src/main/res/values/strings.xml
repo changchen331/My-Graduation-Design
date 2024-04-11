@@ -1,34 +1,36 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">AppTalk</string>
     <string name="name">AppTalk</string>
 
     <!-- 隐藏 -->
-    <string name="visibility">4</string>
+    <!--    <string name="visibility">4</string>-->
     <!-- 显示 -->
-    <!--    <string name="visibility">0</string>-->
+    <string name="visibility">0</string>
 
-    <!--    <string name="asr_text">我正在听……</string>-->
-    <string name="asr_text">I am listening……</string>
+    <string name="asr_text">我正在听……</string>
+    <!--    <string name="asr_text">I am listening……</string>-->
 
-    <!--    <string name="application_selection_title">选择应用</string>-->
-    <string name="application_selection_title">Choose an App</string>
-    <!--    <string name="application_selection_cancel">取消</string>-->
-    <string name="application_selection_cancel" tools:ignore="ButtonCase">cancel</string>
-    <!--    <string name="application_selection_confirm">确认</string>-->
-    <string name="application_selection_confirm">confirm</string>
+    <string name="application_selection_title">选择应用</string>
+    <!--    <string name="application_selection_title">Choose an App</string>-->
+    <string name="application_selection_cancel">取消</string>
+    <!--    <string name="application_selection_cancel" tools:ignore="ButtonCase">cancel</string>-->
+    <string name="application_selection_confirm">确认</string>
+    <!--    <string name="application_selection_confirm">confirm</string>-->
     <string name="application_selection_item_name">App Name</string>
 
     <string name="extra_dialog_item_text">Hello World!</string>
 
-    <!--    <string name="extra_asr_unactivated">点击开始说话</string>-->
-    <string name="extra_asr_unactivated">start speaking</string>
-    <!--    <string name="extra_asr_activated">确认并提交</string>-->
-    <string name="extra_asr_activated">Submit</string>
-    <!--    <string name="extra_asr_end">点击结束语音</string>-->
-    <string name="extra_asr_end">end voice</string>
+    <string name="extra_asr_unactivated">点击开始说话</string>
+    <!--    <string name="extra_asr_unactivated">start speaking</string>-->
+    <string name="extra_asr_activated">确认并提交</string>
+    <!--    <string name="extra_asr_activated">Submit</string>-->
+    <string name="extra_asr_end">点击结束语音</string>
+    <!--    <string name="extra_asr_end">end voice</string>-->
 
-    <string name="extra_edit_question">There should be a question here</string>
-    <string name="extra_edit_answer">There should be a answer here</string>
+    <!--    <string name="extra_edit_question">There should be a question here</string>-->
+    <string name="extra_edit_question">此处应有问题</string>
+    <!--    <string name="extra_edit_answer">There should be a answer here</string>-->
+    <string name="extra_edit_answer">此处应有答案</string>
 
 
 </resources>

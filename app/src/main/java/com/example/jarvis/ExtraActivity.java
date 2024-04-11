@@ -28,9 +28,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * activity_extra_edit 改！大改！
- */
 public class ExtraActivity extends AppCompatActivity {
     private static final String TAG = "ExtraActivity";
     private final List<Message> messages = new ArrayList<>(); // 对话信息列表
@@ -50,7 +47,7 @@ public class ExtraActivity extends AppCompatActivity {
         setContentView(R.layout.activity_extra);
 
         // 从 Intent 中获取用户选择的应用
-        selectedApp = (AppInfo) getIntent().getParcelableExtra("selected_applications");
+        selectedApp = getIntent().getParcelableExtra("selected_applications");
         // 从 Intent 中获取补充问题
         ArrayList<String> extraQuestions = getIntent().getStringArrayListExtra("extra_questions");
         if (extraQuestions != null) questions = extraQuestions;
@@ -227,7 +224,7 @@ public class ExtraActivity extends AppCompatActivity {
         extra_edit_answer.setText(messages.get(position).getContent());
 
         // 显示文本编辑弹窗
-        extra_edit.showAtLocation(recyclerView, Gravity.BOTTOM, 0, 0);
+        extra_edit.showAtLocation(recyclerView, Gravity.CENTER, 0, 0);
 
         // 取消按钮
         ImageButton extra_edit_cancel = activity_extra_edit.findViewById(R.id.extra_edit_cancel);

@@ -3,86 +3,117 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:orientation="vertical"
-    android:padding="30dp">
+    android:layout_marginStart="30dp"
+    android:layout_marginEnd="30dp"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/extra_edit"
-        android:orientation="vertical"
-        android:padding="10dp"
+        android:layout_marginBottom="-20dp"
+        android:elevation="10dp"
+        android:gravity="end"
+        android:orientation="horizontal"
         android:weightSum="1">
 
         <!-- 取消按钮 -->
         <ImageButton
             android:id="@+id/extra_edit_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_gravity="end"
-            android:layout_weight="0.13"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.15"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:importantForAccessibility="no"
+            android:padding="5dp"
             android:scaleType="fitCenter"
             android:src="@drawable/extra_edit_cancel" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/extra_edit"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingTop="20dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp">
 
         <!-- 问题 -->
         <TextView
             android:id="@+id/extra_edit_question"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            android:layout_weight="0.24"
+            android:layout_height="wrap_content"
             android:autofillHints="text"
             android:gravity="center"
             android:maxLines="3"
             android:text="@string/extra_edit_question"
             android:textColor="@color/extra_edit_question"
-            android:textSize="25sp"
+            android:textSize="23sp"
             android:textStyle="bold" />
 
         <!-- 回答 -->
         <TextView
             android:id="@+id/extra_edit_answer"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_margin="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_weight="0.5"
+            android:layout_height="150dp"
+            android:layout_marginTop="15dp"
             android:autofillHints="text"
             android:background="@drawable/extra_edit_answer"
+            android:ellipsize="end"
             android:gravity="center"
-            android:maxLines="2"
+            android:maxLines="3"
+            android:padding="10dp"
             android:text="@string/extra_edit_answer"
             android:textColor="@color/asr_text_empty"
-            android:textSize="20sp" />
+            android:textSize="23sp" />
 
-        <!-- 语音识别按钮 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <!-- 语音识别按钮 -->
+            <ImageButton
+                android:id="@+id/extra_edit_asr"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.43"
+                android:adjustViewBounds="true"
+                android:background="@android:color/transparent"
+                android:importantForAccessibility="no"
+                android:scaleType="fitCenter"
+                android:src="@drawable/extra_edit_asr" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <!-- 确认按钮 -->
         <ImageButton
-            android:id="@+id/extra_edit_asr"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:id="@+id/extra_edit_confirm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="0.13"
+            android:layout_weight="0.2"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:importantForAccessibility="no"
             android:scaleType="fitCenter"
-            android:src="@drawable/extra_edit_asr" />
+            android:src="@drawable/extra_asr_confirm" />
     </LinearLayout>
-
-    <!-- 确认按钮 -->
-    <ImageButton
-        android:id="@+id/extra_edit_confirm"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:adjustViewBounds="true"
-        android:background="@android:color/transparent"
-        android:importantForAccessibility="no"
-        android:scaleType="fitCenter"
-        android:src="@drawable/extra_asr_confirm" />
 
 </LinearLayout>
