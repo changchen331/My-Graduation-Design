@@ -7,14 +7,13 @@
     android:paddingStart="10dp"
     android:paddingEnd="10dp">
 
-    <!-- 对话框 问题 -->
+    <!-- 对话框 左 -->
     <LinearLayout
         android:id="@+id/extra_dialog_left"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:layout_marginBottom="3dp"
-        android:gravity="start"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal"
         android:visibility="visible">
 
@@ -33,9 +32,8 @@
             android:id="@+id/extra_dialog_left_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
             android:layout_marginStart="5dp"
-            android:layout_marginEnd="30dp"
+            android:layout_marginEnd="35dp"
             android:background="@drawable/extra_dialog_item_left"
             android:padding="15dp"
             android:text="@string/extra_dialog_item_text"
@@ -48,9 +46,8 @@
         android:id="@+id/extra_dialog_right"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginTop="3dp"
-        android:layout_marginBottom="3dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:layoutDirection="rtl"
         android:orientation="horizontal"
         android:visibility="visible">
@@ -59,10 +56,10 @@
         <ImageView
             android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
+            android:layout_marginEnd="3dp"
             android:adjustViewBounds="true"
             android:importantForAccessibility="no"
-            android:padding="5dp"
+            android:padding="2dp"
             android:scaleType="fitCenter"
             android:src="@drawable/extra_dialog_right_icon" />
 
@@ -71,10 +68,9 @@
             android:id="@+id/extra_dialog_right_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
             android:layout_marginStart="5dp"
+            android:layout_marginEnd="35dp"
             android:background="@drawable/extra_dialog_item_right"
-            android:gravity="start|center"
             android:padding="15dp"
             android:text="@string/extra_dialog_item_text"
             android:textColor="@color/extra_dialog_item_text"
@@ -85,9 +81,7 @@
             android:id="@+id/extra_dialog_right_edit"
             android:layout_width="45dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
             android:layout_marginStart="-13dp"
-            android:layout_marginEnd="30dp"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:importantForAccessibility="no"

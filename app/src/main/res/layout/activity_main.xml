@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:autoSizeMaxTextSize="50sp"
         android:autoSizeMinTextSize="40sp"
-        android:autoSizeStepGranularity="2sp"
+        android:autoSizeStepGranularity="5sp"
         android:autoSizeTextType="uniform"
         android:gravity="center"
         android:text="@string/name"

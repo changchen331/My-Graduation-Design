@@ -100,14 +100,14 @@ public class AppSelectRecyclerViewAdapter extends RecyclerView.Adapter<AppSelect
     }
 
     /**
-     * 将dp单位转换为像素单位
+     * 将 dp 单位转换为像素单位
      *
-     * @param dp      需要转换的dp值
+     * @param dp      需要转换的 dp 值
      * @param context 上下文对象，用于获取屏幕密度信息
      * @return 转换后的像素值
      */
     private int dpToPx(int dp, Context context) {
-        // 获取显示度量，用于转换dp到像素
+        // 获取显示度量，用于转换 dp 到像素
         float density = context.getResources().getDisplayMetrics().density;
         return Math.round(dp * density); // 计算像素值并返回
     }
@@ -131,15 +131,15 @@ public class AppSelectRecyclerViewAdapter extends RecyclerView.Adapter<AppSelect
         int itemMargin;
         switch (itemSpanCount) {
             case 1:
-                // 只有一列时，边距为屏幕宽度与两倍item宽度差的二分之一
+                // 只有一列时，边距为屏幕宽度与两倍 item 宽度差的二分之一
                 itemMargin = (recyclerWidth - itemWidth) / 2;
                 break;
             case 2:
-                // 双列时，边距为屏幕宽度与两倍item宽度差的四分之一
+                // 双列时，边距为屏幕宽度与两倍 item 宽度差的四分之一
                 itemMargin = (recyclerWidth - 2 * itemWidth) / 4;
                 break;
             default:
-                // 三列时，边距为屏幕宽度与三倍item宽度差的六分之一
+                // 三列时，边距为屏幕宽度与三倍 item 宽度差的六分之一
                 itemMargin = (recyclerWidth - 3 * itemWidth) / 6;
         }
         return itemMargin;

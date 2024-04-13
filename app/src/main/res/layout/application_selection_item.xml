@@ -6,9 +6,9 @@
     android:layout_gravity="center"
     android:background="@drawable/application_selection_item"
     android:orientation="vertical"
-    android:paddingStart="5dp"
+    android:paddingStart="3dp"
     android:paddingTop="3dp"
-    android:paddingEnd="5dp"
+    android:paddingEnd="3dp"
     android:paddingBottom="3dp">
 
     <!-- APP 图标 -->

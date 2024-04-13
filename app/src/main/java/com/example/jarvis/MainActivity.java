@@ -134,6 +134,61 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * 发送输入文本 + 接收返回数据
+     *
+     * @param text 输入文本
+     */
+    private void sendAndGet(String text) {
+        // 对输入的文本进行处理
+        String textTrimmed = text.trim();
+
+        // 用户是否输入了文本
+        if (!textTrimmed.isEmpty()) {
+            apps = getApplicationInformation(MainActivity.this); // 获取所有应用信息
+            MainActivity.this.position = 0; // 重置选择应用的下标（默认为第一个应用）
+
+            // 发送需求 + 所有应用信息
+            /*code*/
+
+            // 接收后端返回的应用列表
+            /*code*/
+            // 模拟接收后端返回的应用列表
+            List<String> targetApplications = Arrays.asList("滴滴出行", "美团", "百度地图");
+            apps = apps.stream().filter(app -> targetApplications.contains(app.getAppName())).collect(Collectors.toList());
+            // 模拟接收后端返回的补充问题
+            ArrayList<String> strings = new ArrayList<>();
+            strings.add("您的目的地：");
+            strings.add("您的出发地：");
+            strings.add("您的出发时间：");
+            questions = strings;
+        }
+    }
+
+    /**
+     * 获取所有应用信息
+     *
+     * @param context 当前上下文环境
+     * @return 应用信息列表，或者在无法获取时返回空列表
+     */
+    private List<AppInfo> getApplicationInformation(Context context) {
+        // 检查 context 是否为 null
+        if (context == null) {
+            // 提供一个空列表，因为没有有效的 context 来获取应用信息
+            return Collections.emptyList();
+        }
+
+        // 创建 AppInfoFetcher 实例
+        AppInfoFetcher appInfoFetcher = new AppInfoFetcher(context);
+        try {
+            return appInfoFetcher.getAllInstalledApps();
+        } catch (Exception e) {
+            // 处理获取应用信息时可能发生的异常
+            Log.e(TAG, "Failed to get installed apps", e);
+            return Collections.emptyList(); // 返回空列表
+        }
+    }
+
+    /**
      * 显示应用选择弹窗
      *
      * @param parentView 指定显示窗口
@@ -151,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = activity_application_selection.findViewById(R.id.application_selection);
 
         // 创建 GridLayoutManager 实例
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this, 1);
         // 设置 recyclerView 为横向滚动
         gridLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         // 将 gridLayoutManager 设置为 recyclerView 的布局管理器
@@ -162,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
         // 点击 项视图（itemView）获取所选应用的下标
         appSelectRecyclerViewAdapter.setOnItemClickListener((view, position) -> {
             if (position >= 0 && position < apps.size()) {
-                this.position = position;
+                MainActivity.this.position = position;
             }
         });
         // 将 recyclerViewAdapter 设置为 recyclerView 的适配器
@@ -210,36 +265,12 @@ public class MainActivity extends AppCompatActivity {
      */
     private void jumpToExtra(AppInfo appInfo) {
         // 创建指向 ExtraActivity 的 Intent
-        Intent intent = new Intent(this, ExtraActivity.class);
+        Intent intent = new Intent(MainActivity.this, ExtraActivity.class);
         // 将 AppInfo 对象添加到 Intent 额外数据中
         intent.putExtra("selected_applications", appInfo);
         intent.putStringArrayListExtra("extra_questions", questions);
         // 启动 ExtraActivity
         startActivity(intent);
-    }
-
-    /**
-     * 获取所有应用信息
-     *
-     * @param context 当前上下文环境
-     * @return 应用信息列表，或者在无法获取时返回空列表
-     */
-    private List<AppInfo> getApplicationInformation(Context context) {
-        // 检查 context 是否为 null
-        if (context == null) {
-            // 提供一个空列表，因为没有有效的 context 来获取应用信息
-            return Collections.emptyList();
-        }
-
-        // 创建 AppInfoFetcher 实例
-        AppInfoFetcher appInfoFetcher = new AppInfoFetcher(context);
-        try {
-            return appInfoFetcher.getAllInstalledApps();
-        } catch (Exception e) {
-            // 处理获取应用信息时可能发生的异常
-            Log.e(TAG, "Failed to get installed apps", e);
-            return Collections.emptyList(); // 返回空列表
-        }
     }
 
     /**
@@ -327,37 +358,6 @@ public class MainActivity extends AppCompatActivity {
                 keyboardText = main_window_keyboard_edit.getText().toString();
             }
         });
-    }
-
-    /**
-     * 发送输入文本 + 接收返回数据
-     *
-     * @param text 输入文本
-     */
-    private void sendAndGet(String text) {
-        // 对输入的文本进行处理
-        String textTrimmed = text.trim();
-
-        // 用户是否输入了文本
-        if (!textTrimmed.isEmpty()) {
-            apps = getApplicationInformation(MainActivity.this); // 获取所有应用信息
-            position = 0; // 重置选择应用的下标（默认为第一个应用）
-
-            // 发送需求 + 所有应用信息
-            /*code*/
-
-            // 接收后端返回的应用列表
-            /*code*/
-            // 模拟接收后端返回的应用列表
-            List<String> targetApplications = Arrays.asList("滴滴出行", "美团", "百度地图");
-            apps = apps.stream().filter(app -> targetApplications.contains(app.getAppName())).collect(Collectors.toList());
-            // 模拟接收后端返回的补充问题
-            ArrayList<String> strings = new ArrayList<>();
-            strings.add("您的目的地：");
-            strings.add("您的出发地：");
-            strings.add("您的出发时间：");
-            questions = strings;
-        }
     }
 
     /**
