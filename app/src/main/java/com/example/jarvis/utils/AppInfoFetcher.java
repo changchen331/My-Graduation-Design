@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class AppInfoFetcher {
     private static final String TAG = "AppInfoFetcher";
-    private final Context context;
+    private final Context context; // 上下文环境（例：MainActivity.this）
 
     public AppInfoFetcher(Context context) {
         this.context = context;
@@ -27,14 +27,12 @@ public class AppInfoFetcher {
 
     @SuppressLint("QueryPermissionsNeeded")
     public List<AppInfo> getAllInstalledApps() {
-        if (context == null) {
-            // 提供一个空列表，因为没有有效的 context 来获取应用信息
-            return Collections.emptyList();
-        }
+        // 返回一个空列表，因为没有有效的 context 来获取应用信息
+        if (context == null) return Collections.emptyList();
 
-        // 用于存放应用数据
+        // 应用数据列表
         List<AppInfo> appList = new ArrayList<>();
-        // 获取PackageManager实例
+        // 获取 PackageManager 实例
         PackageManager packageManager = context.getPackageManager();
 
         // 筛选应用
@@ -42,7 +40,6 @@ public class AppInfoFetcher {
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
         // 为 Intent 添加类别 Intent.CATEGORY_LAUNCHER，表示查找可以作为应用启动器的活动。
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
-
         // 使用 PackageManager 的 queryIntentActivities 方法查询所有可以响应此 Intent 的活动。
         List<ResolveInfo> resolves = packageManager.queryIntentActivities(intent, 0);
         for (ResolveInfo resolveInfo : resolves) {

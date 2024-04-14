@@ -88,13 +88,9 @@ public class AppInfo implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-        // 写入 appName 字符串
-        dest.writeString(appName);
-        // 写入 packageName 字符串
-        dest.writeString(packageName);
+        dest.writeString(appName); // 写入 appName
+        dest.writeString(packageName); // 写入 packageName
         // 如果 mainActivity 不为空，则将其写入
-        if (mainActivity != null) {
-            dest.writeParcelable(mainActivity, flags);
-        }
+        if (mainActivity != null) dest.writeParcelable(mainActivity, flags);
     }
 }

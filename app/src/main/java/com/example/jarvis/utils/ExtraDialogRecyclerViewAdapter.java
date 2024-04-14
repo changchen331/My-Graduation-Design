@@ -145,9 +145,7 @@ public class ExtraDialogRecyclerViewAdapter extends RecyclerView.Adapter<ExtraDi
             itemView.setOnClickListener(v -> {
                 if (onItemClickListener != null) {
                     // 更新当前选中的 item 位置
-                    if (getAdapterPosition() != position) {
-                        position = getAdapterPosition();
-                    }
+                    if (getAdapterPosition() != position) position = getAdapterPosition();
                     // 触发点击事件的回调
                     onItemClickListener.onItemClick(itemView, position);
                 }

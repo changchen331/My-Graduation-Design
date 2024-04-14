@@ -29,10 +29,8 @@ import com.example.jarvis.utils.AppSelectRecyclerViewAdapter;
 import com.example.jarvis.utils.SoftKeyboardStateHelper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -141,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
     private void sendAndGet(String text) {
         // 对输入的文本进行处理
         String textTrimmed = text.trim();
-
         // 用户是否输入了文本
         if (!textTrimmed.isEmpty()) {
             apps = getApplicationInformation(MainActivity.this); // 获取所有应用信息
@@ -153,8 +150,8 @@ public class MainActivity extends AppCompatActivity {
             // 接收后端返回的应用列表
             /*code*/
             // 模拟接收后端返回的应用列表
-            List<String> targetApplications = Arrays.asList("滴滴出行", "美团", "百度地图");
-            apps = apps.stream().filter(app -> targetApplications.contains(app.getAppName())).collect(Collectors.toList());
+//            List<String> targetApplications = Arrays.asList("滴滴出行", "美团", "百度地图");
+//            apps = apps.stream().filter(app -> targetApplications.contains(app.getAppName())).collect(Collectors.toList());
             // 模拟接收后端返回的补充问题
             ArrayList<String> strings = new ArrayList<>();
             strings.add("您的目的地：");
@@ -378,7 +375,7 @@ public class MainActivity extends AppCompatActivity {
                     // 弹出软键盘
                     inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
                 }
-            }, 100); // 延迟时间，可根据实际情况调整
+            }, 100);
         }
     }
 
@@ -413,19 +410,16 @@ public class MainActivity extends AppCompatActivity {
     private void darkenBackground(Float alpha) {
         if (alpha == null || alpha < 0.0f || alpha > 1.0f) {
             // 透明度值无效，使用默认值
+            Log.w(TAG, "Invalid alpha value, using 0.5 instead.");
             alpha = 0.5f;
         }
 
         Window window = MainActivity.this.getWindow();
         try {
-            // 获取当前窗口的布局参数
-            WindowManager.LayoutParams lp = window.getAttributes();
-            // 设置窗口的透明度
-            lp.alpha = alpha;
-            // 为窗口添加背后模糊效果的标志
-            window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-            // 应用更新后的布局参数到窗口
-            window.setAttributes(lp);
+            WindowManager.LayoutParams lp = window.getAttributes(); // 获取当前窗口的布局参数
+            lp.alpha = alpha;  // 设置窗口的透明度
+            window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND); // 为窗口添加背后模糊效果的标志
+            window.setAttributes(lp); // 应用更新后的布局参数到窗口
         } catch (Exception e) {
             // 处理设置窗口属性时可能出现的异常
             Log.e(TAG, "Failed to darken background", e);
@@ -438,6 +432,12 @@ public class MainActivity extends AppCompatActivity {
      * @param milliseconds 震动时长
      */
     private void vibrate(long milliseconds) {
+        // 检查延迟时间是否为非负数
+        if (milliseconds < 0) {
+            Log.w(TAG, "Invalid milliseconds value, using 0 instead.");
+            milliseconds = 100;
+        }
+
         // 获取 Vibrator 服务的实例
         Vibrator vibrator = (Vibrator) MainActivity.this.getSystemService(VIBRATOR_SERVICE);
 
@@ -445,12 +445,7 @@ public class MainActivity extends AppCompatActivity {
         if (vibrator != null && vibrator.hasVibrator()) {
             // 创建一个震动 milliseconds 毫秒的 VibrationEffect
             VibrationEffect vibrationEffect = VibrationEffect.createOneShot(milliseconds, VibrationEffect.DEFAULT_AMPLITUDE);
-            try {
-                vibrator.vibrate(vibrationEffect); // 执行震动
-            } catch (IllegalArgumentException e) {
-                // 处理震动无法执行的情况，例如不合法的震动时长
-                Log.e(TAG, "Failed to vibrate", e);
-            }
+            vibrator.vibrate(vibrationEffect); // 执行震动
         }
     }
 }

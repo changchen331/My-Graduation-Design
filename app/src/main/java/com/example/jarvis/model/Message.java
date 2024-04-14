@@ -6,8 +6,8 @@ import androidx.annotation.NonNull;
  * 额外对话信息
  */
 public class Message {
-    public static final int TYPE_RECEIVED = 0;
-    public static final int TYPE_SENT = 1;
+    public static final int TYPE_RECEIVED = 0; // 接收
+    public static final int TYPE_SENT = 1; // 发送
 
     private String content; // 消息内容
     private int type; // 消息类型
