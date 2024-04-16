@@ -45,17 +45,17 @@ public class ExtraActivity extends AppCompatActivity {
     private final List<String> hint = Arrays.asList("点击白色文本框，我会读出其中的内容", "点击绿色文本框可以更改其中的内容"); // 系统提示
     private AppInfo selectedApp; // 用户选择的应用信息
     private List<String> questions; // 补充问题
-    private final List<String> revisedAnswers = Arrays.asList("复旦大学附属华山医院", "我现在的位置", "现在"); // 更改后的回答（模拟）
     private ExtraDialogRecyclerViewAdapter extraDialogRecyclerViewAdapter; // 对话框布局适配器
     private RecyclerView recyclerView; // 对话框滚动视图
     private String extraKeyboardEditText = ""; // 补充对话界面 手动输入框内容
-    private boolean isVoiceInputConfirmed = false; // 语音输入是否确认
     private boolean isSwitchActivated = false; // 输入切换按钮是否激活
+    private boolean isVoiceInputConfirmed = false; // 语音输入是否确认
+    private boolean isEditASRActivated = false; // 编辑弹窗 语音输入是否激活
     private boolean allQuestionsAnswered = false; // 问题是否全部回答完毕
 
 
     private final List<String> answers = Arrays.asList("长海医院", "泰宝华庭", "周五下午两点"); // 用户的回答（模拟）
-    private boolean isEditASRActivated = false; // 编辑弹窗 语音输入是否激活
+    private final List<String> revisedAnswers = Arrays.asList("复旦大学附属华山医院", "我现在的位置", "现在"); // 更改后的回答（模拟）
     private int schedule = 0; // 对话的进度（模拟）
 
     @Override
