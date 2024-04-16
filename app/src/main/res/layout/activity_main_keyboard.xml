@@ -11,7 +11,7 @@
     android:paddingBottom="20dp"
     android:weightSum="1">
 
-    <!-- 手动输入文本 -->
+    <!-- 手动输入框 -->
     <EditText
         android:id="@+id/main_keyboard_edit"
         android:layout_width="0dp"
@@ -21,11 +21,12 @@
         android:background="@drawable/main_keyboard_edit"
         android:importantForAccessibility="no"
         android:inputType="text"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
+        android:padding="10dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
         android:textColor="@color/main_keyboard_edit_text"
         android:textColorHighlight="@color/main_keyboard_edit_highlight"
-        android:textCursorDrawable="@drawable/main_cursor"
+        android:textCursorDrawable="@drawable/main_keyboard_edit_cursor"
         android:textIsSelectable="true"
         android:textSize="23sp"
         tools:ignore="LabelFor" />

@@ -9,7 +9,7 @@
     <!-- 显示 -->
     <string name="visibility">0</string>
 
-    <string name="asr_text">我正在听……我正在听……我正在听……我正在听……我正在听……我正在听……我正在听……我正在听……我正在听……</string>
+    <string name="asr_text">我正在听……</string>
     <!--    <string name="asr_text">I am listening……</string>-->
 
     <string name="application_selection_title">选择应用</string>
@@ -20,7 +20,7 @@
     <!--    <string name="application_selection_confirm">confirm</string>-->
     <string name="application_selection_item_name">App Name</string>
 
-    <string name="extra_dialog_item_text">你好，世界!你好，世界!你好，世界!你好，世界!你好，世界!你好，世界!你好，世界!你好，世界!你好，世界!你好，世界!你好，世界!</string>
+    <string name="extra_dialog_item_text">你好，世界!</string>
     <!--    <string name="extra_dialog_item_text">Hello World!</string>-->
 
     <string name="extra_asr_unactivated">点击开始说话</string>
@@ -29,6 +29,9 @@
     <!--    <string name="extra_asr_activated">Submit</string>-->
     <string name="extra_asr_end">点击结束语音</string>
     <!--    <string name="extra_asr_end">end voice</string>-->
+
+    <string name="extra_keyboard_send">发送</string>
+    <!--    <string name="extra_keyboard_send">send</string>-->
 
     <string name="extra_edit_question">此处应有问题</string>
     <!--    <string name="extra_edit_question">There should be a question here</string>-->

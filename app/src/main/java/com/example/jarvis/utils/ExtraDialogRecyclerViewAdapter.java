@@ -141,8 +141,16 @@ public class ExtraDialogRecyclerViewAdapter extends RecyclerView.Adapter<ExtraDi
             extraDialogRightText = itemView.findViewById(R.id.extra_dialog_right_text);
             extraDialogRightEdit = itemView.findViewById(R.id.extra_dialog_right_edit);
 
-            // 设置 itemView 的点击事件，当 item 被点击时调用 onItemClickListener 的 onItemClick 方法
-            itemView.setOnClickListener(v -> {
+            // 设置 TextView 的点击事件，当 TextView 被点击时调用 onItemClickListener 的 onItemClick 方法
+            extraDialogLeftText.setOnClickListener(v -> {
+                if (onItemClickListener != null) {
+                    // 更新当前选中的 item 位置
+                    if (getAdapterPosition() != position) position = getAdapterPosition();
+                    // 触发点击事件的回调
+                    onItemClickListener.onItemClick(itemView, position);
+                }
+            });
+            extraDialogRightText.setOnClickListener(v -> {
                 if (onItemClickListener != null) {
                     // 更新当前选中的 item 位置
                     if (getAdapterPosition() != position) position = getAdapterPosition();

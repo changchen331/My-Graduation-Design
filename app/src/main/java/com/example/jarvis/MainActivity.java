@@ -32,6 +32,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * 主界面
+ */
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private List<AppInfo> apps; // 应用信息列表
@@ -51,21 +54,17 @@ public class MainActivity extends AppCompatActivity {
         TextView main_asr_text = findViewById(R.id.main_asr_text);
         // 语音输入按钮
         ImageButton main_asr = findViewById(R.id.main_asr);
-
         // 点击语音输入按钮
         main_asr.setOnClickListener(v -> {
             if (!isASRActivated) {
                 // 语音识别文本休眠
                 isASRTextActivated = false;
                 main_asr_text.setTextColor(MainActivity.this.getColor(R.color.asr_text_empty));
-
                 main_asr_text.setText(R.string.asr_text); // 重置语音识别文本
                 main_asr_text.setVisibility(View.VISIBLE); // 显示语音识别框
-
                 // 语音识别激活
                 isASRActivated = true;
                 main_asr.setActivated(true);
-
                 // 开始录音（应该有一个开始录音的方法）
                 /*code*/
                 vibrate(200); // 模拟开始录音（震动）
@@ -73,18 +72,14 @@ public class MainActivity extends AppCompatActivity {
                 // 结束录音（应该有一个结束录音的方法）
                 /*code*/
                 vibrate(300); // 模拟结束录音（震动）
-
                 main_asr.setVisibility(View.INVISIBLE); // 隐藏语音识别按钮（等待语音识别产生结果）
-
                 // 语音识别
                 /*code*/
                 String text = "我要去医院"; // 模拟语音识别结果
-
                 // 语音识别文本激活
                 isASRTextActivated = true;
                 main_asr_text.setTextColor(MainActivity.this.getColor(R.color.asr_text_filled));
                 main_asr_text.setText(text); // 显示语音识别文本
-
                 // 语音识别休眠
                 isASRActivated = false;
                 main_asr.setActivated(false);
@@ -98,15 +93,18 @@ public class MainActivity extends AppCompatActivity {
         main_send.setOnClickListener(v -> {
             // 已经输入语音
             if (isASRTextActivated) {
+                // 检查输入文本是否为空
+                String text = main_asr_text.getText().toString();
+                if (text.isEmpty()) return;
+                // 发送语音识别文本
                 main_asr_text.setVisibility(View.INVISIBLE); // 隐藏语音识别框
-                sendAndGet(main_asr_text.getText().toString()); // 发送语音识别文本 + 接收返回数据
-
+                sendAndGet(text); // 发送语音识别文本 + 接收返回数据
                 // 语音识别文本休眠
                 isASRTextActivated = false;
                 main_asr_text.setTextColor(MainActivity.this.getColor(R.color.asr_text_empty));
-
                 main_asr_text.setText(R.string.asr_text); // 重置语音识别文本
-                showApplicationSelectionPopWindow(main_asr_text); // 显示应用选择弹窗
+                // 显示应用选择弹窗
+                showApplicationSelectionPopWindow(main_asr_text);
             }
         });
 
@@ -118,16 +116,14 @@ public class MainActivity extends AppCompatActivity {
         main_keyboard.setOnClickListener(v -> {
             main_asr_text.setVisibility(View.INVISIBLE); // 隐藏语音输入文本展示框
             main_asr_text.setText(R.string.asr_text); // 重置语音识别文本
-
             // 语音识别文本休眠
             isASRTextActivated = false;
             main_asr_text.setTextColor(MainActivity.this.getColor(R.color.asr_text_empty));
-
             // 语音识别休眠
             isASRActivated = false;
             main_asr.setActivated(false);
-
-            showKeyboardPopWindow(main_asr_text); // 显示文本输入弹窗
+            // 显示文本输入弹窗
+            showKeyboardPopWindow(main_asr_text);
         });
     }
 
@@ -143,10 +139,8 @@ public class MainActivity extends AppCompatActivity {
         if (!textTrimmed.isEmpty()) {
             apps = getApplicationInformation(MainActivity.this); // 获取所有应用信息
             MainActivity.this.position = 0; // 重置选择应用的下标（默认为第一个应用）
-
             // 发送需求 + 所有应用信息
             /*code*/
-
             // 接收后端返回的应用列表
             /*code*/
             // 模拟接收后端返回的应用列表
@@ -173,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
             // 提供一个空列表，因为没有有效的 context 来获取应用信息
             return Collections.emptyList();
         }
-
         // 创建 AppInfoFetcher 实例
         AppInfoFetcher appInfoFetcher = new AppInfoFetcher(context);
         try {
@@ -340,8 +333,15 @@ public class MainActivity extends AppCompatActivity {
         main_keyboard_window.setOnDismissListener(() -> {
             // 是否要发送输入文本
             if (isKeyboardSend) {
+                // 检查输入文本是否为空
+                String text = main_window_keyboard_edit.getText().toString();
+                if (text.isEmpty()) {
+                    // 恢复背景
+                    darkenBackground(1f);
+                    return;
+                }
                 // 发送文本
-                sendAndGet(main_window_keyboard_edit.getText().toString());
+                sendAndGet(text);
                 // 还原输入框的内容
                 keyboardText = "";
                 // 显示应用选择弹窗
@@ -360,23 +360,25 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 请求焦点 + 弹出软键盘（异步）
      *
-     * @param view 键盘输入框
+     * @param editText 键盘输入框
      */
-    private void popUpSoftKeyboard(View view) {
-        // 检查 view 是否为 null
-        if (view != null) {
-            // 将焦点设置到该输入框上
-            view.requestFocus();
-            // 弹出软键盘（异步）
-            view.postDelayed(() -> {
-                // 获取输入方法管理器
-                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                if (inputMethodManager != null) {
-                    // 弹出软键盘
-                    inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
-                }
-            }, 100);
+    private void popUpSoftKeyboard(EditText editText) {
+        // 检查 editText 是否为 null
+        if (editText == null) {
+            Log.e(TAG, "The provided editText is null.");
+            return;
         }
+        // 将焦点设置到该输入框上
+        editText.requestFocus();
+        // 弹出软键盘（异步）
+        editText.postDelayed(() -> {
+            // 获取输入方法管理器
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            if (inputMethodManager != null) {
+                // 弹出软键盘
+                inputMethodManager.showSoftInput(editText, 0);
+            }
+        }, 100);
     }
 
     /**
@@ -393,7 +395,6 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "EditText 或 PopupWindow 为 null，无法关闭键盘弹窗");
             return;
         }
-
         // 标记是否需要发送手动输入文本
         this.isKeyboardSend = isKeyboardSend;
         // 清除 EditText 的焦点
@@ -408,16 +409,16 @@ public class MainActivity extends AppCompatActivity {
      * @param alpha 透明度，范围从 0.0 到 1.0
      */
     private void darkenBackground(Float alpha) {
+        // 判断透明度是否有效
         if (alpha == null || alpha < 0.0f || alpha > 1.0f) {
-            // 透明度值无效，使用默认值
-            Log.w(TAG, "Invalid alpha value, using 0.5 instead.");
-            alpha = 0.5f;
+            Log.w(TAG, "Invalid alpha value, using default value instead.");
+            alpha = 0.5f; // 设置为默认值
         }
-
+        // 获取窗口对象
         Window window = MainActivity.this.getWindow();
         try {
             WindowManager.LayoutParams lp = window.getAttributes(); // 获取当前窗口的布局参数
-            lp.alpha = alpha;  // 设置窗口的透明度
+            lp.alpha = alpha; // 设置窗口的透明度
             window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND); // 为窗口添加背后模糊效果的标志
             window.setAttributes(lp); // 应用更新后的布局参数到窗口
         } catch (Exception e) {
@@ -434,13 +435,11 @@ public class MainActivity extends AppCompatActivity {
     private void vibrate(long milliseconds) {
         // 检查延迟时间是否为非负数
         if (milliseconds < 0) {
-            Log.w(TAG, "Invalid milliseconds value, using 0 instead.");
-            milliseconds = 100;
+            Log.w(TAG, "Invalid milliseconds value, using default value instead.");
+            milliseconds = 331; // 设置为默认值
         }
-
         // 获取 Vibrator 服务的实例
         Vibrator vibrator = (Vibrator) MainActivity.this.getSystemService(VIBRATOR_SERVICE);
-
         // 检查设备是否支持震动功能
         if (vibrator != null && vibrator.hasVibrator()) {
             // 创建一个震动 milliseconds 毫秒的 VibrationEffect
