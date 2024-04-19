@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 额外对话界面 输入切换按钮 背景 -->
     <!-- 当按钮未被激活时 -->
     <item android:drawable="@drawable/extra_switch_keyboard" android:state_activated="false" />
 

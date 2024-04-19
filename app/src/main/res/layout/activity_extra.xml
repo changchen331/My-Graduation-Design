@@ -60,21 +60,24 @@
         android:scrollbars="vertical" />
 
     <LinearLayout
+        android:id="@+id/extra_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/extra_input"
+        android:background="@drawable/extra_input_visible"
+        android:gravity="center"
         android:orientation="horizontal"
         android:paddingStart="10dp"
         android:paddingTop="10dp"
         android:paddingEnd="10dp"
         android:paddingBottom="15dp"
+        android:visibility="visible"
         android:weightSum="1">
 
         <!-- 键盘输入按钮 -->
         <ImageButton
             android:id="@+id/extra_switch"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="0.15"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
@@ -87,16 +90,17 @@
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_weight="0.70">
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="0.67">
 
             <!-- 语音输入按钮 -->
             <Button
                 android:id="@+id/extra_asr"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/extra_asr"
                 android:importantForAccessibility="no"
                 android:text="@string/extra_asr_unactivated"
@@ -108,19 +112,22 @@
             <EditText
                 android:id="@+id/extra_keyboard_edit"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:autofillHints="text"
+                android:layout_height="wrap_content"
+                android:autofillHints="NONE"
                 android:background="@drawable/extra_keyboard_edit"
+                android:imeOptions="actionSend"
                 android:importantForAccessibility="no"
                 android:inputType="text"
                 android:maxLines="1"
                 android:paddingStart="15dp"
+                android:paddingTop="10dp"
                 android:paddingEnd="15dp"
+                android:paddingBottom="10dp"
                 android:textColor="@color/extra_keyboard_edit_text"
                 android:textColorHighlight="@color/extra_keyboard_edit_highlight"
                 android:textCursorDrawable="@drawable/extra_keyboard_edit_cursor"
                 android:textIsSelectable="true"
-                android:textSize="23sp"
+                android:textSize="20sp"
                 android:visibility="invisible"
                 tools:ignore="LabelFor" />
         </FrameLayout>
@@ -130,14 +137,13 @@
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="0.15"
+            android:layout_weight="0.18"
             android:background="@drawable/extra_keyboard_send"
             android:importantForAccessibility="no"
             android:text="@string/extra_keyboard_send"
             android:textColor="@color/extra_keyboard_send_text"
             android:textSize="20sp"
             android:visibility="invisible" />
-
     </LinearLayout>
+
 </LinearLayout>

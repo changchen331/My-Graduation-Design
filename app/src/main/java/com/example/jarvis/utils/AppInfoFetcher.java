@@ -11,48 +11,45 @@ import android.util.Log;
 import com.example.jarvis.model.AppInfo;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-/**
- * 获取应用信息
- */
 public class AppInfoFetcher {
     private static final String TAG = "AppInfoFetcher";
-    private final Context context; // 上下文环境（例：MainActivity.this）
 
-    public AppInfoFetcher(Context context) {
-        this.context = context;
-    }
-
+    /**
+     * 获取设备上所有已安装应用的名称列表
+     *
+     * @param context 应用上下文
+     * @return 已安装应用的名称列表
+     */
     @SuppressLint("QueryPermissionsNeeded")
-    public List<AppInfo> getAllInstalledApps() {
-        // 返回一个空列表，因为没有有效的 context 来获取应用信息
-        if (context == null) return Collections.emptyList();
-
+    public static List<AppInfo> getAllInstalledApps(Context context) {
         // 应用数据列表
         List<AppInfo> appList = new ArrayList<>();
-        // 获取 PackageManager 实例
-        PackageManager packageManager = context.getPackageManager();
-
-        // 筛选应用
-        // 创建一个新的 Intent 对象，设置其动作为 Intent.ACTION_MAIN，表示主动作。
-        Intent intent = new Intent(Intent.ACTION_MAIN, null);
-        // 为 Intent 添加类别 Intent.CATEGORY_LAUNCHER，表示查找可以作为应用启动器的活动。
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-        // 使用 PackageManager 的 queryIntentActivities 方法查询所有可以响应此 Intent 的活动。
-        List<ResolveInfo> resolves = packageManager.queryIntentActivities(intent, 0);
-        for (ResolveInfo resolveInfo : resolves) {
-            AppInfo appInfo = new AppInfo();
-            ActivityInfo activityInfo = resolveInfo.activityInfo;
-            appInfo.setAppName(resolveInfo.loadLabel(packageManager).toString());
-            appInfo.setPackageName(activityInfo.packageName);
-            appInfo.setAppIcon(activityInfo.loadIcon(packageManager));
-            appInfo.setMainActivity(activityInfo);
-            appList.add(appInfo);
+        // 获取应用信息
+        try {
+            // 获取 PackageManager 实例
+            PackageManager pm = context.getPackageManager();
+            // 筛选应用
+            // 创建一个 Intent 对象，指定了动作为 ACTION_MAIN 和类别为 CATEGORY_LAUNCHER
+            Intent intent = new Intent(Intent.ACTION_MAIN, null).addCategory(Intent.CATEGORY_LAUNCHER);
+            // 使用 PackageManager 的 queryIntentActivities 方法查询所有可以响应此 Intent 的活动
+            List<ResolveInfo> resolves = pm.queryIntentActivities(intent, 0);
+            for (ResolveInfo resolveInfo : resolves) {
+                ActivityInfo activityInfo = resolveInfo.activityInfo;
+                // 存入信息
+                AppInfo appInfo = new AppInfo();
+                appInfo.setAppName(resolveInfo.loadLabel(pm).toString());
+                appInfo.setPackageName(activityInfo.packageName);
+                appInfo.setAppIcon(activityInfo.loadIcon(pm));
+                appInfo.setMainActivity(activityInfo);
+                appList.add(appInfo);
+            }
+        } catch (Exception e) {
+            // 如果获取应用列表过程中发生异常，记录错误日志
+            Log.e(TAG, "Error fetching installed app names", e);
         }
 
-        Log.v(TAG, String.valueOf(appList.size()));
         return appList;
     }
 }

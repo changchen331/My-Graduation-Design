@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 主界面 语音识别按钮 背景 -->
     <!-- 当语音识别按钮激活时 -->
     <item android:drawable="@drawable/main_asr_end" android:state_activated="true" />
 

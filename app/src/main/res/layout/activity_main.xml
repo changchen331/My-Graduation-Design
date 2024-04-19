@@ -40,7 +40,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:autofillHints="text"
         android:ellipsize="end"
         android:gravity="center"
         android:maxLines="3"
@@ -89,8 +88,7 @@
                 android:background="@android:color/transparent"
                 android:importantForAccessibility="no"
                 android:scaleType="fitCenter"
-                android:src="@drawable/main_asr"
-                android:visibility="visible" />
+                android:src="@drawable/main_asr" />
         </FrameLayout>
 
         <View

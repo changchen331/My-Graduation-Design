@@ -6,10 +6,8 @@
     android:layout_gravity="center"
     android:background="@drawable/application_selection_item"
     android:orientation="vertical"
-    android:paddingStart="3dp"
-    android:paddingTop="3dp"
-    android:paddingEnd="3dp"
-    android:paddingBottom="3dp">
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
 
     <!-- APP 图标 -->
     <ImageView
@@ -28,7 +26,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:autofillHints="text"
         android:gravity="center"
         android:text="@string/application_selection_item_name"
         android:textColor="@color/application_selection_item_text"

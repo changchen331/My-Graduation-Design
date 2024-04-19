@@ -35,8 +35,6 @@
 
     <string name="extra_edit_question">此处应有问题</string>
     <!--    <string name="extra_edit_question">There should be a question here</string>-->
-    <string name="extra_edit_answer">此处应有答案</string>
+    <string name="extra_edit_answer">此处应有回复</string>
     <!--    <string name="extra_edit_answer">There should be a answer here</string>-->
-
-
 </resources>

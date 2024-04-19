@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 应用选择界面 item 未选中背景 -->
     <!-- 背景颜色 -->
     <solid android:color="@color/application_selection_item_unselect" />
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 额外对话界面 编辑弹窗 回复框背景 -->
     <!-- 填充颜色 -->
     <solid android:color="@color/extra_edit_answer" />
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 应用选择弹窗 item 背景 -->
     <!-- 当 item 被选中时 -->
     <item android:drawable="@drawable/application_selection_item_select" android:state_selected="true" />
 

@@ -19,13 +19,13 @@ import java.util.List;
  * 用于在 RecyclerView 中显示气泡对话的适配器
  * 负责将数据集合中的数据显示在 RecyclerView 上，并处理数据的操作，同时支持点击事件回调
  */
-public class ExtraDialogRecyclerViewAdapter extends RecyclerView.Adapter<ExtraDialogRecyclerViewAdapter.ViewHolder> {
+public class DialogueInfoAdapter extends RecyclerView.Adapter<DialogueInfoAdapter.ViewHolder> {
     private final List<Message> messages; // 存储对话信息列表
     private int position = 0; // 记录当前选中 item 的位置
-    private ButtonClickListener buttonClickListener; // 定义点击按钮的回调接口
-    private OnItemClickListener onItemClickListener; // 定义点击事件的回调接口
+    private ButtonClickListener buttonClickListener; // 点击按钮的回调接口
+    private OnItemClickListener onItemClickListener; // 点击事件的回调接口
 
-    public ExtraDialogRecyclerViewAdapter(List<Message> messages) {
+    public DialogueInfoAdapter(List<Message> messages) {
         this.messages = messages;
     }
 

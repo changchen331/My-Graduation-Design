@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 额外对话界面 语音识别开始按钮 背景 -->
     <!-- 当按钮被激活时 -->
     <item android:drawable="@drawable/extra_asr_activated" android:state_activated="true" />
 

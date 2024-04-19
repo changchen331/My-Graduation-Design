@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 软键盘状态辅助工具类，用于监听软键盘的显示和隐藏状态。
  */
-public class SoftKeyboardStateHelper implements ViewTreeObserver.OnGlobalLayoutListener {
+public class KeyboardStateMonitor implements ViewTreeObserver.OnGlobalLayoutListener {
 
     private final List<SoftKeyboardStateListener> listeners = new LinkedList<>(); // 软键盘状态监听器列表
     private final View activityRootView; // 当前活动的根视图
@@ -18,11 +18,11 @@ public class SoftKeyboardStateHelper implements ViewTreeObserver.OnGlobalLayoutL
     private int lastSoftKeyboardHeightInPx; // 上次保存的软键盘高度（像素）
     private boolean isSoftKeyboardOpened; // 软键盘当前是否打开
 
-    public SoftKeyboardStateHelper(View activityRootView) {
+    public KeyboardStateMonitor(View activityRootView) {
         this(activityRootView, false);
     }
 
-    public SoftKeyboardStateHelper(View activityRootView, boolean isSoftKeyboardOpened) {
+    public KeyboardStateMonitor(View activityRootView, boolean isSoftKeyboardOpened) {
         this.activityRootView = activityRootView;
         this.isSoftKeyboardOpened = isSoftKeyboardOpened;
         // 注册全局布局监听器
@@ -54,10 +54,10 @@ public class SoftKeyboardStateHelper implements ViewTreeObserver.OnGlobalLayoutL
          * 当软键盘弹出时，它会遮挡部分屏幕，导致可见部分的高度减小；相反，当软键盘收起时，可见部分的高度会增加。
          * 通过观察可见部分的高度变化，我们可以推断出软键盘的状态。
          *
-         * 为了解决不同设备上可见部分高度可能存在的差异，我们引入了一个长度为 2 的数组 temp，
+         * 为了解决不同设备上可见部分高度可能存在的差异，我们引入了一个长度为 2 的数组 heights，
          * 用于存储可见部分高度的两个可能值。这两个值通常一个大，一个小，分别对应软键盘收起和弹出时的高度。
-         * 我们通过比较当前高度值（heightDiff）与 temp 数组中的值来判断软键盘的状态。
-         * 如果 heightDiff 与 temp 中的任一值不同，并且另一值也与 heightDiff 不同，则将 heightDiff 存储在 temp 数组中。
+         * 我们通过比较当前高度值（heightDiff）与 heights 数组中的值来判断软键盘的状态。
+         * 如果 heightDiff 与 heights 中的任一值不同，并且另一值也与 heightDiff 不同，则将 heightDiff 存储在 heights 数组中。
          * 通过这种方式，我们可以确定软键盘开启时的高度（openHeightDiff）和关闭时的高度（closeHeightDiff）。
          *
          * 需要注意的是，输入框的出现和软键盘的弹出并不是同步的。在大多数情况下，输入框会先出现，
@@ -86,24 +86,6 @@ public class SoftKeyboardStateHelper implements ViewTreeObserver.OnGlobalLayoutL
             isSoftKeyboardOpened = false;
             notifyOnSoftKeyboardClosed();
         }
-    }
-
-    /**
-     * 设置软键盘是否打开的状态。
-     *
-     * @param isSoftKeyboardOpened 软键盘是否打开的布尔值
-     */
-    public void setIsSoftKeyboardOpened(boolean isSoftKeyboardOpened) {
-        this.isSoftKeyboardOpened = isSoftKeyboardOpened;
-    }
-
-    /**
-     * 获取软键盘当前是否打开的状态。
-     *
-     * @return 软键盘是否打开的布尔值
-     */
-    public boolean isSoftKeyboardOpened() {
-        return isSoftKeyboardOpened;
     }
 
     /**

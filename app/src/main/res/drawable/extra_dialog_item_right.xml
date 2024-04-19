@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 额外对话界面 右对话框 文本背景 -->
     <!-- 填充颜色 -->
     <solid android:color="@color/extra_dialog_item_text_right" />
 

@@ -1,14 +1,15 @@
 package com.example.jarvis;
 
+import static com.example.jarvis.utils.AppUtil.openApp;
+import static com.example.jarvis.utils.KeyboardUtil.hideSoftInput;
+import static com.example.jarvis.utils.KeyboardUtil.showSoftInput;
+import static com.example.jarvis.utils.VibratorUtil.vibrate;
+
 import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -30,7 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.jarvis.model.AppInfo;
 import com.example.jarvis.model.Message;
-import com.example.jarvis.utils.ExtraDialogRecyclerViewAdapter;
+import com.example.jarvis.utils.DialogueInfoAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,24 +40,22 @@ import java.util.List;
 /**
  * 补充对话界面
  */
-public class ExtraActivity extends AppCompatActivity {
+public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.ExtraEditDialogListener {
+    private final List<String> answers = Arrays.asList("长海医院", "泰宝华庭", "周五下午两点"); // 用户的回答（模拟）
+    private final List<String> revisedAnswers = Arrays.asList("复旦大学附属华山医院", "我现在的位置", "现在"); // 更改后的回答（模拟）
+    private int schedule = 0; // 对话的进度（模拟）
     private static final String TAG = "ExtraActivity";
     private final List<Message> messages = new ArrayList<>(); // 对话信息列表
     private final List<String> hint = Arrays.asList("点击白色文本框，我会读出其中的内容", "点击绿色文本框可以更改其中的内容"); // 系统提示
     private AppInfo selectedApp; // 用户选择的应用信息
     private List<String> questions; // 补充问题
-    private ExtraDialogRecyclerViewAdapter extraDialogRecyclerViewAdapter; // 对话框布局适配器
     private RecyclerView recyclerView; // 对话框滚动视图
+    private DialogueInfoAdapter dialogueInfoAdapter; // 对话框布局适配器
+    private int position; // 选中对话的下标
     private String extraKeyboardEditText = ""; // 补充对话界面 手动输入框内容
     private boolean isSwitchActivated = false; // 输入切换按钮是否激活
     private boolean isVoiceInputConfirmed = false; // 语音输入是否确认
-    private boolean isEditASRActivated = false; // 编辑弹窗 语音输入是否激活
     private boolean allQuestionsAnswered = false; // 问题是否全部回答完毕
-
-
-    private final List<String> answers = Arrays.asList("长海医院", "泰宝华庭", "周五下午两点"); // 用户的回答（模拟）
-    private final List<String> revisedAnswers = Arrays.asList("复旦大学附属华山医院", "我现在的位置", "现在"); // 更改后的回答（模拟）
-    private int schedule = 0; // 对话的进度（模拟）
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,48 +67,52 @@ public class ExtraActivity extends AppCompatActivity {
 
         // 返回按钮
         ImageButton extra_return = findViewById(R.id.extra_return);
-        extra_return.setOnClickListener(v -> finish()); // 点击 返回按钮 返回主界面（MainActivity）
-
         // 语音输入按钮
         Button extra_asr = findViewById(R.id.extra_asr);
         // 输入切换按钮
         ImageButton extra_switch = findViewById(R.id.extra_switch);
-        // 点击语音输入按钮
-        extra_asr.setOnClickListener(v -> {
-            if (!allQuestionsAnswered) {
-                // 开始录音（应该有一个开始录音的方法）
-                /*code*/
-                vibrate(200); // 模拟开始录音（震动）
-                // 弹出 语音输入弹窗
-                showASRPopWindow(extra_switch, extra_asr);
-            } else {
-                // 语音识别按钮处于激活状态
-                vibrate(200); // 交互反馈
-                // 打开应用
-                openApplication(ExtraActivity.this, selectedApp);
-            }
-        });
-
+        extra_switch.setVisibility(Integer.parseInt(getString(R.string.visibility))); // 设置输入切换按钮是否可见
         // 键盘输入框
         EditText extra_keyboard_edit = findViewById(R.id.extra_keyboard_edit);
         // 键盘输入发送按钮
         Button extra_keyboard_send = findViewById(R.id.extra_keyboard_send);
+
+        // 点击 返回按钮
+        extra_return.setOnClickListener(v -> finish()); // 返回主界面（MainActivity）
+
+        // 点击 语音输入按钮
+        extra_asr.setOnClickListener(v -> {
+            if (!allQuestionsAnswered) {
+                // 开始录音（应该有一个开始录音的方法）
+                vibrate(ExtraActivity.this, 200); // 模拟开始录音（震动）
+                /*code*/
+                // 弹出 语音输入弹窗
+                showASRPopWindow(extra_switch, extra_asr);
+            } else {
+                // 语音识别按钮处于激活状态
+                vibrate(ExtraActivity.this, 200); // 交互反馈
+                // 打开应用
+                openApp(ExtraActivity.this, selectedApp.getPackageName());
+            }
+        });
+
         // 监听编辑文本时的动作（按下回车）
         extra_keyboard_edit.setOnEditorActionListener((v, actionId, event) -> {
             // 发送键盘输入信息
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
                 sendKeyboard(extra_keyboard_edit);
                 schedule++; // 问题进度 +1
                 if (schedule == answers.size()) {
                     // 问题已经全部回答完毕
-                    // 退出键盘输入模式
-                    hideSoftKeyboard(extra_keyboard_edit); // 清除焦点 + 收起软键盘（异步）
+                    // 键盘输入休眠
+                    extra_keyboard_edit.clearFocus(); // 清除焦点
+                    hideSoftInput(ExtraActivity.this); // 隐藏软键盘
                     extra_switch.setVisibility(View.INVISIBLE); // 隐藏输入切换按钮
                     extra_keyboard_edit.setVisibility(View.INVISIBLE); // 隐藏键盘输入框
                     extra_keyboard_send.setVisibility(View.INVISIBLE); // 隐藏键盘输入发送按钮
                     isSwitchActivated = false; // 将 isSwitchActivated 设置为 false
                     extra_switch.setActivated(false); // 输入切换按钮休眠
-                    // 激活语音识别按钮
+                    // 语音识别按钮激活
                     extra_asr.setActivated(true);
                     extra_asr.setText(R.string.extra_asr_activated);
                     extra_asr.setVisibility(View.VISIBLE); // 显示语音识别按钮
@@ -126,6 +129,7 @@ public class ExtraActivity extends AppCompatActivity {
             }
             return false;
         });
+
         // 点击 键盘输入发送按钮
         extra_keyboard_send.setOnClickListener(v -> {
             //  发送键盘输入消息
@@ -133,8 +137,9 @@ public class ExtraActivity extends AppCompatActivity {
             schedule++; // 问题进度 +1
             if (schedule == answers.size()) {
                 // 问题已经全部回答完毕
-                // 退出键盘输入模式
-                hideSoftKeyboard(extra_keyboard_edit); // 清除焦点 + 收起软键盘（异步）
+                // 键盘输入休眠
+                extra_keyboard_edit.clearFocus(); // 清除焦点
+                hideSoftInput(ExtraActivity.this); // 隐藏软键盘
                 extra_switch.setVisibility(View.INVISIBLE); // 隐藏输入切换按钮
                 extra_keyboard_edit.setVisibility(View.INVISIBLE); // 隐藏键盘输入框
                 extra_keyboard_send.setVisibility(View.INVISIBLE); // 隐藏键盘输入发送按钮
@@ -156,30 +161,32 @@ public class ExtraActivity extends AppCompatActivity {
             }
         });
 
-        // 设置输入切换按钮是否可见
-        extra_switch.setVisibility(Integer.parseInt(getResources().getString(R.string.visibility)));
         // 点击 输入切换按钮
         extra_switch.setOnClickListener(v -> {
             if (!isSwitchActivated) {
                 // 输入切换按钮未激活
                 extra_asr.setVisibility(View.INVISIBLE); // 隐藏语音输入按钮
-                isSwitchActivated = true; // 将 isSwitchActivated 设置为 true
-                extra_switch.setActivated(true);  // 输入切换按钮激活
-                extra_keyboard_edit.setText(extraKeyboardEditText); // 设置文本输入框的内容
-                extra_keyboard_edit.setSelection(extraKeyboardEditText.length());
                 extra_keyboard_edit.setVisibility(View.VISIBLE); // 显示键盘输入框
                 extra_keyboard_send.setVisibility(View.VISIBLE); // 显示键盘输入发送按钮
-                // 请求文本输入框的焦点 + 弹出软键盘（异步）
-                popUpSoftKeyboard(extra_keyboard_edit);
+                extra_keyboard_edit.setText(extraKeyboardEditText); // 设置文本输入框的内容
+                extra_keyboard_edit.requestFocus(); // 请求文本输入框的焦点
+                extra_keyboard_edit.setSelection(extraKeyboardEditText.length()); // 将光标移至文本末尾
+                // 弹出软键盘
+                extra_keyboard_edit.postDelayed(() -> showSoftInput(extra_keyboard_edit), 100);
+                // 输入切换按钮激活
+                isSwitchActivated = true;
+                extra_switch.setActivated(true);
             } else {
                 // 输入切换按钮已激活
-                hideSoftKeyboard(extra_keyboard_edit); // 清除焦点 + 收起软键盘（异步）
-                isSwitchActivated = false; // 将 isSwitchActivated 设置为 false
-                extra_switch.setActivated(false); // 输入切换按钮休眠
-                extraKeyboardEditText = extra_keyboard_edit.getText().toString(); // 获取文本输入框的内容
+                extra_keyboard_edit.clearFocus(); // 清除焦点
+                hideSoftInput(ExtraActivity.this); // 隐藏软键盘
                 extra_keyboard_edit.setVisibility(View.INVISIBLE); // 隐藏键盘输入框
                 extra_keyboard_send.setVisibility(View.INVISIBLE); // 隐藏键盘输入发送按钮
                 extra_asr.setVisibility(View.VISIBLE); // 显示语音输入按钮
+                extraKeyboardEditText = extra_keyboard_edit.getText().toString(); // 获取文本输入框的内容
+                // 输入切换按钮休眠
+                isSwitchActivated = false;
+                extra_switch.setActivated(false);
             }
         });
     }
@@ -215,17 +222,19 @@ public class ExtraActivity extends AppCompatActivity {
         recyclerView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> recyclerView.postDelayed(() -> recyclerView.scrollToPosition(messages.size() - 1), 100));
 
         // 创建 RecyclerViewAdapter 实例
-        extraDialogRecyclerViewAdapter = new ExtraDialogRecyclerViewAdapter(messages);
-        extraDialogRecyclerViewAdapter.setButtonClickListener(this::showEditPopWindow); // 点击 编辑按钮 弹出发送信息编辑弹窗
+        dialogueInfoAdapter = new DialogueInfoAdapter(messages);
+        dialogueInfoAdapter.setButtonClickListener(this::showEditPopWindow); // 点击 编辑按钮 弹出发送信息编辑弹窗
         // 点击 项视图
-        extraDialogRecyclerViewAdapter.setOnItemClickListener((view, position) -> {
+        dialogueInfoAdapter.setOnItemClickListener((view, position) -> {
             // 检查位置是否有效
             if (position < 0 || position >= messages.size()) {
                 // 处理无效的 position，例如通过日志记录或抛出异常
                 Log.e(TAG, "Invalid position in messages list: " + position);
                 return;
             }
+
             // 获取项视图的信息
+            this.position = position;
             Message message = messages.get(position);
             if (message.getType() == Message.TYPE_RECEIVED) {
                 // 点击的项视图为接收的信息
@@ -236,19 +245,17 @@ public class ExtraActivity extends AppCompatActivity {
                 }
                 // 读出项视图的内容（语音合成）
                 /*code*/
-                // 这里使用 Toast 来模拟语音合成的效果
+                // 使用 Toast 来模拟语音合成的效果
                 Toast.makeText(ExtraActivity.this, content, Toast.LENGTH_SHORT).show();
             } else {
                 // 点击的项视图为发送的信息
-                // 交互反馈
-                vibrate(200);
+                vibrate(ExtraActivity.this, 200); // 交互反馈
                 // 弹出发送信息编辑弹窗
                 showEditPopWindow(position);
             }
         });
         // 将 recyclerViewAdapter 设置为 recyclerView 的适配器
-        recyclerView.setAdapter(extraDialogRecyclerViewAdapter);
-
+        recyclerView.setAdapter(dialogueInfoAdapter);
         // 发送第一个提示
         receive(hint.get(0), 500);
     }
@@ -265,16 +272,12 @@ public class ExtraActivity extends AppCompatActivity {
             Log.e(TAG, "Message content null or empty string.");
             return;
         }
-        // 检查延迟时间是否为非负数
-        if (delayMillis < 0) {
-            Log.w(TAG, "Invalid delayMillis value, using default value instead.");
-            delayMillis = 100; // 设置为默认值
-        }
+
         // 接收消息
         new Handler().postDelayed(() -> {
             messages.add(new Message(content, Message.TYPE_RECEIVED)); // 将新消息添加到消息列表
             // 通知适配器有新项插入，并更新 RecyclerView
-            extraDialogRecyclerViewAdapter.notifyItemInserted(messages.size() - 1);
+            dialogueInfoAdapter.notifyItemInserted(messages.size() - 1);
             // 滚动到 RecyclerView 的最底部，显示最后一条消息
             recyclerView.scrollToPosition(messages.size() - 1);
         }, delayMillis);
@@ -291,10 +294,11 @@ public class ExtraActivity extends AppCompatActivity {
             Log.e(TAG, "Message content null or empty string.");
             return;
         }
+
         // 发送消息
         messages.add(new Message(content, Message.TYPE_SENT)); // 将新消息添加到消息列表
         // 通知适配器有新项插入，并更新 RecyclerView
-        extraDialogRecyclerViewAdapter.notifyItemInserted(messages.size() - 1);
+        dialogueInfoAdapter.notifyItemInserted(messages.size() - 1);
         // 滚动到 RecyclerView 的最底部，显示最后一条消息
         recyclerView.scrollToPosition(messages.size() - 1);
     }
@@ -327,7 +331,7 @@ public class ExtraActivity extends AppCompatActivity {
         // 语音输入弹窗
         @SuppressLint("InflateParams") View activity_extra_asr = getLayoutInflater().inflate(R.layout.activity_extra_asr, null);
         // 创建 PopupWindow 实例
-        PopupWindow extra_asr_window = new PopupWindow(activity_extra_asr, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, false);
+        PopupWindow extra_asr_window = new PopupWindow(activity_extra_asr, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT, false);
         extra_asr_window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE); // 软键盘不会遮挡输入框
         extra_asr_window.showAtLocation(recyclerView, Gravity.BOTTOM, 0, 0); // 显示语音识别弹窗
 
@@ -344,8 +348,9 @@ public class ExtraActivity extends AppCompatActivity {
         extra_asr_end.setOnClickListener(v -> {
             // 结束录音（应该有一个结束录音的方法）
             /*code*/
-            vibrate(300); // 模拟结束录音（震动）
+            vibrate(ExtraActivity.this, 300); // 模拟结束录音（震动）
             extra_asr_end.setVisibility(View.INVISIBLE); // 隐藏语音输入识别结束按钮
+
             // 语音识别
             /*code*/
             String text = answers.get(schedule); // 获取语音识别结果（模拟）
@@ -354,6 +359,7 @@ public class ExtraActivity extends AppCompatActivity {
                 Log.w(TAG, "Speech recognition returned null or empty string.");
                 text = "No Speech recognition message";
             }
+
             // 语音识别文本激活
             extra_asr_text.setTextColor(ExtraActivity.this.getColor(R.color.asr_text_filled));
             extra_asr_text.setText(text); // 显示语音识别文本
@@ -394,59 +400,10 @@ public class ExtraActivity extends AppCompatActivity {
                         if (schedule == 1) receive(hint.get(1), 300); // 显示第二个提示
                         receive(questions.get(schedule), 600);
                     }
-                    // 设置 isVoiceInputConfirmed 为 false
-                    isVoiceInputConfirmed = false;
+                    isVoiceInputConfirmed = false; // 设置 isVoiceInputConfirmed 为 false
                 }
             }
         });
-    }
-
-    /**
-     * 请求焦点 + 弹出软键盘（异步）
-     *
-     * @param editText 键盘输入框
-     */
-    private void popUpSoftKeyboard(EditText editText) {
-        // 检查 editText 是否为 null
-        if (editText == null) {
-            Log.e(TAG, "The provided editText is null.");
-            return;
-        }
-        // 将焦点设置到该输入框上
-        editText.requestFocus();
-        // 弹出软键盘（异步）
-        editText.postDelayed(() -> {
-            // 获取输入方法管理器
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            if (inputMethodManager != null) {
-                // 弹出软键盘
-                inputMethodManager.showSoftInput(editText, 0);
-            }
-        }, 100);
-    }
-
-    /**
-     * 清除焦点 + 收起软键盘（异步）
-     *
-     * @param editText 键盘输入框
-     */
-    private void hideSoftKeyboard(EditText editText) {
-        // 检查 editText 是否为 null
-        if (editText == null) {
-            Log.e(TAG, "The provided editText is null.");
-            return;
-        }
-        // 清除输入框的焦点
-        editText.clearFocus();
-        // 收起软键盘
-        editText.postDelayed(() -> {
-            // 获取当前活动
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (inputMethodManager != null) {
-                // 从当前焦点视图开始，隐藏软键盘
-                inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-            }
-        }, 100);
     }
 
     /**
@@ -462,94 +419,26 @@ public class ExtraActivity extends AppCompatActivity {
         }
 
         // 背景变暗
-        darkenBackground(0.3f);
+//        darkenBackground(0.3f);
 
-        // 文本编辑弹窗
-        @SuppressLint("InflateParams") View activity_extra_edit = getLayoutInflater().inflate(R.layout.activity_extra_edit, null);
-
-        // 问题展示框
-        TextView extra_edit_question = activity_extra_edit.findViewById(R.id.extra_edit_question);
-        // 设置问题
-        String questionText = position < 7 ? messages.get(position - 2).getContent() : messages.get(position - 1).getContent();
-        if (questionText == null || questionText.isEmpty()) {
+        // 获取问题
+        String question = messages.get(position - (position < 3 ? 2 : 1)).getContent();
+        if (question == null || question.isEmpty()) {
             Log.e(TAG, "Question text is null or empty string.");
             return;
         }
-        extra_edit_question.setText(questionText);
-
-        // 回答展示框
-        TextView extra_edit_answer = activity_extra_edit.findViewById(R.id.extra_edit_answer);
-        // 设置回答
-        String answerText = messages.get(position).getContent();
-        if (answerText == null || answerText.isEmpty()) {
+        // 获取回复
+        String answer = messages.get(position).getContent();
+        if (answer == null || answer.isEmpty()) {
             Log.w(TAG, "Answer text is null or empty string.");
             return;
         }
-        extra_edit_answer.setText(answerText);
 
-        // 创建 PopupWindow 实例
-        PopupWindow extra_edit = new PopupWindow(activity_extra_edit, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT, false);
-        extra_edit.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE); // 软键盘不会遮挡输入框
-        extra_edit.showAtLocation(recyclerView, Gravity.CENTER, 0, 0); // 显示文本编辑弹窗
+        // 获取语音识别结果（模拟）
+        String temp = revisedAnswers.get((position - 2) / 2);
 
-        // 取消按钮
-        ImageButton extra_edit_cancel = activity_extra_edit.findViewById(R.id.extra_edit_cancel);
-        extra_edit_cancel.setOnClickListener(v -> extra_edit.dismiss()); // 点击 取消按钮
-
-        // 语音识别按钮
-        ImageButton extra_edit_asr = activity_extra_edit.findViewById(R.id.extra_edit_asr);
-        // 按下 语音识别按钮
-        extra_edit_asr.setOnClickListener(v -> {
-            if (!isEditASRActivated) {
-                // 开始录音（应该有一个开始录音的方法）
-                /*code*/
-                vibrate(200); // 模拟开始录音（震动）
-                // 编辑弹窗语音识别激活
-                isEditASRActivated = true;
-                extra_edit_asr.setActivated(true);
-                // 重置语音识别文本
-                extra_edit_answer.setTextColor(ExtraActivity.this.getColor(R.color.asr_text_empty));
-                extra_edit_answer.setText(R.string.asr_text);
-            } else {
-                // 结束录音（应该有一个结束录音的方法）
-                /*code*/
-                vibrate(300); // 模拟结束录音（震动）
-                extra_edit_asr.setVisibility(View.INVISIBLE); // 隐藏语音识别按钮（等待语音识别产生结果）
-
-                // 语音识别
-                /*code*/
-                // 模拟语音识别结果
-                String text = revisedAnswers.get((position - 2) / 2);
-
-                // 编辑弹窗语音识别休眠
-                isEditASRActivated = false;
-                extra_edit_asr.setActivated(false);
-                extra_edit_asr.setVisibility(View.VISIBLE);
-
-                // 显示语音识别结果
-                extra_edit_answer.setTextColor(ExtraActivity.this.getColor(R.color.asr_text_filled));
-                extra_edit_answer.setText(text);
-            }
-        });
-
-        // 键盘输入按钮
-        ImageButton extra_edit_keyboard = activity_extra_edit.findViewById(R.id.extra_edit_keyboard);
-        extra_edit_keyboard.setOnClickListener(v -> {
-            // 键盘输入
-            Toast.makeText(ExtraActivity.this, "键盘输入", Toast.LENGTH_SHORT).show();
-        });
-
-        // 确认按钮
-        ImageButton extra_edit_confirm = activity_extra_edit.findViewById(R.id.extra_edit_confirm);
-        // 按下 确认按钮
-        extra_edit_confirm.setOnClickListener(v -> {
-            // 更新回答信息
-            messages.get(position).setContent(extra_edit_answer.getText().toString());
-            extraDialogRecyclerViewAdapter.notifyItemChanged(position);
-            extra_edit.dismiss(); // 退出文本编辑弹窗
-        });
-
-        extra_edit.setOnDismissListener(() -> darkenBackground(1f));
+        ExtraEditDialog extraEditDialog = new ExtraEditDialog(question, answer, findViewById(R.id.extra_input), temp);
+        extraEditDialog.show(getSupportFragmentManager(), "extraEditDialog");
     }
 
     /**
@@ -576,51 +465,6 @@ public class ExtraActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * 启动指定应用
-     *
-     * @param context 当前上下文环境
-     * @param app     应用信息
-     */
-    private void openApplication(Context context, AppInfo app) {
-        // 获取应用的启动 Intent
-        Intent intent = context.getPackageManager().getLaunchIntentForPackage(app.getPackageName());
-        // 检查是否成功获取到启动 Intent
-        if (intent != null) {
-            try {
-                context.startActivity(intent); // 启动应用
-            } catch (ActivityNotFoundException e) {
-                // 处理无法找到对应的 Activity 的情况
-                Log.e(TAG, "Activity not found for package: " + app.getPackageName(), e);
-                Toast.makeText(context, "没有权限启动应用。", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            // 处理无法获取启动 Intent 的情况
-            Log.e(TAG, "No launch intent found for package: " + app.getPackageName());
-            Toast.makeText(context, "无法启动应用。", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    /**
-     * 手机震动
-     *
-     * @param milliseconds 震动时长
-     */
-    private void vibrate(long milliseconds) {
-        // 检查延迟时间是否为非负数
-        if (milliseconds < 0) {
-            Log.w(TAG, "Invalid milliseconds value, using default value instead.");
-            milliseconds = 331; // 设置为默认值
-        }
-        // 获取 Vibrator 服务的实例
-        Vibrator vibrator = (Vibrator) ExtraActivity.this.getSystemService(VIBRATOR_SERVICE);
-        // 检查设备是否支持震动功能
-        if (vibrator != null && vibrator.hasVibrator()) {
-            // 创建一个震动 milliseconds 毫秒的 VibrationEffect
-            VibrationEffect vibrationEffect = VibrationEffect.createOneShot(milliseconds, VibrationEffect.DEFAULT_AMPLITUDE);
-            vibrator.vibrate(vibrationEffect); // 执行震动
-        }
-    }
 
     /**
      * 点击软键盘和输入框的外部 收起软键盘
@@ -651,5 +495,18 @@ public class ExtraActivity extends AppCompatActivity {
             }
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    /**
+     * 点击 编辑文本 Dialog 确认按钮
+     *
+     * @param answer 回复文本
+     */
+    @Override
+    public void onExtraEditConfirm(String answer) {
+        if (!answer.equalsIgnoreCase(messages.get(position).getContent())) {
+            messages.get(position).setContent(answer);
+            dialogueInfoAdapter.notifyItemChanged(position);
+        }
     }
 }
