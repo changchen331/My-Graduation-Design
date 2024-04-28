@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">语悦</string>
-    <!--    <string name="app_name">AppTalk</string>-->
+
     <string name="name">语悦</string>
-    <!--    <string name="name">AppTalk</string>-->
+
+    <string name="accessibility_service_description">界面自动化工具</string>
 
     <!-- 隐藏 -->
     <!--    <string name="visibility">4</string>-->
@@ -10,31 +11,54 @@
     <string name="visibility">0</string>
 
     <string name="asr_text">我正在听……</string>
-    <!--    <string name="asr_text">I am listening……</string>-->
 
     <string name="application_selection_title">选择应用</string>
-    <!--    <string name="application_selection_title">Choose an App</string>-->
     <string name="application_selection_cancel">取消</string>
-    <!--    <string name="application_selection_cancel" tools:ignore="ButtonCase">cancel</string>-->
     <string name="application_selection_confirm">确认</string>
-    <!--    <string name="application_selection_confirm">confirm</string>-->
     <string name="application_selection_item_name">App Name</string>
 
-    <string name="extra_dialog_item_text">你好，世界!</string>
-    <!--    <string name="extra_dialog_item_text">Hello World!</string>-->
+    <string name="extra_dialog_item_text">Hello World!</string>
 
     <string name="extra_asr_unactivated">点击开始说话</string>
-    <!--    <string name="extra_asr_unactivated">start speaking</string>-->
-    <string name="extra_asr_activated">确认并提交</string>
-    <!--    <string name="extra_asr_activated">Submit</string>-->
+    <string name="extra_asr_activated">提交</string>
     <string name="extra_asr_end">点击结束语音</string>
-    <!--    <string name="extra_asr_end">end voice</string>-->
 
     <string name="extra_keyboard_send">发送</string>
+
+    <!-- 额外对话界面 编辑对话框 -->
+    <string name="extra_edit_cancel">编辑对话框的取消按钮</string>
+    <string name="extra_edit_question">此处应有问题</string>
+    <string name="extra_edit_answer">编辑对话框的回复框</string>
+    <string name="extra_edit_answer_text">此处应有回复</string>
+    <string name="extra_edit_asr_start">编辑对话框的语音识别开始按钮</string>
+    <string name="extra_edit_asr_end">编辑对话框的语音识别结束按钮</string>
+    <string name="extra_edit_keyboard">编辑对话框的键盘输入按钮</string>
+    <string name="extra_edit_confirm">编辑对话框的确认按钮</string>
+
+
+    <!--    <string name="app_name">AppTalk</string>-->
+    <!--    <string name="name">AppTalk</string>-->
+
+    <!--    <string name="accessibility_service_description">Interface automation tools</string>-->
+
+    <!--    <string name="asr_text">I am listening……</string>-->
+
+    <!--    <string name="application_selection_title">Choose an App</string>-->
+    <!--    <string name="application_selection_cancel" tools:ignore="ButtonCase">cancel</string>-->
+    <!--    <string name="application_selection_confirm">confirm</string>-->
+
+    <!--    <string name="extra_asr_unactivated">start voice input</string>-->
+    <!--    <string name="extra_asr_activated">submit</string>-->
+    <!--    <string name="extra_asr_end">end voice input</string>-->
+
     <!--    <string name="extra_keyboard_send">send</string>-->
 
-    <string name="extra_edit_question">此处应有问题</string>
+    <!--    <string name="extra_edit_cancel">The Cancel button of the edit dialog box</string>-->
     <!--    <string name="extra_edit_question">There should be a question here</string>-->
-    <string name="extra_edit_answer">此处应有回复</string>
-    <!--    <string name="extra_edit_answer">There should be a answer here</string>-->
+    <!--    <string name="extra_edit_answer">Response box for the Edit dialog box</string>-->
+    <!--    <string name="extra_edit_answer_text">There should be a answer here</string>-->
+    <!--    <string name="extra_edit_asr_start">The speech recognition start button for the Edit dialog box</string>-->
+    <!--    <string name="extra_edit_asr_end">The speech recognition end button for the Edit dialog box</string>-->
+    <!--    <string name="extra_edit_keyboard">The keyboard input button for the Edit dialog box</string>-->
+    <!--    <string name="extra_edit_confirm">The Confirm button for the Edit dialog box</string>-->
 </resources>

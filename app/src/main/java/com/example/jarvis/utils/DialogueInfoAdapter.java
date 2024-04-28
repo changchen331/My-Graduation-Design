@@ -16,16 +16,18 @@ import com.example.jarvis.model.Message;
 import java.util.List;
 
 /**
- * 用于在 RecyclerView 中显示气泡对话的适配器
- * 负责将数据集合中的数据显示在 RecyclerView 上，并处理数据的操作，同时支持点击事件回调
+ * ✔ 用于在 RecyclerView 中显示气泡对话的适配器。
+ * 负责将数据集合中的数据显示在 RecyclerView 上，并处理数据的操作，同时支持点击事件回调。
  */
 public class DialogueInfoAdapter extends RecyclerView.Adapter<DialogueInfoAdapter.ViewHolder> {
     private final List<Message> messages; // 存储对话信息列表
-    private int position = 0; // 记录当前选中 item 的位置
     private ButtonClickListener buttonClickListener; // 点击按钮的回调接口
     private OnItemClickListener onItemClickListener; // 点击事件的回调接口
 
     public DialogueInfoAdapter(List<Message> messages) {
+        if (messages == null) {
+            throw new IllegalArgumentException("The list of messages cannot be null");
+        }
         this.messages = messages;
     }
 
@@ -72,20 +74,8 @@ public class DialogueInfoAdapter extends RecyclerView.Adapter<DialogueInfoAdapte
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         // 获取当前位置的对话信息
         Message message = messages.get(position);
-        // 根据消息类型显示对应的布局
-        if (message.getType() == Message.TYPE_RECEIVED) {
-            // 显示接收到的消息布局
-            viewHolder.extraDialogLeftText.setText(message.getContent());
-            viewHolder.extraDialogLeft.setVisibility(View.VISIBLE);
-            viewHolder.extraDialogRight.setVisibility(View.GONE);
-        } else {
-            // 显示发送的消息布局
-            viewHolder.extraDialogRightText.setText(message.getContent());
-            viewHolder.extraDialogLeft.setVisibility(View.GONE);
-            viewHolder.extraDialogRight.setVisibility(View.VISIBLE);
-            // 设置按钮的点击监听器
-            viewHolder.extraDialogRightEdit.setOnClickListener(v -> buttonClickListener.onButtonClick(position));
-        }
+        // 消息绑定
+        viewHolder.bind(message, position);
     }
 
     /**
@@ -95,7 +85,7 @@ public class DialogueInfoAdapter extends RecyclerView.Adapter<DialogueInfoAdapte
      */
     @Override
     public int getItemCount() {
-        return messages != null ? messages.size() : 0;
+        return messages.size();
     }
 
     /**
@@ -140,21 +130,24 @@ public class DialogueInfoAdapter extends RecyclerView.Adapter<DialogueInfoAdapte
             extraDialogRight = itemView.findViewById(R.id.extra_dialog_right);
             extraDialogRightText = itemView.findViewById(R.id.extra_dialog_right_text);
             extraDialogRightEdit = itemView.findViewById(R.id.extra_dialog_right_edit);
+        }
 
-            // 设置 TextView 的点击事件，当 TextView 被点击时调用 onItemClickListener 的 onItemClick 方法
-            extraDialogLeftText.setOnClickListener(v -> {
+        void bind(Message message, int position) {
+            // 根据消息类型显示对应的布局
+            boolean isReceived = message.getType() == Message.TYPE_RECEIVED;
+            extraDialogLeft.setVisibility(isReceived ? View.VISIBLE : View.GONE);
+            extraDialogLeftText.setText(message.getContent());
+            extraDialogRight.setVisibility(isReceived ? View.GONE : View.VISIBLE);
+            extraDialogRightText.setText(message.getContent());
+
+            // 设置按钮的点击监听器
+            if (!isReceived && buttonClickListener != null) {
+                extraDialogRightEdit.setOnClickListener(v -> buttonClickListener.onButtonClick(position));
+            } else extraDialogRightEdit.setOnClickListener(null);
+
+            // 设置文本的点击事件，当文本被点击时调用 onItemClickListener 的 onItemClick 方法
+            itemView.setOnClickListener(v -> {
                 if (onItemClickListener != null) {
-                    // 更新当前选中的 item 位置
-                    if (getAdapterPosition() != position) position = getAdapterPosition();
-                    // 触发点击事件的回调
-                    onItemClickListener.onItemClick(itemView, position);
-                }
-            });
-            extraDialogRightText.setOnClickListener(v -> {
-                if (onItemClickListener != null) {
-                    // 更新当前选中的 item 位置
-                    if (getAdapterPosition() != position) position = getAdapterPosition();
-                    // 触发点击事件的回调
                     onItemClickListener.onItemClick(itemView, position);
                 }
             });

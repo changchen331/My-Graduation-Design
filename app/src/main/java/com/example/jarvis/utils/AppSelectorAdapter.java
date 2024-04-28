@@ -2,6 +2,9 @@ package com.example.jarvis.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,19 +17,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.jarvis.R;
 import com.example.jarvis.model.AppInfo;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
- * 用于在 RecyclerView 中显示应用信息列表的适配器
- * 负责将数据集合中的数据显示在 RecyclerView 上，并处理数据的操作，同时支持点击事件回调
+ * ✔ 用于在 RecyclerView 中显示应用信息列表的适配器。
+ * 负责将数据集合中的数据显示在 RecyclerView 上，并处理数据的操作，同时支持点击事件回调。
  */
 public class AppSelectorAdapter extends RecyclerView.Adapter<AppSelectorAdapter.ViewHolder> {
     private final List<AppInfo> apps; // 存储应用信息列表
-    private int position = 0; // 记录当前选中 item 的位置
     private OnItemClickListener onItemClickListener; // 定义点击事件的回调接口
+    private int position = 0; // 记录当前选中 item 的位置
 
     public AppSelectorAdapter(List<AppInfo> apps) {
-        this.apps = apps;
+        if (apps == null) {
+            Log.e("AppSelectorAdapter", "The apps list cannot be null.");
+            this.apps = Collections.emptyList();
+        } else this.apps = apps;
     }
 
     /**
@@ -52,13 +59,10 @@ public class AppSelectorAdapter extends RecyclerView.Adapter<AppSelectorAdapter.
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.application_selection_item, parent, false);
 
         // 计算 item 的宽度和边距
-        // 获取手机屏幕的宽度
-        int screenWidth = parent.getContext().getResources().getDisplayMetrics().widthPixels;
+        int screenWidth = parent.getContext().getResources().getDisplayMetrics().widthPixels; // 获取手机屏幕的宽度
         // RecyclerView 的宽度为 ScreenWidth - LeftPadding - RightPadding
         int recyclerWidth = screenWidth - dpToPx(60, parent.getContext());
-        // 计算 item 的宽度
         int itemWidth = recyclerWidth / 3;
-        // 根据 recyclerWidth 宽度和 item 数量计算边距
         int itemMargin = calculateItemMargin(recyclerWidth, itemWidth, apps.size());
 
         // 设置 item 的布局参数
@@ -70,7 +74,7 @@ public class AppSelectorAdapter extends RecyclerView.Adapter<AppSelectorAdapter.
     }
 
     /**
-     * 将应用信息数据绑定到 item 视图上
+     * 将应用信息数据绑定到 item 视图上。
      *
      * @param viewHolder ViewHolder 实例，持有对当前 item 视图的引用
      * @param position   当前 item 在数据集中的位置（索引）
@@ -78,10 +82,36 @@ public class AppSelectorAdapter extends RecyclerView.Adapter<AppSelectorAdapter.
     @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        AppInfo app = apps.get(position); // 获取当前位置的应用信息
-        viewHolder.appName.setText(app.getAppName()); // 设置应用名称
-        viewHolder.appIcon.setImageDrawable(app.getAppIcon()); // 设置应用图标
-        viewHolder.itemView.setSelected(position == this.position); // 设置 item 视图的选中状态
+        // 获取当前位置的应用信息
+        AppInfo app = apps.get(position);
+        if (app != null) {
+            // 设置 app 名称
+            TextView appNameView = viewHolder.appName;
+            String appName = app.getAppName();
+            if (!TextUtils.isEmpty(appName)) appNameView.setText(appName);
+
+            // 设置 app 图标
+            ImageView appIconView = viewHolder.appIcon;
+            Drawable appIcon = app.getAppIcon();
+            if (appIcon != null) appIconView.setImageDrawable(appIcon);
+
+            // 设置点击状态
+            viewHolder.itemView.setSelected(position == this.position);
+            // 设置点击事件监听器
+            viewHolder.itemView.setOnClickListener(v -> {
+                if (onItemClickListener != null) {
+                    // 当前点击位置
+                    int currentPosition = viewHolder.getAdapterPosition();
+                    // 更新点击状态
+                    if (currentPosition != this.position) {
+                        notifyItemChanged(this.position); // 取消上个 item 的勾选状态
+                        notifyItemChanged(currentPosition); // 通知选中状态变化
+                        this.position = currentPosition; // 更新 selectedPosition 为新点击的 position
+                    }
+                    onItemClickListener.onItemClick(v, currentPosition);
+                }
+            });
+        }
     }
 
     /**
@@ -125,15 +155,15 @@ public class AppSelectorAdapter extends RecyclerView.Adapter<AppSelectorAdapter.
         int itemMargin;
         switch (itemSpanCount) {
             case 1:
-                // 只有一列时，边距为屏幕宽度与 item 宽度差的一半
+                // 1 列时，边距为屏幕宽度与 item 宽度差的 1/2
                 itemMargin = (recyclerWidth - itemWidth) / 2;
                 break;
             case 2:
-                // 双列时，边距为屏幕宽度与两倍 item 宽度差的四分之一
+                // 2 列时，边距为屏幕宽度与 2 倍 item 宽度差的 1/4
                 itemMargin = (recyclerWidth - 2 * itemWidth) / 4;
                 break;
             default:
-                // 三列或以上时，边距为屏幕宽度与三倍 item 宽度差的六分之一
+                // 3 列或以上时，边距为屏幕宽度与 3 倍 item 宽度差的 1/6
                 itemMargin = (recyclerWidth - 3 * itemWidth) / 6;
         }
         return itemMargin;
@@ -155,7 +185,7 @@ public class AppSelectorAdapter extends RecyclerView.Adapter<AppSelectorAdapter.
     /**
      * ViewHolder 内部类，用于缓存 item 视图中各个子视图的引用
      */
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView appName; // 应用名称
         ImageView appIcon; // 应用图标
 
@@ -163,20 +193,6 @@ public class AppSelectorAdapter extends RecyclerView.Adapter<AppSelectorAdapter.
             super(itemView);
             appName = itemView.findViewById(R.id.application_selection_item_text);
             appIcon = itemView.findViewById(R.id.application_selection_item_image);
-
-            // 设置点击事件
-            itemView.setOnClickListener(v -> {
-                if (onItemClickListener != null) {
-                    if (getAdapterPosition() != position) {
-                        notifyItemChanged(position); // 取消上个 item 的勾选状态
-                        // 如果点击的不是当前选中的 item，则更新 selectedPosition 为新点击的 position
-                        position = getAdapterPosition();
-                        notifyItemChanged(position); // 通知选中状态变化
-                    }
-                    // 触发点击事件的回调
-                    onItemClickListener.onItemClick(itemView, position);
-                }
-            });
         }
     }
 }

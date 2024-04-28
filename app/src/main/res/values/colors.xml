@@ -31,8 +31,7 @@
     <color name="extra_dialog_item_text_left">#FFFFFF</color><!-- 额外对话界面 对话框 item 左文本框 背景颜色 -->
     <color name="extra_dialog_item_text_right">#95EC6A</color><!-- 额外对话界面 对话框 item 右文本框 背景颜色 -->
 
-    <color name="extra_input_visible">#F7F7F7</color><!-- 额外对话界面 输入栏 显示时 背景颜色 -->
-    <color name="extra_input_invisible">#EDEDED</color><!-- 额外对话界面 输入栏 隐藏时 背景颜色 -->
+    <color name="extra_input">#F7F7F7</color><!-- 额外对话界面 输入栏 背景颜色 -->
 
     <color name="extra_asr_activated">#EFB300</color><!-- 额外对话界面 语音识别开始按钮 激活 背景颜色 -->
     <color name="extra_asr_unactivated">#0F9B0F</color><!-- 额外对话界面 语音识别开始按钮 未激活 背景颜色 -->
@@ -48,11 +47,12 @@
     <color name="extra_keyboard_send">#0F9B0F</color><!-- 额外对话界面 键盘输入 发送按钮 背景颜色 -->
     <color name="extra_keyboard_send_text">#FFFFFF</color><!-- 额外对话界面 键盘输入 发送按钮 文字颜色 -->
 
-    <color name="extra_edit">#FFFFFF</color><!-- 额外对话界面 编辑弹窗 背景颜色 -->
-    <color name="extra_edit_question">#000000</color><!-- 额外对话界面 编辑弹窗 问题 文字颜色 -->
-    <color name="extra_edit_answer">#E0E0E0</color><!-- 额外对话界面 编辑弹窗 回复 背景颜色 -->
-    <color name="extra_edit_answer_cursor">#1FB065</color><!-- 额外对话界面 编辑弹窗 回复 光标颜色 -->
-    <color name="extra_edit_answer_highlight">#1FB065</color><!-- 额外对话界面 编辑弹窗 回复 选中颜色 -->
+    <!-- 额外对话界面 编辑对话框 -->
+    <color name="extra_edit">#FFFFFF</color><!-- 背景颜色 -->
+    <color name="extra_edit_question">#000000</color><!-- 问题 文字颜色 -->
+    <color name="extra_edit_answer">#E0E0E0</color><!-- 回复 背景颜色 -->
+    <color name="extra_edit_answer_cursor">#000000</color><!-- 回复 光标颜色 -->
+    <color name="extra_edit_answer_highlight">#2196F3</color><!-- 回复 选中颜色 -->
 
     <color name="white">#FFFFFF</color><!-- 白色 -->
     <color name="black">#000000</color><!-- 黑色 -->

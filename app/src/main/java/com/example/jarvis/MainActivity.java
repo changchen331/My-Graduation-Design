@@ -294,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // 监听软键盘状态变化
-        new KeyboardStateMonitor(main_window_keyboard_edit).addSoftKeyboardStateListener(new KeyboardStateMonitor.SoftKeyboardStateListener() {
+        new KeyboardStateMonitor(parentView).addSoftKeyboardStateListener(new KeyboardStateMonitor.SoftKeyboardStateListener() {
             @Override
             public void onSoftKeyboardOpened(int keyboardHeightInPx) {
                 // 软键盘打开

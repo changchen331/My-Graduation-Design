@@ -22,7 +22,7 @@
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:importantForAccessibility="no"
-            android:padding="15dp"
+            android:padding="13dp"
             android:scaleType="fitCenter"
             android:src="@drawable/extra_return" />
 

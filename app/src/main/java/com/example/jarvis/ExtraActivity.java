@@ -21,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,6 +68,8 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
 
         // 返回按钮
         ImageButton extra_return = findViewById(R.id.extra_return);
+        // 输入栏
+        LinearLayout extra_input = findViewById(R.id.extra_input);
         // 语音输入按钮
         Button extra_asr = findViewById(R.id.extra_asr);
         // 输入切换按钮
@@ -87,7 +90,7 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
                 vibrate(ExtraActivity.this, 200); // 模拟开始录音（震动）
                 /*code*/
                 // 弹出 语音输入弹窗
-                showASRPopWindow(extra_switch, extra_asr);
+                showASRPopWindow(extra_input, extra_switch, extra_asr);
             } else {
                 // 语音识别按钮处于激活状态
                 vibrate(ExtraActivity.this, 200); // 交互反馈
@@ -324,9 +327,11 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
      * @param imageButton 输入切换按钮
      * @param button      语音输入按钮
      */
-    private void showASRPopWindow(ImageButton imageButton, Button button) {
+    private void showASRPopWindow(LinearLayout linearLayout, ImageButton imageButton, Button button) {
         // 背景变暗
         darkenBackground(0.3f);
+        // 隐藏输入栏
+        linearLayout.setVisibility(View.GONE);
 
         // 语音输入弹窗
         @SuppressLint("InflateParams") View activity_extra_asr = getLayoutInflater().inflate(R.layout.activity_extra_asr, null);
@@ -384,6 +389,8 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
         extra_asr_window.setOnDismissListener(() -> {
             // 还原背景
             darkenBackground(1f);
+            // 显示输入栏
+            linearLayout.setVisibility(View.VISIBLE);
             // 判断用户是否确认了语音输入的内容
             if (isVoiceInputConfirmed) {
                 if (schedule == answers.size()) {
@@ -418,9 +425,6 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
             return;
         }
 
-        // 背景变暗
-//        darkenBackground(0.3f);
-
         // 获取问题
         String question = messages.get(position - (position < 3 ? 2 : 1)).getContent();
         if (question == null || question.isEmpty()) {
@@ -437,7 +441,8 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
         // 获取语音识别结果（模拟）
         String temp = revisedAnswers.get((position - 2) / 2);
 
-        ExtraEditDialog extraEditDialog = new ExtraEditDialog(question, answer, findViewById(R.id.extra_input), temp);
+        // 显示对话框
+        ExtraEditDialog extraEditDialog = new ExtraEditDialog(findViewById(R.id.extra_input), question, answer, temp);
         extraEditDialog.show(getSupportFragmentManager(), "extraEditDialog");
     }
 

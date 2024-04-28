@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <!-- 获取所有应用信息权限 -->
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
@@ -19,17 +20,36 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JARVIS"
         tools:targetApi="31">
+
+        <!-- 注册无障碍服务 -->
+        <service
+            android:name=".utils.HumanActionSimulator"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
+
+        <!-- 注册额外对话界面 -->
         <activity
             android:name=".ExtraActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:windowSoftInputMode="adjustUnspecified"
             tools:ignore="LockedOrientationActivity" />
+
+        <!-- 注册主界面 -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
+            android:windowSoftInputMode="adjustUnspecified"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,6 +57,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

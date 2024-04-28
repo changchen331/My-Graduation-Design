@@ -8,11 +8,23 @@
     <style name="Theme.JARVIS" parent="Base.Theme.JARVIS" />
 
     <style name="MyDialog" parent="@android:style/Theme.Dialog">
+        <!-- 背景透明 -->
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
+        <!-- 浮于 Activity 之上 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 边框 -->
+        <item name="android:windowFrame">@null</item>
+        <!-- 无标题 -->
         <item name="android:windowTitleStyle">@null</item>
+        <!-- 不缓存背景 -->
         <item name="android:colorBackgroundCacheHint">@null</item>
+        <!-- 设置动画 -->
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <!-- 半透明 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- 显示软键盘 -->
+        <item name="android:windowSoftInputMode">adjustPan</item>
     </style>
 
 </resources>

@@ -7,41 +7,32 @@ import android.view.inputmethod.InputMethodManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-
 /**
- * TODO 在软键盘开启的状态下 点击确认按钮 在退出 Dialog 之后 宿主界面还是处于软键盘开启的状态
- * TODO 弹出软键盘之后 光标消失
- * TODO 在 Dialog 开启的状态下 无法改变 宿主界面的背景颜色
+ * ✔ 管理软键盘的显示和隐藏的工具类。
  */
 public class KeyboardUtil {
     private static final String TAG = "KeyboardUtil";
 
     /**
-     * 显示软键盘
+     * 显示软键盘。
      *
-     * @param view 需要获取焦点的视图
+     * @param view 需要获取焦点的视图。
      */
     public static void showSoftInput(View view) {
-        // 检查 editText 是否为 null
         if (view == null) {
             Log.e(TAG, "View is null, cannot show soft input.");
             return;
         }
 
         // 显示软键盘
-        try {
-            // 获取输入方法管理器
-            InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT); // 显示软键盘
-        } catch (Exception e) {
-            Log.e(TAG, "Failed to show soft input.", e);
-        }
+        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
     }
 
     /**
-     * 隐藏软键盘
+     * 隐藏软键盘。
      *
-     * @param context 应用上下文
+     * @param context 应用上下文，需传入应用程序的上下文，避免内存泄露。
      */
     public static void hideSoftInput(Context context) {
         if (context == null) {
@@ -50,17 +41,21 @@ public class KeyboardUtil {
         }
 
         // 隐藏软键盘
-        try {
-            // 获取输入方法管理器
-            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                // 获取当前 Activity 中拥有焦点的视图
-                View view = ((AppCompatActivity) context).getCurrentFocus();
-                if (view == null) view = new View(context); // 创建一个新视图，用作隐藏软键盘的令牌
-                imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY); // 隐藏软键盘
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Failed to hide soft input.", e);
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            View view = getCurrentFocus(context); // 获取当前 Activity 中拥有焦点的视图
+            if (view == null) view = new View(context); // 若无焦点视图，则创建一个新视图以隐藏软键盘
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0); // 隐藏软键盘
         }
+    }
+
+    /**
+     * 获取当前上下文中拥有焦点的视图。
+     *
+     * @param context 用于检索当前焦点视图的上下文。
+     * @return 如果找到焦点视图，则返回；否则返回 null。
+     */
+    private static View getCurrentFocus(Context context) {
+        return (context instanceof AppCompatActivity) ? ((AppCompatActivity) context).getCurrentFocus() : null;
     }
 }

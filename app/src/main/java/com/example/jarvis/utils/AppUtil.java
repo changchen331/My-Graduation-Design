@@ -5,17 +5,24 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * ✔ 提供打开应用的工具类。
+ */
 public class AppUtil {
     private static final String TAG = "AppUtil";
 
     /**
-     * 打开指定应用
+     * 打开指定应用。
      *
-     * @param context     应用上下文
-     * @param packageName 要打开的应用的包名
-     * @return 打开成功返回 true，否则返回 false
+     * @param context     应用上下文，必须非空。
+     * @param packageName 要打开的应用的包名，必须非空。
+     * @return 打开成功返回 true，否则返回 false。
      */
     public static boolean openApp(Context context, String packageName) {
+        if (context == null || packageName == null) {
+            throw new IllegalArgumentException("Context and package name cannot be null.");
+        }
+
         try {
             // 获取应用的启动 Intent
             Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
@@ -37,14 +44,15 @@ public class AppUtil {
     }
 
     /**
-     * 显示 Toast 提示
+     * 显示 Toast 提示。
      *
-     * @param context 上下文
-     * @param message 提示信息
+     * @param context 上下文，必须非空。
+     * @param message 提示信息，必须非空。
      */
     private static void showToast(Context context, String message) {
-        if (context != null && message != null) {
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        if (context == null || message == null) {
+            throw new IllegalArgumentException("Context and message cannot be null.");
         }
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 }
