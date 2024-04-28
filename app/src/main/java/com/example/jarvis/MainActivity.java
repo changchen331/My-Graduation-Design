@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.jarvis.model.AppInfo;
 import com.example.jarvis.utils.AppSelectorAdapter;
 import com.example.jarvis.utils.KeyboardStateMonitor;
+import com.example.jarvis.utils.SpeechToTextUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,10 +39,12 @@ import java.util.stream.Collectors;
  */
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    private final SpeechToTextUtil speechToTextUtil = new SpeechToTextUtil(MainActivity.this); // 语音识别工具类
     private List<AppInfo> apps; // 应用信息列表
     private ArrayList<String> questions; // 补充问题列表
     private int position = 0; // 应用选择下标
     private String keyboardText = ""; // 手动输入框内容
+    private String ASRText = ""; // 语音识别内容
     private boolean isASRActivated = false; // 语音识别是否激活
     private boolean isASRTextActivated = false; // 语音识别文本是否激活
     private boolean isKeyboardSend = false; // 是否发送手动输入的文本
@@ -67,15 +71,14 @@ public class MainActivity extends AppCompatActivity {
                 main_asr.setActivated(true);
                 // 开始录音（应该有一个开始录音的方法）
                 vibrate(MainActivity.this, 200); // 交互反馈
-                /*code*/
+                speechToTextUtil.startListening();
             } else {
                 // 结束录音（应该有一个结束录音的方法）
                 /*code*/
                 vibrate(MainActivity.this, 300); // 交互反馈
                 main_asr.setVisibility(View.INVISIBLE); // 隐藏语音识别按钮（等待语音识别产生结果）
                 // 语音识别
-                /*code*/
-                String text = "我要去医院"; // 模拟语音识别结果
+                String text = ASRText; // 模拟语音识别结果
                 // 语音识别文本激活
                 isASRTextActivated = true;
                 main_asr_text.setTextColor(MainActivity.this.getColor(R.color.asr_text_filled));
@@ -379,6 +382,15 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             // 处理设置窗口属性时可能出现的异常
             Log.e(TAG, "Failed to darken background", e);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SpeechToTextUtil.SPEECH_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
+            ASRText = speechToTextUtil.onSpeechResult(resultCode, data);
+            Log.v(TAG, ASRText);
         }
     }
 }

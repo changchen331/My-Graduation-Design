@@ -7,6 +7,7 @@ import static com.example.jarvis.utils.VibratorUtil.vibrate;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,8 +25,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,6 +34,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.jarvis.model.AppInfo;
 import com.example.jarvis.model.Message;
 import com.example.jarvis.utils.DialogueInfoAdapter;
+import com.example.jarvis.utils.SpeechToTextUtil;
+import com.example.jarvis.utils.TextToSpeechUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,18 +45,20 @@ import java.util.List;
  * 补充对话界面
  */
 public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.ExtraEditDialogListener {
-    private final List<String> answers = Arrays.asList("长海医院", "泰宝华庭", "周五下午两点"); // 用户的回答（模拟）
     private final List<String> revisedAnswers = Arrays.asList("复旦大学附属华山医院", "我现在的位置", "现在"); // 更改后的回答（模拟）
     private int schedule = 0; // 对话的进度（模拟）
     private static final String TAG = "ExtraActivity";
     private final List<Message> messages = new ArrayList<>(); // 对话信息列表
     private final List<String> hint = Arrays.asList("点击白色文本框，我会读出其中的内容", "点击绿色文本框可以更改其中的内容"); // 系统提示
+    private final SpeechToTextUtil speechToTextUtil = new SpeechToTextUtil(ExtraActivity.this); // 语音识别工具类
+    private TextToSpeechUtil textToSpeechUtil; // 语音合成工具类
     private AppInfo selectedApp; // 用户选择的应用信息
     private List<String> questions; // 补充问题
     private RecyclerView recyclerView; // 对话框滚动视图
     private DialogueInfoAdapter dialogueInfoAdapter; // 对话框布局适配器
     private int position; // 选中对话的下标
     private String extraKeyboardEditText = ""; // 补充对话界面 手动输入框内容
+    private String extraASRText = ""; // 补充对话界面 语音识别内容
     private boolean isSwitchActivated = false; // 输入切换按钮是否激活
     private boolean isVoiceInputConfirmed = false; // 语音输入是否确认
     private boolean allQuestionsAnswered = false; // 问题是否全部回答完毕
@@ -63,6 +68,7 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_extra);
 
+        textToSpeechUtil = new TextToSpeechUtil(ExtraActivity.this);
         // 初始化 ExtraActivity
         initExtraActivity();
 
@@ -88,7 +94,7 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
             if (!allQuestionsAnswered) {
                 // 开始录音（应该有一个开始录音的方法）
                 vibrate(ExtraActivity.this, 200); // 模拟开始录音（震动）
-                /*code*/
+                speechToTextUtil.startListening();
                 // 弹出 语音输入弹窗
                 showASRPopWindow(extra_input, extra_switch, extra_asr);
             } else {
@@ -105,7 +111,7 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
             if (actionId == EditorInfo.IME_ACTION_SEND) {
                 sendKeyboard(extra_keyboard_edit);
                 schedule++; // 问题进度 +1
-                if (schedule == answers.size()) {
+                if (schedule == questions.size()) {
                     // 问题已经全部回答完毕
                     // 键盘输入休眠
                     extra_keyboard_edit.clearFocus(); // 清除焦点
@@ -138,7 +144,7 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
             //  发送键盘输入消息
             sendKeyboard(extra_keyboard_edit);
             schedule++; // 问题进度 +1
-            if (schedule == answers.size()) {
+            if (schedule == questions.size()) {
                 // 问题已经全部回答完毕
                 // 键盘输入休眠
                 extra_keyboard_edit.clearFocus(); // 清除焦点
@@ -247,9 +253,9 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
                     return;
                 }
                 // 读出项视图的内容（语音合成）
-                /*code*/
+                if (textToSpeechUtil.isInitialized()) textToSpeechUtil.speak(content);
                 // 使用 Toast 来模拟语音合成的效果
-                Toast.makeText(ExtraActivity.this, content, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ExtraActivity.this, content, Toast.LENGTH_SHORT).show();
             } else {
                 // 点击的项视图为发送的信息
                 vibrate(ExtraActivity.this, 200); // 交互反馈
@@ -358,7 +364,8 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
 
             // 语音识别
             /*code*/
-            String text = answers.get(schedule); // 获取语音识别结果（模拟）
+//            String text = answers.get(schedule); // 获取语音识别结果（模拟）
+            String text = extraASRText; // 获取语音识别结果（模拟）
             // 检查 text 是否为空，如果为空则使用默认消息
             if (text == null || text.isEmpty()) {
                 Log.w(TAG, "Speech recognition returned null or empty string.");
@@ -393,7 +400,7 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
             linearLayout.setVisibility(View.VISIBLE);
             // 判断用户是否确认了语音输入的内容
             if (isVoiceInputConfirmed) {
-                if (schedule == answers.size()) {
+                if (schedule == questions.size()) {
                     // 问题已经全部回答完毕
                     allQuestionsAnswered = true; // 设置 allQuestionsAnswered 为 true
                     imageButton.setVisibility(View.INVISIBLE); // 隐藏输入切换按钮
@@ -513,5 +520,20 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
             messages.get(position).setContent(answer);
             dialogueInfoAdapter.notifyItemChanged(position);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SpeechToTextUtil.SPEECH_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
+            extraASRText = speechToTextUtil.onSpeechResult(resultCode, data);
+            Log.v(TAG, extraASRText);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (textToSpeechUtil != null) textToSpeechUtil.shutdownTts(); // 关闭TTS引擎并释放资源
     }
 }
