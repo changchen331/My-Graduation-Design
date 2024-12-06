@@ -13,16 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ✔ 工具类用于获取设备上所有已安装应用的信息。
+ * 工具类用于获取设备上所有已安装应用的信息
  */
 public class AppInfoFetcher {
     private static final String TAG = "AppInfoFetcher";
 
     /**
-     * 获取设备上所有已安装应用的名称列表。
+     * 获取设备上所有已安装应用的名称列表
      *
-     * @param context 应用上下文，必须非空。
-     * @return 已安装应用的名称列表。
+     * @param context 应用上下文，必须非空
+     * @return 已安装应用的名称列表
      */
     public static List<AppInfo> getAllInstalledApps(Context context) {
         if (context == null) {

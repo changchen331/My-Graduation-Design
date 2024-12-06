@@ -6,7 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 /**
- * ✔ 提供打开应用的工具类。
+ * 提供打开应用的工具类
  */
 public class AppUtil {
     private static final String TAG = "AppUtil";
@@ -14,9 +14,9 @@ public class AppUtil {
     /**
      * 打开指定应用。
      *
-     * @param context     应用上下文，必须非空。
-     * @param packageName 要打开的应用的包名，必须非空。
-     * @return 打开成功返回 true，否则返回 false。
+     * @param context     应用上下文，必须非空
+     * @param packageName 要打开的应用的包名，必须非空
+     * @return 打开成功返回 true，否则返回 false
      */
     public static boolean openApp(Context context, String packageName) {
         if (context == null || packageName == null) {
@@ -44,10 +44,10 @@ public class AppUtil {
     }
 
     /**
-     * 显示 Toast 提示。
+     * 显示 Toast 提示
      *
-     * @param context 上下文，必须非空。
-     * @param message 提示信息，必须非空。
+     * @param context 上下文，必须非空
+     * @param message 提示信息，必须非空
      */
     private static void showToast(Context context, String message) {
         if (context == null || message == null) {

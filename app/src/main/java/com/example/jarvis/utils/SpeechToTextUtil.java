@@ -23,7 +23,7 @@ public class SpeechToTextUtil {
     }
 
     /**
-     * 开始监听用户的语音输入并识别成文本。
+     * 开始监听用户的语音输入并识别成文本
      */
     public void startListening() {
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
@@ -45,8 +45,8 @@ public class SpeechToTextUtil {
 
 
     /**
-     * 处理语音识别的结果。
-     * 在 Activity 的 onActivityResult 方法中调用。
+     * 处理语音识别的结果
+     * 在 Activity 的 onActivityResult 方法中调用
      *
      * @param resultCode 结果码，指示语音识别的状态。
      * @param data       包含识别结果的 Intent。

@@ -9,8 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * ✔ 软键盘状态辅助工具类，用于监听软键盘的显示和隐藏状态。
- * 该工具通过监听全局布局变化来推断软键盘的显示状态，并通知注册的监听器。
+ * 软键盘状态辅助工具类，用于监听软键盘的显示和隐藏状态
+ * 该工具通过监听全局布局变化来推断软键盘的显示状态，并通知注册的监听器
  */
 public class KeyboardStateMonitor implements ViewTreeObserver.OnGlobalLayoutListener {
     private static final String TAG = "KeyboardStateMonitor";

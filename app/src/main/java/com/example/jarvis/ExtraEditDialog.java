@@ -23,7 +23,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.jarvis.utils.KeyboardStateMonitor;
 
 /**
- * ✔ 提供额外编辑功能和信息发送的对话框。
+ * 提供额外编辑功能和信息发送的对话框
  */
 public class ExtraEditDialog extends DialogFragment {
     private final LinearLayout linearLayout; // 输入栏

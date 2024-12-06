@@ -21,8 +21,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * ✔ 用于在 RecyclerView 中显示应用信息列表的适配器。
- * 负责将数据集合中的数据显示在 RecyclerView 上，并处理数据的操作，同时支持点击事件回调。
+ * 用于在 RecyclerView 中显示应用信息列表的适配器
+ * 负责将数据集合中的数据显示在 RecyclerView 上，并处理数据的操作，同时支持点击事件回调
  */
 public class AppSelectorAdapter extends RecyclerView.Adapter<AppSelectorAdapter.ViewHolder> {
     private final List<AppInfo> apps; // 存储应用信息列表

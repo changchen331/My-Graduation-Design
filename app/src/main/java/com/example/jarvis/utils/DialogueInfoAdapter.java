@@ -16,8 +16,8 @@ import com.example.jarvis.model.Message;
 import java.util.List;
 
 /**
- * ✔ 用于在 RecyclerView 中显示气泡对话的适配器。
- * 负责将数据集合中的数据显示在 RecyclerView 上，并处理数据的操作，同时支持点击事件回调。
+ * 用于在 RecyclerView 中显示气泡对话的适配器
+ * 负责将数据集合中的数据显示在 RecyclerView 上，并处理数据的操作，同时支持点击事件回调
  */
 public class DialogueInfoAdapter extends RecyclerView.Adapter<DialogueInfoAdapter.ViewHolder> {
     private final List<Message> messages; // 存储对话信息列表

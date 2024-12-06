@@ -8,16 +8,16 @@ import android.os.Vibrator;
 import android.util.Log;
 
 /**
- * ✔ 提供手机振动功能的工具类。
+ * 提供手机振动功能的工具类
  */
 public class VibratorUtil {
     private static final String TAG = "VibratorUtil";
 
     /**
-     * 使手机产生振动。
+     * 使手机产生振动
      *
-     * @param context  应用的上下文对象，必须非空。
-     * @param duration 振动持续的时间，单位为毫秒，建议在 1 到 5000 毫秒之间。
+     * @param context  应用的上下文对象，必须非空
+     * @param duration 振动持续的时间，单位为毫秒，建议在 1 到 5000 毫秒之间
      */
     public static void vibrate(Context context, long duration) {
         // 检查传入的 context 是否为 null
