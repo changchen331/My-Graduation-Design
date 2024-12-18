@@ -12,6 +12,13 @@ public class Message {
     private String content; // 消息内容
     private int type; // 消息类型
 
+    public Message() {
+    }
+
+    public Message(int type) {
+        this.type = type;
+    }
+
     public Message(String content, int type) {
         this.content = content;
         this.type = type;
