@@ -10,6 +10,8 @@ import android.util.Log;
 import com.example.jarvis.model.AppInfo;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,8 +28,8 @@ public class AppInfoFetcher {
      */
     public static List<AppInfo> getAllInstalledApps(Context context) {
         if (context == null) {
-            Log.e(TAG, "Context cannot be null.");
-            return new ArrayList<>();
+            LogUtil.warning(TAG, "getAllInstalledApps", "Context cannot be null", Boolean.TRUE);
+            return Collections.emptyList();
         }
 
         // 获取应用信息
@@ -36,9 +38,8 @@ public class AppInfoFetcher {
             // 获取 PackageManager 实例
             PackageManager pm = context.getPackageManager();
             // 筛选应用
-            // 创建一个 Intent 对象
-            Intent intent = new Intent(Intent.ACTION_MAIN, null).addCategory(Intent.CATEGORY_LAUNCHER);
-            List<ResolveInfo> resolves = pm.queryIntentActivities(intent, 0);// 查询所有可以响应此 Intent 的活动
+            Intent intent = new Intent(Intent.ACTION_MAIN, null).addCategory(Intent.CATEGORY_LAUNCHER); // 创建一个 Intent 对象
+            List<ResolveInfo> resolves = pm.queryIntentActivities(intent, 0); // 查询所有可以响应此 Intent 的活动
             for (ResolveInfo resolveInfo : resolves) {
                 // 存入信息
                 ActivityInfo activityInfo = resolveInfo.activityInfo;
@@ -51,7 +52,7 @@ public class AppInfoFetcher {
             }
         } catch (Exception e) {
             // 如果获取应用列表过程中发生异常，记录错误日志
-            Log.e(TAG, "Error fetching installed app names", e);
+            LogUtil.error(TAG, "getAllInstalledApps", "Error fetching installed app names", e);
         }
 
         return installedApps;

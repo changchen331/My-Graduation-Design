@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
  * 应用信息
  */
 public class AppInfo implements Parcelable {
-    public static final Creator<AppInfo> CREATOR = new Creator<AppInfo>() {
+    public static final Creator<AppInfo> CREATOR = new Creator<>() {
         @Override
         public AppInfo createFromParcel(Parcel in) {
             return new AppInfo(in);

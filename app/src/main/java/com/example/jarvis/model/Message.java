@@ -10,7 +10,7 @@ public class Message {
     public static final int TYPE_SENT = 1; // 发送
 
     private String content; // 消息内容
-    private int type; // 消息类型
+    private Integer type; // 消息类型
 
     public Message() {
     }
@@ -32,7 +32,7 @@ public class Message {
         this.content = content;
     }
 
-    public int getType() {
+    public Integer getType() {
         return type;
     }
 

@@ -20,7 +20,7 @@ public class KeyboardUtil {
      */
     public static void showSoftInput(View view) {
         if (view == null) {
-            Log.e(TAG, "View is null, cannot show soft input.");
+            LogUtil.warning(TAG, "showSoftInput", "View is null, cannot show soft input", Boolean.TRUE);
             return;
         }
 
@@ -36,7 +36,7 @@ public class KeyboardUtil {
      */
     public static void hideSoftInput(Context context) {
         if (context == null) {
-            Log.e(TAG, "Context is null, cannot hide soft input.");
+            LogUtil.warning(TAG, "hideSoftInput", "Context is null, cannot hide soft input", Boolean.TRUE);
             return;
         }
 

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.jarvis.R;
 import com.example.jarvis.model.Message;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -20,15 +21,17 @@ import java.util.List;
  * 负责将数据集合中的数据显示在 RecyclerView 上，并处理数据的操作，同时支持点击事件回调
  */
 public class DialogueInfoAdapter extends RecyclerView.Adapter<DialogueInfoAdapter.ViewHolder> {
+    private static final String TAG = "DialogueInfoAdapter";
     private final List<Message> messages; // 存储对话信息列表
+
     private ButtonClickListener buttonClickListener; // 点击按钮的回调接口
     private OnItemClickListener onItemClickListener; // 点击事件的回调接口
 
     public DialogueInfoAdapter(List<Message> messages) {
         if (messages == null) {
-            throw new IllegalArgumentException("The list of messages cannot be null");
-        }
-        this.messages = messages;
+            LogUtil.warning(TAG, "DialogueInfoAdapter", "The list of messages cannot be null", Boolean.TRUE);
+            this.messages = Collections.emptyList();
+        } else this.messages = messages;
     }
 
     /**

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.LocaleList;
 import android.speech.RecognizerIntent;
-import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -15,7 +14,9 @@ import java.util.ArrayList;
 
 public class SpeechToTextUtil {
     private static final String TAG = "SpeechRecognitionUtil";
-    public static final int SPEECH_RECOGNITION_REQUEST_CODE = 331; // 确保这是唯一的请求码
+
+    public static final Integer SPEECH_RECOGNITION_REQUEST_CODE = 331; // 确保这是唯一的请求码
+
     private final Activity activity; // 用于回调的 Activity
 
     public SpeechToTextUtil(Activity activity) {
@@ -39,17 +40,16 @@ public class SpeechToTextUtil {
         try {
             activity.startActivityForResult(speechIntent, SPEECH_RECOGNITION_REQUEST_CODE);
         } catch (Exception e) {
-            Log.e(TAG, "Error starting speech recognition.", e);
+            LogUtil.error(TAG, "startListening", "Error starting speech recognition", e);
         }
     }
-
 
     /**
      * 处理语音识别的结果
      * 在 Activity 的 onActivityResult 方法中调用
      *
-     * @param resultCode 结果码，指示语音识别的状态。
-     * @param data       包含识别结果的 Intent。
+     * @param resultCode 结果码，指示语音识别的状态
+     * @param data       包含识别结果的 Intent
      */
     public String onSpeechResult(int resultCode, Intent data) {
         // 检查请求码和数据是否有效

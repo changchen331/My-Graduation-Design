@@ -6,10 +6,8 @@ import static com.example.jarvis.utils.KeyboardUtil.showSoftInput;
 import static com.example.jarvis.utils.VibratorUtil.vibrate;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -20,7 +18,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.jarvis.model.AppInfo;
 import com.example.jarvis.utils.AppSelectorAdapter;
 import com.example.jarvis.utils.KeyboardStateMonitor;
+import com.example.jarvis.utils.LogUtil;
 import com.example.jarvis.utils.SpeechToTextUtil;
 
 import java.util.List;
@@ -39,15 +37,20 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+
     private final SpeechToTextUtil speechToTextUtil = new SpeechToTextUtil(MainActivity.this); // 语音识别工具类
+
     private List<AppInfo> apps; // 应用信息列表
+
     private Integer position = 0; // 应用选择下标
-    private String ASRText = ""; // 语音识别内容
-    private String question = ""; // 补充问题列表
+
+    private String userInput = ""; // 用户输入
     private String keyboardText = ""; // 手动输入框内容
-    private Boolean isASRActivated = false; // 语音识别是否激活
-    private Boolean isKeyboardSend = false; // 是否发送手动输入的文本
-    private Boolean isASRTextActivated = false; // 语音识别文本是否激活
+    private String first_question = ""; // 起始问题
+
+    private Boolean isASRActivated = Boolean.FALSE; // 语音识别是否激活
+    private Boolean isKeyboardSend = Boolean.FALSE; // 是否发送手动输入的文本
+    private Boolean isASRTextActivated = Boolean.FALSE; // 语音识别文本是否激活
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,20 +74,17 @@ public class MainActivity extends AppCompatActivity {
                 isASRActivated = true;
                 main_asr.setActivated(true);
 
-                // 开始录音
+                // 语音识别
                 vibrate(MainActivity.this, 200); // 交互反馈
                 speechToTextUtil.startListening();
             } else {
                 vibrate(MainActivity.this, 300); // 交互反馈
                 main_asr.setVisibility(View.INVISIBLE); // 隐藏语音识别按钮（等待语音识别产生结果）
 
-                // 语音识别
-                String text = ASRText; // 模拟语音识别结果
-
                 // 语音识别文本激活
                 isASRTextActivated = true;
                 main_asr_text.setTextColor(MainActivity.this.getColor(R.color.asr_text_filled));
-                main_asr_text.setText(text); // 显示语音识别文本
+                main_asr_text.setText(userInput); // 显示语音识别文本
 
                 // 语音识别休眠
                 isASRActivated = false;
@@ -99,13 +99,9 @@ public class MainActivity extends AppCompatActivity {
         main_send.setOnClickListener(v -> {
             // 已经输入语音
             if (isASRTextActivated) {
-                // 检查输入文本是否为空
-                String text = main_asr_text.getText().toString();
-                if (text.isEmpty()) return;
-
                 // 发送语音识别文本
                 main_asr_text.setVisibility(View.INVISIBLE); // 隐藏语音识别框
-                getFirstQuestion(text); // 发送语音识别文本 + 接收返回数据
+                getFirstQuestion(userInput); // 获取第一个问题
 
                 // 语音识别文本休眠
                 isASRTextActivated = false;
@@ -114,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // 显示应用选择弹窗
 //                showApplicationSelectionPopWindow(main_asr_text);
+                // 测试
                 jumpToExtra();
             }
         });
@@ -124,18 +121,14 @@ public class MainActivity extends AppCompatActivity {
 //        main_keyboard.setVisibility(Integer.parseInt(getResources().getString(R.string.visibility)));
         // 点击键盘输入按钮
         main_keyboard.setOnClickListener(v -> {
-            // 隐藏语音输入文本展示框
-            main_asr_text.setVisibility(View.INVISIBLE);
-
-            // 重置语音识别文本
-            main_asr_text.setText(R.string.asr_text);
-
-            // 语音识别文本休眠
-            isASRTextActivated = false;
-            main_asr_text.setTextColor(MainActivity.this.getColor(R.color.asr_text_empty));
-
             // 语音识别休眠
-            isASRActivated = false;
+            main_asr_text.setVisibility(View.INVISIBLE); // 隐藏语音输入文本展示框
+            main_asr_text.setText(R.string.asr_text); // 重置语音识别文本
+            // 语音识别文本休眠
+            isASRTextActivated = Boolean.FALSE;
+            main_asr_text.setTextColor(MainActivity.this.getColor(R.color.asr_text_empty));
+            // 语音识别按钮休眠
+            isASRActivated = Boolean.FALSE;
             main_asr.setActivated(false);
 
             // 显示文本输入弹窗
@@ -144,19 +137,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * 发送输入文本 + 接收返回数据
+     * 获取第一个问题
      *
      * @param text 输入文本
      */
     private void getFirstQuestion(String text) {
         // 对输入的文本进行处理
         String textTrimmed = text.trim();
+
         // 用户是否输入了文本
         if (!textTrimmed.isEmpty()) {
             apps = getAllInstalledApps(MainActivity.this); // 获取所有应用信息
             MainActivity.this.position = 0; // 重置选择应用的下标（默认为第一个应用）
             // 发送需求 + 所有应用信息
-            question = getStart(MainActivity.this, textTrimmed).getContent();
+            first_question = getStart(MainActivity.this, textTrimmed).getContent();
         }
     }
 
@@ -167,7 +161,10 @@ public class MainActivity extends AppCompatActivity {
      */
     private void showApplicationSelectionPopWindow(View parentView) {
         // 处理无效的参数
-        if (parentView == null || apps == null || apps.isEmpty()) return;
+        if (parentView == null || apps == null || apps.isEmpty()) {
+            LogUtil.warning(TAG, "showApplicationSelectionPopWindow", "parentView 或 apps 为空，无法显示应用选择弹窗", Boolean.TRUE);
+            return;
+        }
 
         // 背景变暗
         darkenBackground(0.3f);
@@ -188,9 +185,7 @@ public class MainActivity extends AppCompatActivity {
         AppSelectorAdapter appSelectorAdapter = new AppSelectorAdapter(apps);
         // 点击 项视图（itemView）获取所选应用的下标
         appSelectorAdapter.setOnItemClickListener((view, position) -> {
-            if (position >= 0 && position < apps.size()) {
-                MainActivity.this.position = position;
-            }
+            if (position >= 0 && position < apps.size()) MainActivity.this.position = position;
         });
         // 将 recyclerViewAdapter 设置为 recyclerView 的适配器
         recyclerView.setAdapter(appSelectorAdapter);
@@ -206,8 +201,7 @@ public class MainActivity extends AppCompatActivity {
         Button application_selection_cancel = activity_application_selection.findViewById(R.id.application_selection_cancel);
         // 点击应用选择弹窗取消按钮
         application_selection_cancel.setOnClickListener(v -> {
-            // 退出应用选择弹窗
-            main_application_selection.dismiss();
+            main_application_selection.dismiss(); // 退出应用选择弹窗
         });
 
         // 应用选择弹窗确认按钮
@@ -231,28 +225,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * 启动 ExtraActivity 并传递 AppInfo 对象。
-     *
-     * @param appInfo 要传递的 AppInfo 对象。
+     * 启动 ExtraActivity
      */
-    private void jumpToExtra(AppInfo appInfo) {
+    private void jumpToExtra() {
         // 创建指向 ExtraActivity 的 Intent
         Intent intent = new Intent(MainActivity.this, ExtraActivity.class);
+
         // 将 AppInfo 对象添加到 Intent 额外数据中
-        intent.putExtra("selected_applications", appInfo);
-        intent.putExtra("extra_question", question);
+        intent.putExtra("scene", userInput);
+        intent.putExtra("first_question", first_question);
+
         // 启动 ExtraActivity
         startActivity(intent);
     }
 
     /**
-     * 启动 ExtraActivity 并传递 AppInfo 对象。
+     * 启动 ExtraActivity 并传递 AppInfo 对象
+     *
+     * @param appInfo 要传递的 AppInfo 对象
      */
-    private void jumpToExtra() {
+    private void jumpToExtra(AppInfo appInfo) {
         // 创建指向 ExtraActivity 的 Intent
         Intent intent = new Intent(MainActivity.this, ExtraActivity.class);
+
         // 将 AppInfo 对象添加到 Intent 额外数据中
-        intent.putExtra("extra_question", question);
+        intent.putExtra("first_question", first_question);
+        intent.putExtra("selected_applications", appInfo);
+
         // 启动 ExtraActivity
         startActivity(intent);
     }
@@ -264,7 +263,10 @@ public class MainActivity extends AppCompatActivity {
      */
     private void showKeyboardPopWindow(View parentView) {
         // 处理无效的视图参数
-        if (parentView == null) return;
+        if (parentView == null) {
+            LogUtil.warning(TAG, "showKeyboardPopWindow", "parentView 为 null，无法显示文本输入弹窗", Boolean.TRUE);
+            return;
+        }
 
         // 背景变暗
         darkenBackground(0.3f);
@@ -297,10 +299,8 @@ public class MainActivity extends AppCompatActivity {
 
         // 监听编辑文本时的动作（按下回车）
         main_window_keyboard_edit.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEND) {
-                // 关闭键盘弹窗
-                dismissKeyboard(Boolean.TRUE, main_window_keyboard_edit, main_keyboard_window);
-            }
+            if (actionId == EditorInfo.IME_ACTION_SEND)
+                dismissKeyboard(Boolean.TRUE, main_window_keyboard_edit, main_keyboard_window); // 关闭键盘弹窗
             return false;
         });
 
@@ -319,8 +319,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSoftKeyboardClosed() {
-                // 软键盘关闭
-                // 关闭键盘弹窗
+                // 软键盘关闭，关闭键盘弹窗
                 dismissKeyboard(Boolean.FALSE, main_window_keyboard_edit, main_keyboard_window);
             }
         });
@@ -329,28 +328,26 @@ public class MainActivity extends AppCompatActivity {
         main_keyboard_window.setOnDismissListener(() -> {
             // 是否要发送输入文本
             if (isKeyboardSend) {
+                userInput = main_window_keyboard_edit.getText().toString();
                 // 检查输入文本是否为空
-                String text = main_window_keyboard_edit.getText().toString();
-                if (text.isEmpty()) {
-                    // 恢复背景
-                    darkenBackground(1f);
+                if (userInput.isEmpty()) {
+                    darkenBackground(1f); // 恢复背景
                     return;
                 }
-                // 发送文本
-                getFirstQuestion(text);
+
                 // 还原输入框的内容
                 keyboardText = "";
+                // 还原标记
+                isKeyboardSend = Boolean.FALSE;
                 // 显示应用选择弹窗
 //                showApplicationSelectionPopWindow(parentView);
-                // 还原标记
-                isKeyboardSend = false;
 
+                // 测试
+                getFirstQuestion(userInput); // 发送文本
                 jumpToExtra();
             } else {
-                // 恢复背景
-                darkenBackground(1f);
-                // 记录已输入但没有发送的文本
-                keyboardText = main_window_keyboard_edit.getText().toString();
+                darkenBackground(1f); // 恢复背景
+                keyboardText = main_window_keyboard_edit.getText().toString(); // 记录已输入但没有发送的文本
             }
         });
     }
@@ -365,10 +362,10 @@ public class MainActivity extends AppCompatActivity {
     private void dismissKeyboard(Boolean isKeyboardSend, EditText editText, PopupWindow popupWindow) {
         // 检查 EditText 和 PopupWindow 是否为 null
         if (editText == null || popupWindow == null) {
-            // 如果 EditText 或 PopupWindow为null，记录错误并返回
-            Log.e(TAG, "EditText 或 PopupWindow 为 null，无法关闭键盘弹窗");
+            LogUtil.warning(TAG, "dismissKeyboard", "EditText 或 PopupWindow 为 null，无法关闭键盘弹窗", Boolean.TRUE);
             return;
         }
+
         // 标记是否需要发送手动输入文本
         this.isKeyboardSend = isKeyboardSend;
         // 清除 EditText 的焦点
@@ -385,7 +382,7 @@ public class MainActivity extends AppCompatActivity {
     private void darkenBackground(Float alpha) {
         // 判断透明度是否有效
         if (alpha == null || alpha < 0.0f || alpha > 1.0f) {
-            Log.w(TAG, "Invalid alpha value, using default value instead.");
+            LogUtil.warning(TAG, "darkenBackground", "Invalid alpha value, using default value instead", Boolean.TRUE);
             alpha = 0.5f; // 设置为默认值
         }
         // 获取窗口对象
@@ -396,30 +393,16 @@ public class MainActivity extends AppCompatActivity {
             window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND); // 为窗口添加背后模糊效果的标志
             window.setAttributes(lp); // 应用更新后的布局参数到窗口
         } catch (Exception e) {
-            // 处理设置窗口属性时可能出现的异常
-            Log.e(TAG, "Failed to darken background", e);
+            LogUtil.error(TAG, "darkenBackground", "Failed to darken background", e);
         }
-    }
-
-    /**
-     * 显示 Toast 提示
-     *
-     * @param context 上下文，必须非空
-     * @param message 提示信息，必须非空
-     */
-    private static void showToast(Context context, String message) {
-        if (context == null || message == null) {
-            throw new IllegalArgumentException("Context and message cannot be null.");
-        }
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SpeechToTextUtil.SPEECH_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
-            ASRText = speechToTextUtil.onSpeechResult(resultCode, data);
-            Log.v(TAG, ASRText);
+            userInput = speechToTextUtil.onSpeechResult(resultCode, data);
+            LogUtil.info(TAG, "onActivityResult", userInput, Boolean.TRUE);
         }
     }
 }

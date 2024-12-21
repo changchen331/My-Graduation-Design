@@ -1,7 +1,6 @@
 package com.example.jarvis.utils;
 
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
@@ -14,10 +13,12 @@ import java.util.List;
  */
 public class KeyboardStateMonitor implements ViewTreeObserver.OnGlobalLayoutListener {
     private static final String TAG = "KeyboardStateMonitor";
-    private static final int KEYBOARD_THRESHOLD_DP = 200; // 软键盘高度阈值
+    private static final Integer KEYBOARD_THRESHOLD_DP = 200; // 软键盘高度阈值
+
     private final List<SoftKeyboardStateListener> listeners = new LinkedList<>(); // 监听器列表，软键盘状态监听器
+
+    private Boolean isSoftKeyboardOpened; // 软键盘当前是否打开
     private View activityView; // 当前活动的视图
-    private boolean isSoftKeyboardOpened; // 软键盘当前是否打开
 
     /**
      * 构造函数
@@ -36,11 +37,12 @@ public class KeyboardStateMonitor implements ViewTreeObserver.OnGlobalLayoutList
      */
     public KeyboardStateMonitor(View activityView, boolean isSoftKeyboardOpened) {
         if (activityView == null) {
-            Log.e(TAG, "The activity root view cannot be null.");
+            LogUtil.warning(TAG, "KeyboardStateMonitor", "The activity root view cannot be null", Boolean.TRUE);
             return;
         }
         this.activityView = activityView;
         this.isSoftKeyboardOpened = isSoftKeyboardOpened;
+
         // 注册全局布局监听器
         activityView.getViewTreeObserver().addOnGlobalLayoutListener(this);
     }
@@ -83,18 +85,16 @@ public class KeyboardStateMonitor implements ViewTreeObserver.OnGlobalLayoutList
      */
     private void notifyOnSoftKeyboardOpened(int keyboardHeightInPx) {
         // 上次保存的软键盘高度（像素）
-        for (SoftKeyboardStateListener listener : listeners) {
+        for (SoftKeyboardStateListener listener : listeners)
             if (listener != null) listener.onSoftKeyboardOpened(keyboardHeightInPx);
-        }
     }
 
     /**
      * 当软键盘关闭时，调用此方法通知所有监听器
      */
     private void notifyOnSoftKeyboardClosed() {
-        for (SoftKeyboardStateListener listener : listeners) {
+        for (SoftKeyboardStateListener listener : listeners)
             if (listener != null) listener.onSoftKeyboardClosed();
-        }
     }
 
     /**

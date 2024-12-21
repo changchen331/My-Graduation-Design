@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,13 +24,17 @@ import java.util.List;
  * 负责将数据集合中的数据显示在 RecyclerView 上，并处理数据的操作，同时支持点击事件回调
  */
 public class AppSelectorAdapter extends RecyclerView.Adapter<AppSelectorAdapter.ViewHolder> {
+    private static final String TAG = "AppSelectorAdapter";
+
     private final List<AppInfo> apps; // 存储应用信息列表
+
     private OnItemClickListener onItemClickListener; // 定义点击事件的回调接口
-    private int position = 0; // 记录当前选中 item 的位置
+
+    private Integer position = 0; // 记录当前选中 item 的位置
 
     public AppSelectorAdapter(List<AppInfo> apps) {
         if (apps == null) {
-            Log.e("AppSelectorAdapter", "The apps list cannot be null.");
+            LogUtil.warning(TAG, "AppSelectorAdapter", "The apps list cannot be null", Boolean.TRUE);
             this.apps = Collections.emptyList();
         } else this.apps = apps;
     }
@@ -59,7 +62,7 @@ public class AppSelectorAdapter extends RecyclerView.Adapter<AppSelectorAdapter.
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.application_selection_item, parent, false);
 
         // 计算 item 的宽度和边距
-        int screenWidth = parent.getContext().getResources().getDisplayMetrics().widthPixels; // 获取手机屏幕的宽度
+        Integer screenWidth = parent.getContext().getResources().getDisplayMetrics().widthPixels; // 获取手机屏幕的宽度
         // RecyclerView 的宽度为 ScreenWidth - LeftPadding - RightPadding
         int recyclerWidth = screenWidth - dpToPx(60, parent.getContext());
         int itemWidth = recyclerWidth / 3;
@@ -131,7 +134,7 @@ public class AppSelectorAdapter extends RecyclerView.Adapter<AppSelectorAdapter.
      * @param context 上下文对象，用于获取屏幕密度信息
      * @return 转换后的像素值
      */
-    private int dpToPx(int dp, Context context) {
+    private Integer dpToPx(int dp, Context context) {
         // 获取显示度量，用于转换 dp 到像素
         float density = context.getResources().getDisplayMetrics().density;
         return Math.round(dp * density); // 计算像素值并返回
@@ -144,7 +147,7 @@ public class AppSelectorAdapter extends RecyclerView.Adapter<AppSelectorAdapter.
      * @param itemCount     item 数量
      * @return 计算出的边距值（像素）
      */
-    private int calculateItemMargin(int recyclerWidth, int itemWidth, int itemCount) {
+    private Integer calculateItemMargin(int recyclerWidth, int itemWidth, int itemCount) {
         // 检查 item 数量是否为 0，如果是，则不需要边距
         if (itemCount == 0) return 0;
 
@@ -152,21 +155,17 @@ public class AppSelectorAdapter extends RecyclerView.Adapter<AppSelectorAdapter.
         int itemSpanCount = Math.max(1, Math.min(3, itemCount));
 
         // 根据列数计算边距
-        int itemMargin;
-        switch (itemSpanCount) {
-            case 1:
+        return switch (itemSpanCount) {
+            case 1 ->
                 // 1 列时，边距为屏幕宽度与 item 宽度差的 1/2
-                itemMargin = (recyclerWidth - itemWidth) / 2;
-                break;
-            case 2:
+                    (recyclerWidth - itemWidth) / 2;
+            case 2 ->
                 // 2 列时，边距为屏幕宽度与 2 倍 item 宽度差的 1/4
-                itemMargin = (recyclerWidth - 2 * itemWidth) / 4;
-                break;
-            default:
+                    (recyclerWidth - 2 * itemWidth) / 4;
+            default ->
                 // 3 列或以上时，边距为屏幕宽度与 3 倍 item 宽度差的 1/6
-                itemMargin = (recyclerWidth - 3 * itemWidth) / 6;
-        }
-        return itemMargin;
+                    (recyclerWidth - 3 * itemWidth) / 6;
+        };
     }
 
     /**

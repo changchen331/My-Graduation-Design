@@ -1,7 +1,6 @@
 package com.example.jarvis.utils;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -26,27 +25,6 @@ public class HttpRequests {
         client = new OkHttpClient.Builder().connectTimeout(10, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS).writeTimeout(30, TimeUnit.SECONDS).build();
     }
 
-    // 发送 GET 同步请求（等到服务器有响应才会继续往下走）
-    // 注意网络同步请求必须要有一个子线程
-//    public static void getSync(String url) {
-//        new Thread(() -> {
-//            // get 请求
-//            Request request = new Request.Builder().url(url).get().build();
-//
-//            // 请求的 call 对象
-//            Call call = client.newCall(request);
-//            try (Response response = call.execute()) {
-//                if (response.isSuccessful()) {
-//                    Log.i(TAG, "GET 同步请求:" + (response.body() != null ? response.body().string() : ""));
-//                } else {
-//                    Log.e(TAG, "GET 同步请求: 请求失败");
-//                }
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }).start();
-//    }
-
     // 发送 GET 异步请求
     public static Message getAsync(String url) {
         Message message = new Message(Message.TYPE_RECEIVED);
@@ -60,58 +38,32 @@ public class HttpRequests {
             // 失败的请求
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                message.setContent("GET 异步请求: 发送请求失败");
-                Log.e(TAG, "GET 异步请求: 发送请求失败");
+                message.setContent("");
+                LogUtil.warning(TAG, "getAsync", "发送请求失败", Boolean.TRUE);
             }
 
             // 结束的回调
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                // 响应码可能是 404 也可能是 200 都会走这个方法
-                if (response.isSuccessful()) {
-                    String responseBody = response.body() != null ? response.body().string() : "";
-                    message.setContent(responseBody);
-                    Log.i(TAG, "GET 异步请求: " + responseBody);
-                } else {
-                    message.setContent("GET 异步请求: 请求失败");
-                    Log.e(TAG, "GET 异步请求: 请求失败");
-                }
+                String responseBody = response.body() != null ? response.body().string() : "";
+                message.setContent(responseBody);
+
+                if (response.isSuccessful())
+                    LogUtil.info(TAG, "getAsync_onResponse", responseBody, Boolean.TRUE);
+                else LogUtil.warning(TAG, "getAsync_onResponse", "请求失败", Boolean.TRUE);
             }
         });
 
         return message;
     }
 
-    // 发送 POST 同步请求
-//    public static void postSync(String url, RequestBody requestBody) {
-//        new Thread(() -> {
-//            if (requestBody == null) {
-//                Log.e(TAG, "POST 同步请求: 请求体为空");
-//                return;
-//            }
-//
-//            Request request = new Request.Builder().url(url).post(requestBody).build();
-//            //请求的call对象
-//            Call call = client.newCall(request);
-//            try (Response response = call.execute()) {
-//                if (response.isSuccessful()) {
-//                    Log.i(TAG, "POST 同步请求：" + (response.body() != null ? response.body().string() : ""));
-//                } else {
-//                    Log.e(TAG, "POST 同步请求：请求失败");
-//                }
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }).start();
-//    }
-
-    //发送 POST 异步请求
+    // 发送 POST 异步请求
     public static Message postAsync(String url, RequestBody requestBody) {
         Message message = new Message(Message.TYPE_RECEIVED);
 
         if (requestBody == null) {
-            message.setContent("POST 异步请求：请求体为空");
-            Log.e(TAG, "POST 异步请求：请求体为空");
+            message.setContent("");
+            LogUtil.warning(TAG, "postAsync", "请求体为空", Boolean.TRUE);
             return message;
         }
 
@@ -124,34 +76,32 @@ public class HttpRequests {
             // 失败的请求
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                message.setContent("POST 异步请求：请求失败");
-                Log.e(TAG, "POST 异步请求：请求失败");
+                message.setContent("");
+                LogUtil.warning(TAG, "postAsync", "发送请求失败", Boolean.TRUE);
             }
 
             // 结束的回调
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String responseBody = response.body() != null ? response.body().string() : "";
-                    message.setContent(responseBody);
-                    Log.i(TAG, "返回数据：" + responseBody);
-                } else {
-                    message.setContent("POST 异步请求：请求失败");
-                    Log.e(TAG, "POST 异步请求：请求失败");
-                }
+                String responseBody = response.body() != null ? response.body().string() : "";
+                message.setContent(responseBody);
+
+                if (response.isSuccessful())
+                    LogUtil.info(TAG, "postAsync_onResponse", responseBody, Boolean.TRUE);
+                else LogUtil.warning(TAG, "postAsync_onResponse", "请求失败", Boolean.TRUE);
             }
         });
 
         return message;
     }
 
-    //发送 POST 异步请求
+    // 发送 POST 异步请求
     public static Message postAsync(String url, RequestBody requestBody, Boolean needHeader, Context context) {
         Message message = new Message(Message.TYPE_RECEIVED);
 
         if (requestBody == null) {
-            message.setContent("POST 异步请求：请求体为空");
-            Log.e(TAG, "POST 异步请求：请求体为空");
+            message.setContent("");
+            LogUtil.warning(TAG, "postAsync", "请求体为空", Boolean.TRUE);
             return message;
         }
 
@@ -159,10 +109,8 @@ public class HttpRequests {
         Request request;
         if (needHeader) {
             String api_Key = context.getString(R.string.gpt_4o);
-            request = new Request.Builder().url(url).post(requestBody).addHeader("Authorization", api_Key).build();
-        } else {
-            return postAsync(url, requestBody);
-        }
+            request = new Request.Builder().url(url).post(requestBody).addHeader("Authorization", "Bearer " + api_Key).build();
+        } else return postAsync(url, requestBody);
         // 请求的 call 对象
         Call call = client.newCall(request);
         // 异步请求
@@ -170,21 +118,19 @@ public class HttpRequests {
             // 失败的请求
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                message.setContent("POST 异步请求：请求失败");
-                Log.e(TAG, "POST 异步请求：请求失败");
+                message.setContent("");
+                LogUtil.warning(TAG, "postAsync", "发送请求失败", Boolean.TRUE);
             }
 
             // 结束的回调
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String responseBody = response.body() != null ? response.body().string() : "";
-                    message.setContent(responseBody);
-                    Log.i(TAG, "返回数据：" + responseBody);
-                } else {
-                    message.setContent("POST 异步请求：请求失败");
-                    Log.e(TAG, "POST 异步请求：请求失败");
-                }
+                String responseBody = response.body() != null ? response.body().string() : "";
+                message.setContent(responseBody);
+
+                if (response.isSuccessful())
+                    LogUtil.info(TAG, "postAsync_onResponse", responseBody, Boolean.TRUE);
+                else LogUtil.warning(TAG, "postAsync_onResponse", "请求失败", Boolean.TRUE);
             }
         });
 
