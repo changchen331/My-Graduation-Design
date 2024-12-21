@@ -1,7 +1,6 @@
 package com.example.jarvis.utils;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 public class ToastUtil {
@@ -18,13 +17,27 @@ public class ToastUtil {
      * @param context 上下文，必须非空
      * @param message 提示信息，必须非空
      */
-    public static void showToast(Context context, String message, Boolean needLong) {
+    public static void showLong(Context context, String message) {
         if (context == null || message == null) {
             LogUtil.warning(TAG, "showToast", "Context and message cannot be null", Boolean.TRUE);
             return;
         }
 
-        if (needLong) Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-        else Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * 显示 Toast 提示
+     *
+     * @param context 上下文，必须非空
+     * @param message 提示信息，必须非空
+     */
+    public static void showShort(Context context, String message) {
+        if (context == null || message == null) {
+            LogUtil.warning(TAG, "showToast", "Context and message cannot be null", Boolean.TRUE);
+            return;
+        }
+
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 }

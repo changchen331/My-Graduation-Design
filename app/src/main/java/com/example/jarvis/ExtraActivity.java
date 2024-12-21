@@ -4,7 +4,6 @@ import static com.example.jarvis.utils.HttpRequests.postAsync;
 import static com.example.jarvis.utils.KeyboardUtil.hideSoftInput;
 import static com.example.jarvis.utils.KeyboardUtil.showSoftInput;
 import static com.example.jarvis.utils.SlotUtil.getSlots;
-import static com.example.jarvis.utils.ToastUtil.showToast;
 import static com.example.jarvis.utils.VibratorUtil.vibrate;
 
 import android.annotation.SuppressLint;
@@ -116,7 +115,7 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
                 vibrate(ExtraActivity.this, 200); // 交互反馈
 //                openApp(ExtraActivity.this, selectedApp.getPackageName());
                 // 测试
-                showToast(ExtraActivity.this, "本次实验结束，感谢参与~", Boolean.TRUE);
+                ToastUtil.showLong(ExtraActivity.this, "本次实验结束，感谢参与~");
             }
         });
 
@@ -274,7 +273,7 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
                 // 弹出发送信息编辑弹窗
 //                showEditPopWindow(position);
                 // 测试
-                ToastUtil.showToast(ExtraActivity.this, "该功能正在研发当中。。。", Boolean.FALSE);
+                ToastUtil.showShort(ExtraActivity.this, "该功能正在研发当中。。。");
             }
         });
 

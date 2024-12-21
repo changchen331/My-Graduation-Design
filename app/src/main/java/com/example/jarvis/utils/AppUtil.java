@@ -2,7 +2,6 @@ package com.example.jarvis.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 /**
  * 提供打开应用的工具类
@@ -28,7 +27,7 @@ public class AppUtil {
             if (launchIntent == null) {
                 // 应用未安装或未找到对应的应用
                 LogUtil.warning(TAG, "openApp", "Application with package name " + packageName + " not found", Boolean.TRUE);
-                ToastUtil.showToast(context, "应用未安装或未找到应用", Boolean.TRUE);
+                ToastUtil.showLong(context, "应用未安装或未找到应用");
                 return;
             }
             // 启动应用
@@ -36,7 +35,7 @@ public class AppUtil {
         } catch (Exception e) {
             // 启动应用时发生异常
             LogUtil.error(TAG, "openApp", "Failed to start application", e);
-            ToastUtil.showToast(context, "打开应用时发生错误", Boolean.TRUE);
+            ToastUtil.showLong(context, "打开应用时发生错误");
         }
     }
 }
