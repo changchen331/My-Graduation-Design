@@ -1,5 +1,6 @@
 package com.example.jarvis;
 
+import static com.example.jarvis.utils.ChatToGPT.getConclusion;
 import static com.example.jarvis.utils.HttpRequests.postAsync;
 import static com.example.jarvis.utils.KeyboardUtil.hideSoftInput;
 import static com.example.jarvis.utils.KeyboardUtil.showSoftInput;
@@ -317,13 +318,13 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
             jsonContent = new JSONObject(responseBody);
 
             if (jsonContent.has("content")) {
-                // 还有问题
+                // 获取问题
                 content = jsonContent.getString("content");
-            } else if (jsonContent.has("conclusion")) {
-                // 问题已全部问完
-                allQuestionsAnswered = Boolean.TRUE;
-                question = jsonContent.getString("conclusion");
-                return;
+                // 如果问题已全部回答完毕
+                if (isAllQuestionsAnswered(content)) {
+                    question = getConclusion(ExtraActivity.this, slots).getContent();
+                    return;
+                }
             } else {
                 LogUtil.warning(TAG, "parseResponse", "未找到指定 Json 字段", Boolean.TRUE);
                 return;
@@ -353,6 +354,16 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
             // 提取问题
             question = content.substring(jsonMatcher.end()).trim();
         } else LogUtil.warning(TAG, "parseResponse", "未找到 JSON", Boolean.TRUE);
+    }
+
+    /**
+     * 获取总结
+     *
+     * @return True = 已获得全部信息；False = 未获得全部信息
+     */
+    private Boolean isAllQuestionsAnswered(String response) {
+        allQuestionsAnswered = response.startsWith("我已获得到所有的信息，以下是信息内容：");
+        return allQuestionsAnswered;
     }
 
     /**
