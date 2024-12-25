@@ -67,7 +67,6 @@ public class ChatToGPTUtil {
         RequestBody requestBody = RequestBody.create(overallJson.toString(), JSON);
 
         // 发送请求
-//        HttpRequestsUtil.postSync(URL, requestBody, context, handler, MESSAGE_CODE);
         String api_Key = context.getString(R.string.gpt_4o);
         Request request = new Request.Builder().url(URL).post(requestBody).addHeader("Authorization", "Bearer " + api_Key).build();
         new Thread() {
@@ -130,7 +129,6 @@ public class ChatToGPTUtil {
         RequestBody requestBody = RequestBody.create(overallJson.toString(), JSON);
 
         // 发送请求
-//        HttpRequestsUtil.postSync(URL, requestBody, context, handler, MESSAGE_CODE);
         String api_Key = context.getString(R.string.gpt_4o);
         Request request = new Request.Builder().url(URL).post(requestBody).addHeader("Authorization", "Bearer " + api_Key).build();
         new Thread() {

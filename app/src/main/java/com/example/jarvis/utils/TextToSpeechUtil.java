@@ -7,7 +7,7 @@ import java.util.Locale;
 
 public class TextToSpeechUtil implements TextToSpeech.OnInitListener {
     private static final String TAG = "TextToSpeechUtil";
-    private static final Float voice_speed = 0.8f; // 语速
+    private static final Float voice_speed = 1.0f; // 语速
     private static final Float voice_pitch = 1.0f; // 音调
 
     private final Context context;

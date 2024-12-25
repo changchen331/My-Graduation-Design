@@ -44,6 +44,7 @@ import com.iflytek.cloud.RecognizerListener;
 import com.iflytek.cloud.RecognizerResult;
 import com.iflytek.cloud.SpeechError;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -99,30 +100,36 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
     Button extra_keyboard_send;
 
     private final Handler handler = new Handler(msg -> {
-        if (msg.what == MESSAGE_CODE) {
-            parseResponse(msg.obj.toString()); // 解析返回结果
-            if (allQuestionsAnswered) {
-                // 键盘输入休眠
-                extra_keyboard_edit.clearFocus(); // 清除焦点
-                KeyboardUtil.hideSoftInput(this); // 隐藏软键盘
-                extra_switch.setVisibility(View.INVISIBLE); // 隐藏输入切换按钮
-                extra_keyboard_edit.setVisibility(View.INVISIBLE); // 隐藏键盘输入框
-                extra_keyboard_send.setVisibility(View.INVISIBLE); // 隐藏键盘输入发送按钮
-                isSwitchActivated = Boolean.FALSE; // 将 isSwitchActivated 设置为 false
-                extra_switch.setActivated(false); // 输入切换按钮休眠
+        if (msg.what == ChatToGPTUtil.MESSAGE_CODE) {
+            parseResponse_GPT(msg.obj.toString());
 
-                // 语音识别按钮激活
-                extra_asr.setActivated(true);
-                extra_asr.setText(R.string.extra_asr_activated);
-                extra_asr.setVisibility(View.VISIBLE); // 显示语音识别按钮
-                isVoiceInputConfirmed = Boolean.FALSE; // 设置 isVoiceInputConfirmed 为 false
-            } else if (messages.size() == 3) receive(hint.get(1)); // 显示第二个提示
+            // 键盘输入休眠
+            extra_keyboard_edit.clearFocus(); // 清除焦点
+            KeyboardUtil.hideSoftInput(this); // 隐藏软键盘
+            extra_switch.setVisibility(View.INVISIBLE); // 隐藏输入切换按钮
+            extra_keyboard_edit.setVisibility(View.INVISIBLE); // 隐藏键盘输入框
+            extra_keyboard_send.setVisibility(View.INVISIBLE); // 隐藏键盘输入发送按钮
+            isSwitchActivated = Boolean.FALSE; // 将 isSwitchActivated 设置为 false
+            extra_switch.setActivated(false); // 输入切换按钮休眠
 
-            // 显示接收的问题
-            alertDialog.dismiss(); // 关闭等待弹窗
-            darkenBackground(1.0f); // 恢复背景
+            // 语音识别按钮激活
+            extra_asr.setActivated(true);
+            extra_asr.setText(R.string.extra_asr_activated);
+            extra_asr.setVisibility(View.VISIBLE); // 显示语音识别按钮
+
             receive(question); // 接收信息
+        } else if (msg.what == MESSAGE_CODE) {
+            parseResponse_Baichuan(msg.obj.toString()); // 解析返回结果
+            if (messages.size() == 4) {
+//                receive(hint.get(1)); // 显示第二个提示
+            }
+            if (!allQuestionsAnswered) receive(question); // 接收信息
+
         }
+
+        // 显示接收的问题
+        alertDialog.dismiss(); // 关闭等待弹窗
+        darkenBackground(1.0f); // 恢复背景
         return true;
     });
 
@@ -132,7 +139,7 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
         setContentView(R.layout.activity_extra);
 
         // 初始化
-        initAlertDialog(); // 初始化等待弹窗
+        initAlertDialog("请稍后", "语悦正在思考，请耐心等待...", Boolean.FALSE); // 初始化等待弹窗
         initExtraActivity(); // 初始化 ExtraActivity
         textToSpeechUtil = new TextToSpeechUtil(this); // 初始化文字转语音
         @SuppressLint("InflateParams") View activity_extra_asr = getLayoutInflater().inflate(R.layout.activity_extra_asr, null); // 语音输入弹窗
@@ -164,7 +171,12 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
                 VibratorUtil.vibrate(this, 200); // 交互反馈
 //                openApp(ExtraActivity.this, selectedApp.getPackageName());
                 // 测试
-                ToastUtil.showLong(this, "本次实验结束，感谢参与~");
+                initAlertDialog("感谢您", "本次实验结束，感谢您的参与~", Boolean.TRUE);
+                alertDialog.show();
+                new Handler().postDelayed(() -> {
+                    alertDialog.dismiss();
+                    finish();
+                }, 5000);
             }
         });
 
@@ -231,11 +243,14 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
     private void initExtraActivity() {
         // 从 Intent 中获取用户选择的应用
         selectedApp = getIntent().getParcelableExtra("selected_application");
+        // 测试
+        LogUtil.debug(TAG, "initExtraActivity", (selectedApp != null ? selectedApp.getAppName() : "空的"), Boolean.TRUE);
         // 获取初始 slot（测试）
         try {
-            if (selectedApp != null)
+            if (selectedApp != null) {
                 slots = new JSONObject(SlotUtil.getSlots(this, selectedApp.getAppName()));
-            else {
+                LogUtil.info(TAG, "initExtraActivity", slots.toString(), Boolean.TRUE);
+            } else {
                 slots = new JSONObject(SlotUtil.getSlots(this, "打车"));
                 LogUtil.warning(TAG, "initExtraActivity", "应用信息为空，使用默认信息", Boolean.TRUE);
             }
@@ -286,14 +301,12 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
                     LogUtil.warning(TAG, "initExtraActivity", "Message content null or empty string", Boolean.TRUE);
                     return;
                 }
-
                 // 读出项视图的内容（语音合成）
                 if (textToSpeechUtil.isInitialized()) textToSpeechUtil.speak(content);
             } else {
                 // 点击的项视图为发送的信息
                 VibratorUtil.vibrate(this, 200); // 交互反馈
-                // 弹出发送信息编辑弹窗
-//                showEditPopWindow(position);
+//                showEditPopWindow(position); // 弹出发送信息编辑弹窗
                 // 测试
                 ToastUtil.showShort(this, "该功能正在研发当中。。。");
             }
@@ -324,16 +337,19 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
 
             @Override
             public void onResult(RecognizerResult results, boolean isLast) {
-                if (results != null) answer += results.getResultString();
-                else {
-                    answer = "识别失败";
+                if (results != null) {
+                    answer += results.getResultString().replace("。", "");
+                    asrText.setText(answer);
+                } else {
+                    asrText.setText("识别失败");
                     LogUtil.warning(TAG, "initVoiceRecognitionUtil_onResult", "语音识别失败", Boolean.TRUE);
                 }
-                asrText.setText(answer);
             }
 
             @Override
             public void onError(SpeechError error) {
+                asrText.setText("您好像没有说话哦");
+                LogUtil.warning(TAG, "initVoiceRecognitionUtil_onError", "您好像没有说话哦", Boolean.TRUE);
             }
 
             @Override
@@ -350,10 +366,10 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
     /**
      * 初始化一个不可取消的对话框
      */
-    private void initAlertDialog() {
+    private void initAlertDialog(String title, String message, Boolean isCancelable) {
         // 创建并显示对话框
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("请稍后").setMessage("语悦正在思考，请耐心等待...").setCancelable(false); // 禁止通过点击外部取消
+        builder.setTitle(title).setMessage(message).setCancelable(isCancelable); // 禁止通过点击外部取消
         alertDialog = builder.create();
     }
 
@@ -380,9 +396,13 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
         ImageButton extra_asr_cancel = extraAsrActivity.findViewById(R.id.extra_asr_cancel);
         // 语音识别确认按钮
         ImageButton extra_asr_confirm = extraAsrActivity.findViewById(R.id.extra_asr_confirm);
-
         // 语音输入结束按钮
         Button extra_asr_end = extraAsrActivity.findViewById(R.id.extra_asr_end);
+
+        // 重置语音识别文本
+        extra_asr_text.setTextColor(getColor(R.color.asr_text_empty));
+        extra_asr_text.setText(getString(R.string.asr_text));
+
         //点击 语音输入结束按钮
         extra_asr_end.setOnClickListener(v -> {
             // 语音识别休眠
@@ -392,7 +412,6 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
 
             // 语音识别文本激活
             extra_asr_text.setTextColor(getColor(R.color.asr_text_filled));
-            extra_asr_text.setText(answer); // 显示语音识别文本
             extra_asr_cancel.setVisibility(View.VISIBLE); // 显示语音识别取消按钮
             extra_asr_confirm.setVisibility(View.VISIBLE); // 显示语音识别确认按钮
         });
@@ -409,15 +428,22 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
 
         // 弹窗退出监听
         extra_asr_window.setOnDismissListener(() -> {
-            // 显示输入栏
+            // 还原状态
             linearLayout.setVisibility(View.VISIBLE);
+            extra_asr_cancel.setVisibility(View.INVISIBLE); // 隐藏语音识别取消按钮
+            extra_asr_confirm.setVisibility(View.INVISIBLE); // 隐藏语音识别确认按钮
+            extra_asr_end.setVisibility(View.VISIBLE); // 显示语音输入识别结束按钮
 
             // 判断用户是否确认了语音输入的内容
             if (isVoiceInputConfirmed) {
+                isVoiceInputConfirmed = Boolean.FALSE;
                 // 发送语音识别信息
                 send(answer);
                 alertDialog.show(); // 显示等待弹窗
                 getQuestion(); // 获取下一个问题
+            } else {
+                answer = ""; // 清空用户输入
+                darkenBackground(1.0f); // 还原背景
             }
         });
     }
@@ -473,15 +499,16 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody requestBody = RequestBody.create(json.toString(), JSON);
 
-        HttpRequestsUtil.postSync("https://10.230.34.16:8001/chat", requestBody, handler, MESSAGE_CODE);
+        answer = ""; // 还原用户回复
+        HttpRequestsUtil.postSync(getString(R.string.Baichuan2_7B_Base_URL), requestBody, handler, MESSAGE_CODE);
     }
 
     /**
-     * 拆解 Response
+     * 拆解 Response（Baichuan2_7B_Base）
      *
      * @param responseBody 响应体
      */
-    private void parseResponse(String responseBody) {
+    private void parseResponse_Baichuan(String responseBody) {
         JSONObject jsonContent;
         String content;
         try {
@@ -489,17 +516,17 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
             if (jsonContent.has("content")) {
                 // 获取问题
                 content = jsonContent.getString("content");
-                // 如果问题已全部回答完毕
-                if (isAllQuestionsAnswered(content)) {
-                    ChatToGPTUtil.getConclusion(this, slots, handler);
-                    return;
-                }
+            } else if (jsonContent.has("conclusion")) {
+                allQuestionsAnswered = Boolean.TRUE;
+//                question = jsonContent.getString("conclusion");
+                ChatToGPTUtil.getConclusion(this, slots, handler);
+                return;
             } else {
-                LogUtil.warning(TAG, "parseResponse", "未找到 content 字段", Boolean.TRUE);
+                LogUtil.warning(TAG, "parseResponse_Baichuan", "未找到 content 字段", Boolean.TRUE);
                 return;
             }
         } catch (JSONException e) {
-            LogUtil.error(TAG, "parseResponse", "获取 Json 字段失败", e);
+            LogUtil.error(TAG, "parseResponse_Baichuan", "获取 Json 字段失败", e);
             return;
         }
 
@@ -514,25 +541,31 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
             try {
                 slots = new JSONObject(jsonString);
             } catch (JSONException e) {
-                LogUtil.error(TAG, "parseResponse", "提取 slots 失败", e);
+                LogUtil.error(TAG, "parseResponse_Baichuan", "提取 slots 失败", e);
                 return;
             }
-            LogUtil.info(TAG, "parseResponse", slots.toString(), Boolean.TRUE);
+            LogUtil.info(TAG, "parseResponse_Baichuan", slots.toString(), Boolean.TRUE);
 
             // 提取问题
             question = content.substring(jsonMatcher.end()).trim();
-            LogUtil.info(TAG, "parseResponse", question, Boolean.TRUE);
-        } else LogUtil.warning(TAG, "parseResponse", "未找到 JSON", Boolean.TRUE);
+            LogUtil.info(TAG, "parseResponse_Baichuan", question, Boolean.TRUE);
+        } else LogUtil.warning(TAG, "parseResponse_Baichuan", "未找到 JSON", Boolean.TRUE);
     }
 
     /**
-     * 判断是否已经回答全部问题
+     * 解析返回结果（GPT-4o）
      *
-     * @return True = 已回答全部问题；False = 未回答全部问题
+     * @param responseBody 返回体
      */
-    private Boolean isAllQuestionsAnswered(String response) {
-        allQuestionsAnswered = response.startsWith("我已获得到所有的信息，以下是信息内容：");
-        return allQuestionsAnswered;
+    private void parseResponse_GPT(String responseBody) {
+        try {
+            JSONObject jsonObject = new JSONObject(responseBody);
+            JSONArray choices = jsonObject.getJSONArray("choices");
+            question = choices.getJSONObject(0).getJSONObject("message").getString("content");
+            LogUtil.info(TAG, "parseResponse_GPT", question, Boolean.TRUE);
+        } catch (JSONException e) {
+            LogUtil.error(TAG, "parseResponse_GPT", "未找到 content 字段", e);
+        }
     }
 
     /**

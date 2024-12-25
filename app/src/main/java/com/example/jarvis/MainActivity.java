@@ -33,6 +33,7 @@ import com.example.jarvis.utils.KeyboardStateMonitor;
 import com.example.jarvis.utils.KeyboardUtil;
 import com.example.jarvis.utils.LogUtil;
 import com.example.jarvis.utils.SpeechToTextUtil;
+import com.example.jarvis.utils.ToastUtil;
 import com.example.jarvis.utils.VibratorUtil;
 import com.example.jarvis.utils.VoiceRecognitionUtil;
 import com.iflytek.cloud.ErrorCode;
@@ -54,9 +55,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
-    private final VoiceRecognitionUtil voiceRecognitionUtil = new VoiceRecognitionUtil(this); // 语音识别工具类
-    private final SpeechToTextUtil speechToTextUtil = new SpeechToTextUtil(this); // 语音识别工具类（已弃用）
     private final PermissionRequest permissionRequest = new PermissionRequest(); // 权限申请
+    private final SpeechToTextUtil speechToTextUtil = new SpeechToTextUtil(this); // 语音识别工具类（已弃用）
+    private final VoiceRecognitionUtil voiceRecognitionUtil = new VoiceRecognitionUtil(this); // 语音识别工具类
 
     private List<AppInfo> apps; // 应用信息列表
     // 测试（槽位列表）
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     private Boolean isASRActivated = Boolean.FALSE; // 语音识别是否激活
     private Boolean isKeyboardSend = Boolean.FALSE; // 是否发送手动输入的文本
     private Boolean isASRTextActivated = Boolean.FALSE; // 语音识别文本是否激活
+    private Boolean isApplicationSelectionConfirmed = Boolean.FALSE; // 应用选择是否确认
 
     // 动态申请的权限
     protected String[] requestPermissionArray = new String[]{android.Manifest.permission.RECORD_AUDIO, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
@@ -159,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // 显示应用选择弹窗
                 showApplicationSelectionPopWindow(main_asr_text);
-            }
+            } else ToastUtil.showShort(this, "请先完成语音输入");
         });
 
         // 设置键盘输入按钮是否可见（解开注释则不可见，否则默认可见）
@@ -223,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onResult(RecognizerResult results, boolean isLast) {
-                if (results != null) userInput = results.getResultString();
+                if (results != null) userInput = results.getResultString().replace("。", "");
                 else {
                     userInput = "识别失败";
                     LogUtil.warning(TAG, "initVoiceRecognitionUtil_onResult", "语音识别失败", Boolean.TRUE);
@@ -233,6 +235,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(SpeechError error) {
+                userInput = "您好像没有说话哦";
+                LogUtil.warning(TAG, "initVoiceRecognitionUtil_onError", "您好像没有说话哦", Boolean.TRUE);
+                asrText.setText(userInput);
             }
 
             @Override
@@ -319,16 +324,18 @@ public class MainActivity extends AppCompatActivity {
 
         // 应用选择弹窗取消按钮
         Button application_selection_cancel = activity_application_selection.findViewById(R.id.application_selection_cancel);
+        // 应用选择弹窗确认按钮
+        Button application_selection_confirm = activity_application_selection.findViewById(R.id.application_selection_confirm);
+
         // 点击应用选择弹窗取消按钮
         application_selection_cancel.setOnClickListener(v -> {
             main_application_selection.dismiss(); // 退出应用选择弹窗
         });
 
-        // 应用选择弹窗确认按钮
-        Button application_selection_confirm = activity_application_selection.findViewById(R.id.application_selection_confirm);
         // 点击应用选择弹窗确认按钮
         application_selection_confirm.setOnClickListener(v -> {
             if (position >= 0 && position < apps.size()) {
+                isApplicationSelectionConfirmed = Boolean.TRUE; // 标记已经确认应用选择
                 // 获取选择的应用信息
                 selectedApp = apps.get(position);
                 // 获取起始问题
@@ -339,10 +346,12 @@ public class MainActivity extends AppCompatActivity {
             main_application_selection.dismiss(); // 退出应用选择弹窗
         });
 
-        // 设置退出弹窗时的监听器（恢复背景）
+        // 设置退出弹窗时的监听器
         main_application_selection.setOnDismissListener(() -> {
-            darkenBackground(0.1f); // 背景变暗
-            alertDialog.show(); // 显示等待弹窗
+            if (isApplicationSelectionConfirmed) {
+                darkenBackground(0.1f); // 背景变暗
+                alertDialog.show(); // 显示等待弹窗
+            } else darkenBackground(1.0f);
         });
     }
 
@@ -362,7 +371,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * 解析返回结果
+     * 解析返回结果（Baichuan2_7B_Base）
      *
      * @param responseBody 返回体
      */
@@ -472,7 +481,6 @@ public class MainActivity extends AppCompatActivity {
 //                getFirstQuestion(userInput);
                 keyboardText = ""; // 还原输入框的内容
                 isKeyboardSend = Boolean.FALSE; // 还原标记
-
                 // 显示应用选择弹窗
                 showApplicationSelectionPopWindow(parentView);
             } else {
