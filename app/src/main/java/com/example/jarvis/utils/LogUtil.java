@@ -3,7 +3,7 @@ package com.example.jarvis.utils;
 import android.util.Log;
 
 public class LogUtil {
-    // 禁止实例化工具类
+
     private LogUtil() {
         // 私有构造函数防止实例化
     }

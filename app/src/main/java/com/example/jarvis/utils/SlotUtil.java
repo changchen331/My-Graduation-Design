@@ -7,6 +7,10 @@ import com.example.jarvis.R;
 public class SlotUtil {
     private static final String TAG = "SlotUtil";
 
+    private SlotUtil() {
+        // 私有构造函数防止实例化
+    }
+
     public static String getSlots(Context context, String scene) {
         return switch (scene) {
             case "KTV团购" -> context.getResources().getString(R.string.ktv_tuan2_gou4);

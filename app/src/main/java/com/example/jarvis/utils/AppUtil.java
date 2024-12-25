@@ -9,6 +9,10 @@ import android.content.Intent;
 public class AppUtil {
     private static final String TAG = "AppUtil";
 
+    private AppUtil() {
+        // 私有构造函数防止实例化
+    }
+
     /**
      * 打开指定应用。
      *

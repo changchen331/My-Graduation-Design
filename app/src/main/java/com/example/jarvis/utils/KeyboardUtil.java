@@ -1,7 +1,6 @@
 package com.example.jarvis.utils;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -12,6 +11,10 @@ import androidx.appcompat.app.AppCompatActivity;
  */
 public class KeyboardUtil {
     private static final String TAG = "KeyboardUtil";
+
+    private KeyboardUtil() {
+        // 私有构造函数防止实例化
+    }
 
     /**
      * 显示软键盘

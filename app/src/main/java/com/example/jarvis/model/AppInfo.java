@@ -33,9 +33,9 @@ public class AppInfo implements Parcelable {
 
     private AppInfo(Parcel in) {
         // 从 Parcel 中读取信息
-        appName = in.readString();
-        packageName = in.readString();
-        mainActivity = in.readParcelable(ActivityInfo.class.getClassLoader());
+        this.appName = in.readString();
+        this.packageName = in.readString();
+        this.mainActivity = in.readParcelable(ActivityInfo.class.getClassLoader());
     }
 
     public String getAppName() {
@@ -73,12 +73,7 @@ public class AppInfo implements Parcelable {
     @NonNull
     @Override
     public String toString() {
-        return "AppInfo{" +
-                "appName='" + appName + '\'' +
-                ", packageName='" + packageName + '\'' +
-                ", appIcon=" + appIcon.toString() + '\'' +
-                ", mainActivity=" + mainActivity.name +
-                '}';
+        return "AppInfo{" + "appName='" + appName + '\'' + ", packageName='" + packageName + '\'' + ", appIcon=" + appIcon.toString() + '\'' + ", mainActivity=" + mainActivity.name + '}';
     }
 
     @Override

@@ -1,9 +1,5 @@
 package com.example.jarvis;
 
-import static com.example.jarvis.utils.KeyboardUtil.hideSoftInput;
-import static com.example.jarvis.utils.KeyboardUtil.showSoftInput;
-import static com.example.jarvis.utils.VibratorUtil.vibrate;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -21,7 +17,14 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.jarvis.utils.KeyboardStateMonitor;
+import com.example.jarvis.utils.KeyboardUtil;
 import com.example.jarvis.utils.LogUtil;
+import com.example.jarvis.utils.VibratorUtil;
+import com.example.jarvis.utils.VoiceRecognitionUtil;
+import com.iflytek.cloud.ErrorCode;
+import com.iflytek.cloud.RecognizerListener;
+import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechError;
 
 /**
  * 提供额外编辑功能和信息发送的对话框
@@ -29,16 +32,18 @@ import com.example.jarvis.utils.LogUtil;
 public class ExtraEditDialog extends DialogFragment {
     private final static String TAG = "ExtraEditDialog";
 
+    private final VoiceRecognitionUtil voiceRecognitionUtil; // 语音识别工具类
     private final LinearLayout linearLayout; // 输入栏
     private final String question; // 问题
-    private final String answer; // 回复
 
     private ExtraEditDialogListener listener; // 回调接口
     private KeyboardStateMonitor keyboardStateMonitor; // 软键盘监听器
 
+    private String answer; // 回复
     private Boolean isKeyboardActivate = Boolean.FALSE; // 键盘输入是否激活
 
-    public ExtraEditDialog(LinearLayout linearLayout, String question, String answer) {
+    public ExtraEditDialog(Context context, LinearLayout linearLayout, String question, String answer) {
+        voiceRecognitionUtil = new VoiceRecognitionUtil(context);
         this.linearLayout = linearLayout;
         this.question = question;
         this.answer = answer;
@@ -47,7 +52,49 @@ public class ExtraEditDialog extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.MyDialog); //设置对话框样式
+        setStyle(DialogFragment.STYLE_NO_FRAME, R.style.MyDialog); //设置对话框样式
+    }
+
+    /**
+     * 初始化语音识别对象
+     */
+    private void initVoiceRecognitionUtil(EditText asrText) {
+        voiceRecognitionUtil.init(new RecognizerListener() {
+            @Override
+            public void onVolumeChanged(int volume, byte[] data) {
+            }
+
+            @Override
+            public void onBeginOfSpeech() {
+            }
+
+            @Override
+            public void onEndOfSpeech() {
+            }
+
+            @Override
+            public void onResult(RecognizerResult results, boolean isLast) {
+                if (results != null) answer = results.getResultString();
+                else {
+                    answer = "识别失败";
+                    LogUtil.warning(TAG, "initVoiceRecognitionUtil_onResult", "语音识别失败", Boolean.TRUE);
+                }
+                asrText.setText(answer);
+            }
+
+            @Override
+            public void onError(SpeechError error) {
+            }
+
+            @Override
+            public void onEvent(int eventType, int arg1, int arg2, Bundle extras) {
+            }
+        }, code -> {
+            if (code != ErrorCode.SUCCESS)
+                LogUtil.warning(TAG, "initVoiceRecognitionUtil", "语音识别初始化失败，错误码：" + code, Boolean.TRUE);
+            else
+                LogUtil.info(TAG, "initVoiceRecognitionUtil", "语音识别初始化成功，错误码：" + code, Boolean.TRUE);
+        });
     }
 
     @Nullable
@@ -62,6 +109,8 @@ public class ExtraEditDialog extends DialogFragment {
         ImageButton extra_edit_keyboard = dialog_extra_edit.findViewById(R.id.extra_edit_keyboard); // 键盘输入按钮
         ImageButton extra_edit_confirm = dialog_extra_edit.findViewById(R.id.extra_edit_confirm); // 确认按钮
 
+        // 初始化语音识别
+        initVoiceRecognitionUtil(dialog_extra_edit.findViewById(R.id.extra_edit_answer));
         // 隐藏输入栏
         linearLayout.setVisibility(View.GONE);
 
@@ -74,44 +123,31 @@ public class ExtraEditDialog extends DialogFragment {
 
         // 点击 语音识别开始按钮
         extra_edit_asr_start.setOnClickListener(v -> {
-            // 语音识别
-            vibrate(getContext(), 200); // 交互反馈
-            /*code*/
-
             // 键盘输入状态休眠
             if (isKeyboardActivate) {
                 extra_edit_answer.clearFocus(); // 清除输入框焦点
-                hideSoftInput(requireContext()); // 隐藏软键盘
+                KeyboardUtil.hideSoftInput(requireContext()); // 隐藏软键盘
                 isKeyboardActivate = Boolean.FALSE;
             }
             extra_edit_keyboard.setVisibility(View.INVISIBLE); // 隐藏键盘输入按钮
 
             // 语音识别激活
+            VibratorUtil.vibrate(getContext(), 200); // 交互反馈
+            voiceRecognitionUtil.startListening(); // 开始语音识别
+            extra_edit_answer.setEnabled(false); // 设置回复展示框为不可用状态
+            extra_edit_confirm.setVisibility(View.GONE); // 隐藏确认按钮
             extra_edit_asr_start.setVisibility(View.INVISIBLE); // 隐藏语音识别开始按钮
             extra_edit_asr_end.setVisibility(View.VISIBLE); // 显示语音识别结束按钮
-            extra_edit_confirm.setVisibility(View.GONE); // 隐藏确认按钮
-            extra_edit_answer.setEnabled(false); // 设置回复展示框为不可用状态
-
-            // 重置语音识别文本
             extra_edit_answer.setTextColor(ContextCompat.getColor(requireContext(), R.color.asr_text_empty));
-            extra_edit_answer.setText(R.string.asr_text);
+            extra_edit_answer.setText(R.string.asr_text); // 重置语音识别文本
         });
 
         // 点击 语音识别结束按钮
         extra_edit_asr_end.setOnClickListener(v -> {
-            // 结束录音
-            vibrate(getContext(), 200); // 交互反馈
-
-            // 语音识别
-            extra_edit_asr_end.setVisibility(View.INVISIBLE); // 隐藏语音识别结束按钮 等待语音识别结束
-            /*code*/
-            String text = ""; // 获取语音识别结果（模拟）
-
-            // 显示语音识别结果
-            extra_edit_answer.setTextColor(ContextCompat.getColor(requireContext(), R.color.asr_text_filled));
-            extra_edit_answer.setText(text);
-
             // 语音识别休眠
+            VibratorUtil.vibrate(getContext(), 200); // 交互反馈
+            voiceRecognitionUtil.stopListening(); // 结束语音识别
+            extra_edit_answer.setTextColor(ContextCompat.getColor(requireContext(), R.color.asr_text_filled));
             extra_edit_asr_start.setVisibility(View.VISIBLE); // 显示语音识别开始按钮
             extra_edit_keyboard.setVisibility(View.VISIBLE); // 显示键盘输入按钮
             extra_edit_confirm.setVisibility(View.VISIBLE); // 显示确认按钮
@@ -123,8 +159,7 @@ public class ExtraEditDialog extends DialogFragment {
             // 显示软键盘
             isKeyboardActivate = Boolean.TRUE;
             extra_edit_answer.requestFocus(); // 请求回复展示框的焦点
-            extra_edit_answer.postDelayed(() -> showSoftInput(extra_edit_answer), 100); // 弹出软键盘
-
+            extra_edit_answer.postDelayed(() -> KeyboardUtil.showSoftInput(extra_edit_answer), 100); // 弹出软键盘
             // 将光标移至文本末尾
             if (extra_edit_answer.getText().length() > 0)
                 extra_edit_answer.setSelection(extra_edit_answer.getText().length());
@@ -135,14 +170,14 @@ public class ExtraEditDialog extends DialogFragment {
         keyboardStateMonitor.addSoftKeyboardStateListener(new KeyboardStateMonitor.SoftKeyboardStateListener() {
             @Override
             public void onSoftKeyboardOpened(int keyboardHeightInPx) {
-                isKeyboardActivate = true; // 软键盘打开
+                isKeyboardActivate = Boolean.TRUE; // 软键盘打开
             }
 
             @Override
             public void onSoftKeyboardClosed() {
                 // 软键盘关闭
                 extra_edit_answer.clearFocus();
-                isKeyboardActivate = false;
+                isKeyboardActivate = Boolean.FALSE;
             }
         });
 
@@ -175,7 +210,7 @@ public class ExtraEditDialog extends DialogFragment {
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
-        hideSoftInput(requireContext()); // 隐藏软键盘
+        KeyboardUtil.hideSoftInput(requireContext()); // 隐藏软键盘
         linearLayout.setVisibility(View.VISIBLE); // 显示输入栏
     }
 

@@ -6,9 +6,9 @@ import android.speech.tts.TextToSpeech;
 import java.util.Locale;
 
 public class TextToSpeechUtil implements TextToSpeech.OnInitListener {
-    private static final String TAG = "TTSUtil";
-    private static final Float voice_speed = 0.7f; // 语速
-    private static final Float voice_pitch = 1.5f; // 音调
+    private static final String TAG = "TextToSpeechUtil";
+    private static final Float voice_speed = 0.8f; // 语速
+    private static final Float voice_pitch = 1.0f; // 音调
 
     private final Context context;
     private TextToSpeech tts;
@@ -29,9 +29,9 @@ public class TextToSpeechUtil implements TextToSpeech.OnInitListener {
         if (status == TextToSpeech.SUCCESS) {
             int result = tts.setLanguage(Locale.getDefault());
 
-            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED)
                 LogUtil.debug(TAG, "onInit", "The Language specified is not supported", Boolean.TRUE);
-            } else isInitialized = Boolean.TRUE;
+            else isInitialized = Boolean.TRUE;
 
         } else LogUtil.warning(TAG, "onInit", "Initialization failed", Boolean.TRUE);
     }

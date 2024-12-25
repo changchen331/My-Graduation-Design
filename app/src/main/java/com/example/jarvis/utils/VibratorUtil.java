@@ -5,7 +5,6 @@ import static android.content.Context.VIBRATOR_SERVICE;
 import android.content.Context;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.util.Log;
 
 /**
  * 提供手机振动功能的工具类
@@ -13,7 +12,6 @@ import android.util.Log;
 public class VibratorUtil {
     private static final String TAG = "VibratorUtil";
 
-    // 禁止实例化工具类
     private VibratorUtil() {
         // 私有构造函数防止实例化
     }

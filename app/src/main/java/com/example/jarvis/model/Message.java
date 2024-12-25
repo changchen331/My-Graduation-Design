@@ -12,13 +12,6 @@ public class Message {
     private String content; // 消息内容
     private Integer type; // 消息类型
 
-    public Message() {
-    }
-
-    public Message(int type) {
-        this.type = type;
-    }
-
     public Message(String content, int type) {
         this.content = content;
         this.type = type;
@@ -43,9 +36,6 @@ public class Message {
     @NonNull
     @Override
     public String toString() {
-        return "Message{" +
-                "content='" + content + '\'' +
-                ", type=" + type +
-                '}';
+        return "Message{" + "content='" + content + '\'' + ", type=" + type + '}';
     }
 }

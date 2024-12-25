@@ -6,7 +6,6 @@ import android.widget.Toast;
 public class ToastUtil {
     private static final String TAG = "ToastUtil";
 
-    // 禁止实例化工具类
     private ToastUtil() {
         // 私有构造函数防止实例化
     }

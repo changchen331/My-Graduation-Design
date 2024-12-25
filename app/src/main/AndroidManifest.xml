@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <!-- 获取所有应用信息权限 -->
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
@@ -10,19 +14,43 @@
     <!-- 震动权限 -->
     <uses-permission android:name="android.permission.VIBRATE" />
 
-    <!-- 语音识别相关权限 -->
+    <!--获取手机录音机使用权限，听写、识别、语义理解需要用到此权限 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- 网络权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!--读取网络信息状态 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--获取当前wifi状态 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!--允许程序改变网络连接状态 -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+
+    <!--读取手机信息权限 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--读取联系人权限，上传联系人需要用到此权限 -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <!--外存储写权限，构建语法需要用到此权限 -->
+    <!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
+    <!--外存储读权限，构建语法需要用到此权限 -->
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+
+    <!--手机定位信息，用来为语义等功能提供定位，提供更精准的服务-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!--如需使用人脸识别，还要添加：摄相头权限，拍照需要用到 -->
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
+        android:name=".BaseApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.JARVIS"
@@ -43,19 +71,10 @@
                 android:resource="@xml/accessibility_service_config" />
         </service>
 
-        <!-- 注册额外对话界面 -->
-        <activity
-            android:name=".ExtraActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustUnspecified"
-            tools:ignore="LockedOrientationActivity" />
-
         <!-- 注册主界面 -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
@@ -64,6 +83,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- 注册额外对话界面 -->
+        <activity
+            android:name=".ExtraActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustUnspecified"
+            tools:ignore="LockedOrientationActivity" />
 
     </application>
 

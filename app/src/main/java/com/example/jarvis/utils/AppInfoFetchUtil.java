@@ -5,20 +5,22 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.util.Log;
 
 import com.example.jarvis.model.AppInfo;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 /**
  * 工具类用于获取设备上所有已安装应用的信息
  */
-public class AppInfoFetcher {
-    private static final String TAG = "AppInfoFetcher";
+public class AppInfoFetchUtil {
+    private static final String TAG = "AppInfoFetchUtil";
+
+    private AppInfoFetchUtil() {
+        // 私有构造函数防止实例化
+    }
 
     /**
      * 获取设备上所有已安装应用的名称列表
