@@ -1,5 +1,6 @@
 <resources>
     <string name="gpt_4o">your api key</string>
+
     <string name="Baichuan2_7B_Base_URL">http://10.176.56.192:8001/chat</string>
     <string name="app_name">语悦</string>
 
@@ -39,321 +40,35 @@
     <string name="extra_edit_confirm">编辑对话框的确认按钮</string>
 
     <!-- 槽位 -->
-    <string name="ktv_tuan2_gou4">{
-        "所在城市": null,
-        "价格区间": null,
-        "具体位置": null,
-        "是否需要停车位": null,
-        "商家名称": null,
-        "包厢大小": null,
-        "预约日期": null,
-        "预约到店时间": null,
-        "预约人姓名": null,
-        "手机号": null
-    }</string>
-    <string name="shang4_men2_jia1_zheng4_fu2_wu4">{
-        "家政服务类型": null,
-        "上门频率": null,
-        "对服务人员性别要求": null,
-        "对服务人员年龄要求": null,
-        "是否需要健康证明": null,
-        "对服务人员其他要求": null,
-        "上门地址": null,
-        "预约人手机号": null,
-        "预约人姓名": null
-    }</string>
-    <string name="yi1_yuan4">{
-        "挂号医院所在区县": null,
-        "是否三甲": null,
-        "挂号可用医保": null,
-        "医院名称": null,
-        "是否专家号": null,
-        "预约科室": null,
-        "就诊人姓名": null,
-        "就诊人电话": null,
-        "就诊人身份证号": null
-    }</string>
-    <string name="zai4_xian4_mai3_yao4">{
-        "所在城市": null,
-        "药品名": null,
-        "送达时效": null,
-        "配送方式": null,
-        "适用人群": null,
-        "医保涵盖": null,
-        "外卖地址": null,
-        "收件人姓名": null,
-        "收件人手机号": null
-    }</string>
-    <string name="jia1_dian4_xiu1_li3">{
-        "所在城市": null,
-        "修理的家电品类": null,
-        "修理要求": null,
-        "服务价位": null,
-        "服务上门商家名": null,
-        "修理家电件数": null,
-        "预约上门时间": null,
-        "预约人姓名": null,
-        "预约人手机号": null
-    }</string>
-    <string name="du4_jia4_cun1">{
-        "度假村位置": null,
-        "度假村价位": null,
-        "度假村名称": null,
-        "服务设施要求": null,
-        "是否需要停车场": null,
-        "是否接待港澳台、外籍游客": null,
-        "是否含早餐": null,
-        "人数": null,
-        "房间数量": null,
-        "房型要求": null,
-        "入住时间": null,
-        "退房时间": null,
-        "预约人姓名": null,
-        "预约人身份证": null,
-        "预约人手机号": null
-    }</string>
-    <string name="kuai4_di4">{
-        "寄件人地址": null,
-        "寄件人姓名": null,
-        "寄件人手机号码": null,
-        "收件人地址": null,
-        "收件人姓名": null,
-        "收件人手机号码": null,
-        "寄件时间": null,
-        "物品信息": null,
-        "重量": null,
-        "设置体积": null,
-        "是否保价": null,
-        "送达时间要求": null,
-        "快递员备注": null
-    }</string>
-    <string name="xi4_qv3_yan3_chu1_men2_piao4">{
-        "戏曲表演名称": null,
-        "演出城市": null,
-        "演出地点": null,
-        "演出时间": null,
-        "预期票价": null,
-        "姓名": null,
-        "人数": null,
-        "身份证": null,
-        "手机号": null
-    }</string>
-    <string name="shou3_ji1_wei2_xiu1">{
-        "手机品牌": null,
-        "故障类型": null,
-        "是否保修内": null,
-        "维修预算": null,
-        "是否需要提供备用机": null,
-        "特殊要求": null,
-        "姓名": null,
-        "身份证": null,
-        "手机号": null
-    }</string>
-    <string name="da3_che1">{
-        "出发地": null,
-        "目的地": null,
-        "途经点": null,
-        "出发时间": null,
-        "车型选择": null
-    }</string>
-    <string name="bo1_fang4_you3_sheng1_shu1">{
-        "小说类型": null,
-        "是否更新完全": null,
-        "播讲形式": null,
-        "小说名": null
-    }</string>
-    <string name="bo1_fang4_dian4_shi4_jv4">{
-        "电视剧类型": null,
-        "生产地区": null,
-        "电视剧名": null,
-        "当前观看集数": null
-    }</string>
-    <string name="cha2_xun2_lu4_xian4">{
-        "出发地": null,
-        "目的地": null,
-        "出发时间": null,
-        "交通方式": null,
-        "补充条件": null
-    }</string>
-    <string name="min2_su4_yu4_ding4">{
-        "入住城市": null,
-        "具体位置偏好": null,
-        "入住日期": null,
-        "退房日期": null,
-        "价格范围": null,
-        "房型": null,
-        "特殊要求": null,
-        "入住人数": null,
-        "身份证": null,
-        "手机号": null
-    }</string>
-    <string name="sheng1_xian1_cai3_gou4">{
-        "商品名称": null,
-        "品牌": null,
-        "价格区间": null,
-        "购买数量": null,
-        "收货地址": null,
-        "收货人": null,
-        "收货人手机号": null,
-        "订单备注": null,
-        "是否开发票": null
-    }</string>
-    <string name="kan4_ya2">{
-        "姓名": null,
-        "电话": null,
-        "是否医保定点": null,
-        "牙齿症状": null,
-        "以往的口腔疾病": null,
-        "是否是初诊": null,
-        "就诊日期": null,
-        "医院名称": null,
-        "选择的口腔项目": null
-    }</string>
-    <string name="wang3_luo4_gou4_wu4">{
-        "商品名称": null,
-        "补充要求": null,
-        "价格区间": null,
-        "购买件数": null,
-        "预计收货时间": null,
-        "收货人姓名": null,
-        "收货人地址": null,
-        "收货人手机号": null
-    }</string>
-    <string name="yu3_mao2_qiu2_guan3">{
-        "羽毛球馆区": null,
-        "预约日期": null,
-        "预约时段": null,
-        "预约人数": null,
-        "是否需要球拍租借": null,
-        "预约人姓名": null,
-        "预约人手机号": null
-    }</string>
-    <string name="xue3_ya1_ji4_lu4">{
-        "高压": null,
-        "低压": null,
-        "脉搏数值": null,
-        "时间": null,
-        "备注": null
-    }</string>
-    <string name="ding4_gou4_wai4_mai4">{
-        "菜品": null,
-        "商家名称": null,
-        "菜品数量": null,
-        "价格区间": null,
-        "收货地址": null,
-        "姓名": null,
-        "手机号": null,
-        "送出时间": null,
-        "备注": null,
-        "餐具数量": null
-    }</string>
-    <string name="ji4_zhang4">{
-        "支出类型": null,
-        "支出日期": null,
-        "支出金额": null,
-        "备注": null
-    }</string>
-    <string name="gou4_mai3_jing3_dian3_men2_piao4">{
-        "出游城市": null,
-        "景点名称": null,
-        "门票类型": null,
-        "门票日期": null,
-        "门票场次": null,
-        "门票数量": null,
-        "姓名": null,
-        "身份证": null,
-        "手机号": null,
-        "是否购买景区意外险": null
-    }</string>
-    <string name="gou4_mai3_huo3_che1_piao4">{
-        "出发车站": null,
-        "到达车站": null,
-        "出发日期": null,
-        "出发时间": null,
-        "车次类型": null,
-        "座位类型": null,
-        "订票数量": null,
-        "姓名": null,
-        "身份证": null,
-        "手机号": null
-    }</string>
-    <string name="gen1_tuan2_you2_yu4_ding4">{
-        "目标城市": null,
-        "游玩天数": null,
-        "涵盖景点": null,
-        "价格区间": null,
-        "服务保障": null,
-        "出行日期": null,
-        "预定人数": null,
-        "游玩人姓名": null,
-        "游玩人身份证号": null,
-        "联系人姓名": null,
-        "手机号": null
-    }</string>
-    <string name="pei2_zhen3_fu2_wu4">{
-        "所在城市和区域": null,
-        "目标医院": null,
-        "期望陪诊服务人员性别": null,
-        "期望的日期和时间": null,
-        "预期花费的时间": null,
-        "其他要求": null,
-        "手机号": null,
-        "姓名": null
-    }</string>
-    <string name="yu4_ding4_dian4_ying3_piao4">{
-        "电影名": null,
-        "观影城市": null,
-        "影院位置": null,
-        "观影日期": null,
-        "观影时间": null,
-        "影片版本": null",
-        "影厅类型": null,
-        "影院服务": null,
-        "影院品牌": null,
-        "选座偏好": null,
-        "小食和饮料": null,
-        "手机号": null
-    }</string>
-    <string name="yu4_ding4_you2_lun2_chuan2_piao4">{
-        "出发港口": null,
-        "目标城市": null,
-        "邮轮公司": null,
-        "可接受价位": null,
-        "舱房类型": null,
-        "舱房间数": null,
-        "出行人数": null,
-        "姓名": null,
-        "电话": null,
-        "电子邮箱": null,
-        "是否预订保险": null
-    }</string>
-    <string name="yu4_yue1_ti3_jian3">{
-        "所在城市": null,
-        "医院类型": null,
-        "检查项目": null,
-        "医保涵盖": null,
-        "有无停车位": null,
-        "预约日期": null,
-        "预约人姓名": null,
-        "手机号": null,
-        "身份证号": null,
-        "年龄": null,
-        "性别": null,
-        "婚否": null,
-        "备注": null
-    }</string>
-    <string name="yu4_yue1_can1_ting1">{
-        "餐厅类型": null,
-        "价格区间": null,
-        "是否需要包厢": null,
-        "设施特色": null,
-        "订座日期": null,
-        "到店时间": null,
-        "人数": null,
-        "预定人姓名": null,
-        "收货人手机号": null,
-        "其他备注": null
-    }</string>
+    <string name="ktv_tuan2_gou4">{"商家名称": null,"所在城市": null,"具体位置": null,"价格区间": null,"预约日期": null}</string>
+    <string name="shang4_men2_jia1_zheng4_fu2_wu4">{"家政服务类型": null,"上门地址": null,"上门频率": null,"预约人手机号": null,"预约人姓名": null}</string>
+    <string name="yi1_yuan4">{"医院名称": null,"挂号医院所在区县": null,"是否三甲": null,"预约科室": null,"就诊人姓名": null}</string>
+    <string name="zai4_xian4_mai3_yao4">{"药品名": null,"所在城市": null,"外卖地址": null,"送达时效": null,"收件人手机号": null}</string>
+    <string name="jia1_dian4_xiu1_li3">{"所在城市": null,"修理的家电品类": null,"服务上门商家名": null,"预约上门时间": null,"预约人手机号": null}</string>
+    <string name="du4_jia4_cun1">{"度假村名称": null,"度假村位置": null,"度假村价位": null,"入住时间": null,"预约人手机号": null}</string>
+    <string name="kuai4_di4">{"寄件人姓名": null,"寄件人手机号码": null,"收件人地址": null,"收件人姓名": null,"收件人手机号码": null}</string>
+    <string name="xi4_qv3_yan3_chu1_men2_piao4">{"戏曲表演名称": null, "演出城市": null, "演出时间": null, "预期票价": null, "手机号": null}</string>
+    <string name="shou3_ji1_wei2_xiu1">{"手机品牌": null,"故障类型": null,"是否保修内": null,"维修预算": null,"手机号": null}</string>
+    <string name="da3_che1">{"出发地": null,"目的地": null,"出发时间": null,"车型选择": null}</string>
+    <string name="bo1_fang4_you3_sheng1_shu1">{"小说类型": null,"是否更新完全": null,"播讲形式": null,"小说名": null}</string>
+    <string name="bo1_fang4_dian4_shi4_jv4">{"电视剧类型": null,"生产地区": null,"电视剧名": null,"当前观看集数": null}</string>
+    <string name="cha2_xun2_lu4_xian4">{"出发地": null,"目的地": null,"出发时间": null,"交通方式": null, "补充条件": null}</string>
+    <string name="min2_su4_yu4_ding4">{"入住城市": null,"入住日期": null,"退房日期": null,"价格范围": null,"手机号": null}</string>
+    <string name="sheng1_xian1_cai3_gou4">{"商品名称": null,"价格区间": null,"购买数量": null,"收货地址": null, "收货人手机号": null}</string>
+    <string name="kan4_ya2">{"姓名": null,"电话": null,"牙齿症状": null,"就诊日期": null,"医院名称": null}</string>
+    <string name="wang3_luo4_gou4_wu4">{"商品名称": null,"价格区间": null,"购买件数": null,"收货人姓名": null,"收货人手机号": null}</string>
+    <string name="yu3_mao2_qiu2_guan3">{"预约日期": null,"预约时段": null,"预约人数": null,"预约人姓名": null,"预约人手机号": null}</string>
+    <string name="xue3_ya1_ji4_lu4">{"高压": null,"低压": null,"脉搏数值": null,"时间": null,"备注": null}</string>
+    <string name="ding4_gou4_wai4_mai4">{"商家名称": null,"菜品": null,"菜品数量": null,"收货地址": null,"手机号": null}</string>
+    <string name="ji4_zhang4">{"支出类型": null,"支出日期": null,"支出金额": null,"备注": null}</string>
+    <string name="gou4_mai3_jing3_dian3_men2_piao4"> {"出游城市": null,"景点名称": null,"门票日期": null,"门票数量": null,"身份证": null} </string>
+    <string name="gou4_mai3_huo3_che1_piao4"> {"出发车站": null,"到达车站": null,"出发日期": null,"出发时间": null,"姓名": null} </string>
+    <string name="gen1_tuan2_you2_yu4_ding4">{"目标城市": null, "游玩天数": null, "出行日期": null, "价格区间": null, "手机号": null}</string>
+    <string name="pei2_zhen3_fu2_wu4">{"所在城市和区域": null, "目标医院": null, "期望陪诊服务人员性别": null, "期望的日期和时间": null, "手机号": null}</string>
+    <string name="yu4_ding4_dian4_ying3_piao4">{"电影名": null, "观影城市": null, "观影日期": null, "观影时间": null, "手机号": null}</string>
+    <string name="yu4_ding4_you2_lun2_chuan2_piao4">{"出发港口": null, "目标城市": null, "邮轮公司": null, "可接受价位": null, "姓名": null}</string>
+    <string name="yu4_yue1_ti3_jian3">{"所在城市": null, "医院类型": null, "检查项目": null, "预约日期": null, "手机号": null}</string>
+    <string name="yu4_yue1_can1_ting1">{"餐厅类型": null, "价格区间": null, "订座日期": null, "人数": null, "收货人手机号": null}</string>
 
 
     <!--    <string name="app_name">AppTalk</string>-->
