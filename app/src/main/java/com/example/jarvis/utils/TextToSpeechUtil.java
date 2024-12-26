@@ -11,6 +11,7 @@ public class TextToSpeechUtil implements TextToSpeech.OnInitListener {
     private static final Float voice_pitch = 1.0f; // 音调
 
     private final Context context;
+
     private TextToSpeech tts;
 
     private Boolean isInitialized = Boolean.FALSE;
@@ -28,7 +29,6 @@ public class TextToSpeechUtil implements TextToSpeech.OnInitListener {
     public void onInit(int status) {
         if (status == TextToSpeech.SUCCESS) {
             int result = tts.setLanguage(Locale.getDefault());
-
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED)
                 LogUtil.debug(TAG, "onInit", "The Language specified is not supported", Boolean.TRUE);
             else isInitialized = Boolean.TRUE;

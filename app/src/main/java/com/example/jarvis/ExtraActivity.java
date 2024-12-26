@@ -100,7 +100,15 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
     Button extra_keyboard_send;
 
     private final Handler handler = new Handler(msg -> {
-        if (msg.what == ChatToGPTUtil.MESSAGE_CODE) {
+        if (msg.what == MESSAGE_CODE) {
+            parseResponse_Baichuan(msg.obj.toString()); // 解析返回结果
+//            parseResponse_GPT(msg.obj.toString()); // 解析返回结果
+            if (messages.size() == 4) {
+//                receive(hint.get(1)); // 显示第二个提示
+            }
+            if (!allQuestionsAnswered) receive(question); // 接收信息
+
+        } else if (msg.what == ChatToGPTUtil.MESSAGE_CODE) {
             parseResponse_GPT(msg.obj.toString());
 
             // 键盘输入休眠
@@ -118,13 +126,6 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
             extra_asr.setVisibility(View.VISIBLE); // 显示语音识别按钮
 
             receive(question); // 接收信息
-        } else if (msg.what == MESSAGE_CODE) {
-            parseResponse_Baichuan(msg.obj.toString()); // 解析返回结果
-            if (messages.size() == 4) {
-//                receive(hint.get(1)); // 显示第二个提示
-            }
-            if (!allQuestionsAnswered) receive(question); // 接收信息
-
         }
 
         // 显示接收的问题
@@ -184,7 +185,7 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
         extra_keyboard_edit.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEND) {
                 // 等待后端回复
-                darkenBackground(0.2f); // 背景变暗
+                darkenBackground(0.3f); // 背景变暗
                 alertDialog.show(); // 显示等待弹窗
 
                 // 发送键盘输入信息
@@ -196,7 +197,7 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
         // 点击 键盘输入发送按钮
         extra_keyboard_send.setOnClickListener(v -> {
             // 等待后端回复
-            darkenBackground(0.2f); // 背景变暗
+            darkenBackground(0.3f); // 背景变暗
             alertDialog.show(); // 显示等待弹窗
 
             // 发送键盘输入信息
@@ -380,10 +381,10 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
      * @param linearLayout     输入栏
      */
     private void showASRPopWindow(View extraAsrActivity, LinearLayout linearLayout) {
-        // 背景变暗
-        darkenBackground(0.2f);
+
         // 隐藏输入栏
         linearLayout.setVisibility(View.GONE);
+        darkenBackground(0.3f); // 背景变暗
 
         // 创建 PopupWindow 实例
         PopupWindow extra_asr_window = new PopupWindow(extraAsrActivity, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT, false);

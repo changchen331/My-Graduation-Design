@@ -1,10 +1,13 @@
 package com.example.jarvis.utils;
 
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 
 import androidx.annotation.NonNull;
+
+import com.example.jarvis.R;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -137,6 +140,48 @@ public class HttpRequestsUtil {
 
         // POST 同步请求
         Request request = new Request.Builder().url(url).post(requestBody).build();
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                // 请求的 call 对象
+                Call call = client.newCall(request);
+                try (Response response = call.execute()) {
+                    String responseBody = response.body() != null ? response.body().string() : "";
+                    if (response.isSuccessful())
+                        LogUtil.info(TAG, "postSync", responseBody, Boolean.TRUE);
+                    else LogUtil.warning(TAG, "postSync", responseBody, Boolean.TRUE);
+
+                    // 通过Handler传递消息
+                    Message message = Message.obtain();
+                    message.what = messageCode;
+                    message.obj = responseBody;
+                    handler.sendMessage(message);
+                } catch (IOException e) {
+                    LogUtil.error(TAG, "postSync", "发送请求失败", e);
+                }
+            }
+        }.start();
+    }
+
+    /**
+     * 发送 POST 同步请求-2
+     *
+     * @param url         要请求的 URL 字符串
+     * @param requestBody 请求体
+     * @param context     获取 API Key
+     * @param handler     用于在主线程上处理响应的 Handler
+     * @param messageCode 信息标识
+     */
+    public static void postSync(String url, RequestBody requestBody, Context context, Handler handler, Integer messageCode) {
+        if (requestBody == null) {
+            LogUtil.warning(TAG, "postSync", "请求体为空", Boolean.TRUE);
+            return;
+        }
+
+        // 发送 POST 同步请求
+        String api_Key = context.getString(R.string.gpt_4o);
+        Request request = new Request.Builder().url(url).post(requestBody).addHeader("Authorization", "Bearer " + api_Key).build();
         new Thread() {
             @Override
             public void run() {
