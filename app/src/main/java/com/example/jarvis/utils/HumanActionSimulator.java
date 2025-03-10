@@ -1,53 +1,113 @@
 package com.example.jarvis.utils;
 
 import android.accessibilityservice.AccessibilityService;
+import android.accessibilityservice.GestureDescription;
+import android.graphics.Path;
 import android.view.accessibility.AccessibilityEvent;
-import android.view.accessibility.AccessibilityNodeInfo;
 
 public class HumanActionSimulator extends AccessibilityService {
+    private static final String TAG = "HumanActionSimulator";
+
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        // 在这里处理无障碍事件，例如读取屏幕上的元素或执行操作
+        int screenWidth = getScreenWidth();
+        int screenHeight = getScreenHeight();
+
+        int x = screenWidth / 2;
+        int y = screenHeight / 2;
+        performClick(x, y);
     }
 
     @Override
     public void onInterrupt() {
-        // 当服务中断时调用
     }
 
-    // 模拟点击
-    public void performClick(float x, float y) {
-//        performGlobalAction(GLOBAL_ACTION_CLICK);
-
+    /**
+     * 获取屏幕宽度
+     *
+     * @return 屏幕宽度
+     */
+    private int getScreenWidth() {
+        return getResources().getDisplayMetrics().widthPixels;
     }
 
-    // 模拟长按
-    public void performLongClick(float x, float y) {
-//        performGlobalAction(GLOBAL_ACTION_LONG_CLICK);
+    /**
+     * 获取屏幕高度
+     *
+     * @return 屏幕高度
+     */
+    private int getScreenHeight() {
+        return getResources().getDisplayMetrics().heightPixels;
     }
 
-    // 模拟滑动
-    public void performSwipe(float startX, float startY, float endX, float endY) {
-        // AccessibilityService 不直接支持滑动操作，需要通过查找元素和坐标来实现
-        // 这里只是一个示意性的函数，实际实现需要更复杂的逻辑
+    /**
+     * 在指定坐标 (x, y) 执行点击操作
+     *
+     * @param x 点击位置的横坐标（单位：像素）
+     * @param y 点击位置的纵坐标（单位：像素）
+     */
+    private void performClick(int x, int y) {
+        // 创建点击路径
+        Path clickPath = new Path();
+        clickPath.moveTo(x, y);
+
+        // 创建点击描述（0ms开始，持续50ms）
+        GestureDescription.StrokeDescription strokeDescription = new GestureDescription.StrokeDescription(clickPath, 0, 50);
+        GestureDescription.Builder builder = new GestureDescription.Builder();
+        builder.addStroke(strokeDescription);
+
+        // 执行点击
+        dispatchGesture(builder.build(), new GestureResultCallback() {
+            @Override
+            public void onCompleted(GestureDescription gestureDescription) {
+                // 手势完成
+                super.onCompleted(gestureDescription);
+                LogUtil.debug(TAG, "performClick", "操作成功", Boolean.TRUE);
+            }
+
+            @Override
+            public void onCancelled(GestureDescription gestureDescription) {
+                // 手势取消
+                super.onCancelled(gestureDescription);
+                LogUtil.debug(TAG, "performClick", "操作取消", Boolean.TRUE);
+            }
+        }, null);
     }
 
-    // 自动注入文本
-    public void performSetText(String text) {
-        // 此方法需要找到对应的输入框节点并设置文本
-        // 以下代码仅为示例，实际使用时需要根据实际情况进行查找和设置
-        AccessibilityNodeInfo nodeInfo = getRootInActiveWindow();
-        if (nodeInfo != null) {
-            // 假设已经找到输入框节点
-            nodeInfo.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT);
-            nodeInfo.setText(text);
-        }
-    }
+    /**
+     * 在指定路径 (startX, startY) -> (endX, endY) 执行滑动操作
+     *
+     * @param startX 滑动开始位置的横坐标（单位：像素）
+     * @param startY 滑动开始位置的纵坐标（单位：像素）
+     * @param endX   滑动结束位置的横坐标（单位：像素）
+     * @param endY   滑动结束位置的纵坐标（单位：像素）
+     */
+    private void performSwipe(int startX, int startY, int endX, int endY) {
+        // 创建滑动路径
+        Path swipePath = new Path();
+        swipePath.moveTo(startX, startY);
+        swipePath.lineTo(endX, endY);
 
-    @Override
-    public void onServiceConnected() {
-        super.onServiceConnected();
-        // 在这里设置服务的配置，如反馈类型等
-        setServiceInfo(getServiceInfo());
+        // 创建滑动描述
+        GestureDescription.StrokeDescription strokeDescription = new GestureDescription.StrokeDescription(swipePath, 0, 500);
+        GestureDescription.Builder builder = new GestureDescription.Builder();
+        builder.addStroke(strokeDescription);
+
+        // 执行滑动
+        dispatchGesture(builder.build(), new GestureResultCallback() {
+            @Override
+            public void onCompleted(GestureDescription gestureDescription) {
+                // 手势成功
+                super.onCompleted(gestureDescription);
+                LogUtil.debug(TAG, "performSwipe", "操作成功", Boolean.TRUE);
+            }
+
+            @Override
+            public void onCancelled(GestureDescription gestureDescription) {
+                // 操作取消
+                super.onCancelled(gestureDescription);
+                LogUtil.debug(TAG, "performSwipe", "操作取消", Boolean.TRUE);
+            }
+        }, null);
     }
 }

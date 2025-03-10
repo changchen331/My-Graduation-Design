@@ -1,5 +1,5 @@
 <resources>
-    <string name="gpt_4o">your api key</string>
+    <!--    <string name="gpt_4o">your api key</string>-->
 
     <string name="Baichuan2_7B_Base_URL">http://10.176.56.192:8001/chat</string>
     <string name="app_name">语悦</string>

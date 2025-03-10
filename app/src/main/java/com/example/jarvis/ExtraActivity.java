@@ -381,7 +381,6 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
      * @param linearLayout     输入栏
      */
     private void showASRPopWindow(View extraAsrActivity, LinearLayout linearLayout) {
-
         // 隐藏输入栏
         linearLayout.setVisibility(View.GONE);
         darkenBackground(0.3f); // 背景变暗
@@ -486,7 +485,6 @@ public class ExtraActivity extends AppCompatActivity implements ExtraEditDialog.
     private void getQuestion() {
         JSONObject json = new JSONObject();
         String promptHead = "你是一个负责信息抽取的机器人，需要信息抽取的场景是\"" + selectedApp.getAppName() + "\"。请你根据与用户的对话填充槽位、并不断对槽位为空的部分进行提问，每一次提问的槽位数量为 1。";
-//        String promptBody = "如果用户所回答的内容中，有不属于，那么请不要将用户回答内容中出错的部分填入槽位，而是对用户回答中出错的槽位进行重新询问。\n槽位:" + slots.toString() + "\n";
         String promptBody = "\n槽位:" + slots.toString() + "\n";
         String promptTail = "上轮对话:{\"gpt\":\"" + question + "\",\"human\":\"" + answer + "\"}";
         String prompt = promptHead + promptBody + promptTail;

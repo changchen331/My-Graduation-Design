@@ -1,0 +1,17 @@
+{
+    "scene": "预定电影票",
+    "slots": {
+        "电影名": null,
+        "观影城市": null,
+        "影院位置": null,
+        "观影日期": null,
+        "观影时间": null,
+        "影片版本": "null（IMAX3D，IMAX2D，CINITY2D，中国巨幕3D，中国巨幕2D，杜比视野2D，3D，2D，原版，国语配音）",
+        "影厅类型": "null（IMAX厅，CGS中国巨幕厅，CINITY厅，杜比影院，120帧、MX4D，4DX厅，SCREENX，DTS临境音，融合厅，LUXE厅，DMAX）",
+        "影院服务": "null（退票、改签、影城卡、3D眼镜收费，观影小食，可停车，消费券，轮椅友好影院，全真皮沙发座椅）",
+        "影院品牌": null,
+        "选座偏好": null,
+        "小食和饮料": null,
+        "手机号": null
+    }
+}
